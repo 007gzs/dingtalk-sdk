@@ -2,6 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
+
+from dingtalk.core.utils import to_text
 from dingtalk.storage import BaseStorage
 
 
@@ -21,7 +23,7 @@ class KvStorage(BaseStorage):
         value = self.kvdb.get(key)
         if value is None:
             return default
-        return json.loads(value)
+        return json.loads(to_text(value))
 
     def set(self, key, value, ttl=None):
         if value is None:
