@@ -46,7 +46,7 @@ class ISVClient(BaseClient):
     def _handle_pre_request(self, method, uri, kwargs):
         if 'suite_access_token=' in uri or 'suite_access_token' in kwargs.get('params', {}):
             raise ValueError("suite_access_token: " + uri)
-        uri = '%s%suite_access_token=%s' % (uri, '&' if '?' in uri else '?', self.suite_access_token)
+        uri = '%s%ssuite_access_token=%s' % (uri, '&' if '?' in uri else '?', self.suite_access_token)
         return method, uri, kwargs
 
     def _handle_request_except(self, e, func, *args, **kwargs):
@@ -127,9 +127,10 @@ class ISVClient(BaseClient):
         获取应用套件令牌Token
         :return:
         """
-        return self.post(
+        return self._request(
+            'post',
             '/service/get_suite_token',
-            {
+            data={
                 "suite_key": self.suite_key,
                 "suite_secret": self.suite_secret,
                 "suite_ticket": self.cache.suite_ticket.get()
