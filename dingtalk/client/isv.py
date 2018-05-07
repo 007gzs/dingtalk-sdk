@@ -2,6 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
+import json
 
 from dingtalk.client import DingTalkClient
 from dingtalk.client.base import BaseClient
@@ -109,6 +110,7 @@ class ISVClient(BaseClient):
     def parse_message(self, msg, signature, timestamp, nonce):
         message = self.crypto.decrypt_message(msg, signature, timestamp, nonce)
         try:
+            message = json.loads(message)
             self.proc_message(message)
         except Exception as e:
             logger.error("proc_message error %s %s", message, e)
