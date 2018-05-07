@@ -89,17 +89,17 @@ class ISVClient(BaseClient):
             return
         event_type = message.get('EventType', None)
 
-        if event_type == SuitePushType.SUITE_TICKET:
+        if event_type == SuitePushType.SUITE_TICKET.value:
             suite_ticket = message.get('SuiteTicket', None)
             if suite_ticket:
                 self.set_suite_ticket(suite_ticket)
             return
-        elif event_type == SuitePushType.TMP_AUTH_CODE:
+        elif event_type == SuitePushType.TMP_AUTH_CODE.value:
             auth_code = message.get('AuthCode')
             permanent_code_data = self.get_permanent_code(auth_code)
             message['__permanent_code_data'] = permanent_code_data
             return
-        elif event_type == SuitePushType.SUITE_RELIEVE:
+        elif event_type == SuitePushType.SUITE_RELIEVE.value:
             corp_id = message.get('AuthCorpId')
             self.cache.permanent_code.delete(corp_id)
             self.cache.ch_permanent_code.delete(corp_id)
