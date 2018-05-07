@@ -100,8 +100,8 @@ class ISVClient(BaseClient):
             return
         elif event_type == SuitePushType.SUITE_RELIEVE:
             corp_id = message.get('AuthCorpId')
-            self.cache.permanent_code.delete(corp_id, permanent_code)
-            self.cache.ch_permanent_code.delete(corp_id, ch_permanent_code)
+            self.cache.permanent_code.delete(corp_id)
+            self.cache.ch_permanent_code.delete(corp_id)
             return
         else:
             return
