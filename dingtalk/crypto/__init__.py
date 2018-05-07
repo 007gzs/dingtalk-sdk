@@ -7,7 +7,7 @@ import json
 from dingtalk.core.exceptions import InvalidSignatureException, InvalidCorpIdOrSuiteKeyException
 from dingtalk.core.utils import to_text, to_binary, DingTalkSigner, random_string
 
-from wechatpy.crypto.base import BasePrpCrypto
+from dingtalk.crypto.base import BasePrpCrypto
 
 
 def _get_signature(token, timestamp, nonce, encrypt):
