@@ -85,6 +85,9 @@ class ISVClient(BaseClient):
     def get_dingtalk_client(self, corp_id):
         return ISVDingTalkClient(corp_id, self)
 
+    def get_channel_client(self, corp_id):
+        return ISVChannelClient(corp_id, self)
+
     def proc_message(self, message):
         if not isinstance(message, dict):
             return

@@ -5,6 +5,7 @@ import logging
 
 import time
 
+from dingtalk.client import DingTalkClient
 from dingtalk.client.base import BaseClient
 from dingtalk.core.utils import random_string, DingTalkSigner
 from dingtalk.storage.cache import ChannelCache
@@ -12,68 +13,18 @@ from dingtalk.storage.cache import ChannelCache
 logger = logging.getLogger(__name__)
 
 
-class ChannelClient(BaseClient):
+class ChannelClient(DingTalkClient):
 
     def __init__(self, corp_id, prefix='channel', storage=None, timeout=None, auto_retry=True):
         super(ChannelClient, self).__init__(storage, timeout, auto_retry)
         self.corp_id = corp_id
         self.cache = ChannelCache(self.storage, prefix)
 
-    def _handle_pre_request(self, method, uri, kwargs):
-        if 'access_token=' in uri or 'access_token' in kwargs.get('params', {}):
-            raise ValueError("access_token: " + uri)
-        uri = '%s%access_token=%s' % (uri, '&' if '?' in uri else '?', self.channel_token)
-        return method, uri, kwargs
+    def get_jsapi_ticket(self):
+        return self.get_channel_jsapi_ticket()
 
-    def _handle_request_except(self, e, func, *args, **kwargs):
-        if e.errcode in (33001, 40001, 42001, 40014):
-            self.cache.channel_token.delete()
-            if self.auto_retry:
-                return func(*args, **kwargs)
-        raise e
-
-    @property
-    def channel_token(self):
-        self.cache.channel_token.get()
-        token = self.cache.channel_token.get()
-        if token is None:
-            ret = self.get_channel_token()
-            token = ret['access_token']
-            expires_in = ret.get('expires_in', 7200)
-            self.cache.channel_token.set(value=token, ttl=expires_in)
-        return token
-
-    @property
-    def channel_jsapi_ticket(self):
-        ticket = self.cache.jsapi_ticket.get()
-        if ticket is None:
-            ret = self.get_channel_jsapi_ticket()
-            ticket = ret['ticket']
-            expires_in = ret.get('expires_in', 7200)
-            self.cache.jsapi_ticket.set(value=ticket, ttl=expires_in)
-        return ticket
-
-    def get_jsapi_params(self, url, noncestr=None, timestamp=None):
-        if not noncestr:
-            noncestr = random_string()
-        if timestamp is None:
-            timestamp = int(time.time() * 1000)
-        data = [
-            'noncestr={noncestr}'.format(noncestr=noncestr),
-            'jsapi_ticket={ticket}'.format(ticket=self.channel_jsapi_ticket),
-            'timestamp={timestamp}'.format(timestamp=timestamp),
-            'url={url}'.format(url=url),
-        ]
-        signer = DingTalkSigner(delimiter=b'&')
-        signer.add_data(*data)
-
-        ret = {
-            'corpId': self.corp_id,
-            'timeStamp': timestamp,
-            'nonceStr': noncestr,
-            'signature': signer.signature
-        }
-        return ret
+    def get_access_token(self):
+        return self.get_channel_token()
 
     def get_channel_token(self):
         raise NotImplementedError
