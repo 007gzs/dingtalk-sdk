@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 class DingTalkClient(BaseClient):
 
+    user = api.User()
     department = api.Department()
 
     def __init__(self, corp_id, prefix='client', storage=None, timeout=None, auto_retry=True):
