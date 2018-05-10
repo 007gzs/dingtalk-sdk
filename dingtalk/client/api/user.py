@@ -6,6 +6,25 @@ from dingtalk.client.api.base import DingTalkBaseAPI
 
 class User(DingTalkBaseAPI):
 
+    def auth_scopes(self):
+        """
+        获取CorpSecret授权范围
+        :return:
+        """
+        return self._get('/auth/scopes')
+
+    def get_org_user_count(self, only_active):
+        """
+        获取企业员工人数
+        :param only_active: 是否包含未激活钉钉的人员数量
+        :return: 企业员工数量
+        """
+        return self._get(
+            '/user/get_org_user_count',
+            {'onlyActive': 0 if only_active else 1},
+            result_processor=lambda x: x['count']
+        )
+
     def getuserinfo(self, code):
         """
         通过CODE换取用户身份

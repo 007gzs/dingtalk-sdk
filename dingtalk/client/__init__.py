@@ -18,6 +18,7 @@ class DingTalkClient(BaseClient):
 
     user = api.User()
     department = api.Department()
+    message = api.Message()
 
     def __init__(self, corp_id, prefix='client', storage=None, timeout=None, auto_retry=True):
         super(DingTalkClient, self).__init__(storage, timeout, auto_retry)

@@ -35,7 +35,7 @@ class Department(DingTalkBaseAPI):
 
     def get(self, _id, lang='zh_CN'):
         """
-        获取部门列表
+        获取部门详情
         :param _id: 部门id
         :param lang: 通讯录语言(默认zh_CN，未来会支持en_US)
         :return: 部门列表数据。以部门的order字段从小到大排列
