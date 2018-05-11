@@ -14,6 +14,7 @@ class Callback(DingTalkBaseAPI):
     def register_call_back(self, call_back_tags, token, aes_key, url):
         """
         注册事件回调接口
+
         :param call_back_tags: 需要监听的事件类型
         :param token: 加解密需要用到的token
         :param aes_key: 数据加密密钥
@@ -37,6 +38,7 @@ class Callback(DingTalkBaseAPI):
     def get_call_back(self):
         """
         查询事件回调接口
+
         :return:
         """
         return self._get('/call_back/get_call_back')
@@ -44,6 +46,7 @@ class Callback(DingTalkBaseAPI):
     def update_call_back(self, call_back_tags, token, aes_key, url):
         """
         更新事件回调接口
+
         :param call_back_tags: 需要监听的事件类型
         :param token: 加解密需要用到的token
         :param aes_key: 数据加密密钥
@@ -67,6 +70,7 @@ class Callback(DingTalkBaseAPI):
     def delete_call_back(self):
         """
         删除事件回调接口
+
         :return:
         """
         return self._get('/call_back/delete_call_back')
@@ -74,6 +78,7 @@ class Callback(DingTalkBaseAPI):
     def get_call_back_failed_result(self):
         """
         获取回调失败的结果
+
         :return:
         """
         return self._get('/call_back/delete_call_back')

@@ -14,6 +14,7 @@ class Cspace(DingTalkBaseAPI):
     def add_to_single_chat(self, agent_id, userid, media_id, file_name):
         """
         发送文件给指定用户
+
         :param agent_id: 文件发送者微应用的agentId
         :param userid: 文件接收人的userid
         :param media_id: 调用钉盘上传文件接口得到的mediaid
@@ -33,6 +34,7 @@ class Cspace(DingTalkBaseAPI):
     def add(self, code, media_id, space_id, folder_id, name, agent_id=None, overwrite=False):
         """
         新增文件到用户钉盘
+
         :param code: 如果是微应用，code值为微应用免登授权码,如果是服务窗应用，code值为服务窗免登授权码
                      code为临时授权码，只能消费一次，下次请求需要重新获取新的code。
         :param media_id: 调用钉盘上传文件接口得到的mediaid
@@ -61,6 +63,7 @@ class Cspace(DingTalkBaseAPI):
     def get_custom_space(self, domain=None, agent_id=None):
         """
         获取企业下的自定义空间
+
         :param domain: 企业调用时传入，需要为10个字节以内的字符串，仅可包含字母和数字，大小写不敏感
         :param agent_id: ISV调用时传入，微应用agentId
         :return: 申请到的空间id
@@ -77,6 +80,7 @@ class Cspace(DingTalkBaseAPI):
     def grant_custom_space(self, isdownload, userid, agent_id=None, domain=None, duration=30, path=None, fileids=()):
         """
         授权用户访问企业下的自定义空间
+
         :param isdownload: 权限类型，true为下载，false为上传
         :param userid: 企业用户userid
         :param agent_id: ISV调用时传入，授权访问指定微应用的自定义空间
@@ -105,6 +109,7 @@ class Cspace(DingTalkBaseAPI):
     def file_upload_transaction(self, agent_id, file_size, chunk_numbers, upload_id=None):
         """
         开启/提交 文件上传事务
+
         :param agent_id: 微应用的agentId
         :param file_size: 文件大小
         :param chunk_numbers: 文件总块数
@@ -125,6 +130,7 @@ class Cspace(DingTalkBaseAPI):
     def file_upload_chunk(self, agent_id, upload_id, chunk_sequence, file_chunk):
         """
         上传文件块
+
         :param agent_id: 微应用的agentId
         :param upload_id: 上传事务id
         :param chunk_sequence: 文件块号，从1开始计数
@@ -146,6 +152,7 @@ class Cspace(DingTalkBaseAPI):
     def file_upload_single(self, agent_id, file_size, media_file):
         """
         单步文件上传
+
         :param agent_id: 微应用的agentId
         :param file_size: 文件大小
         :param media_file: 要上传的文件，一个 File-object

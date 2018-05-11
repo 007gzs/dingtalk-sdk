@@ -129,6 +129,7 @@ class ISVClient(BaseClient):
     def get_suite_access_token(self):
         """
         获取应用套件令牌Token
+
         :return:
         """
         return self._request(
@@ -144,6 +145,7 @@ class ISVClient(BaseClient):
     def get_permanent_code(self, tmp_auth_code):
         """
         获取企业授权的永久授权码
+
         :param tmp_auth_code: 回调接口（tmp_auth_code）获取的临时授权码
         :return:
         """
@@ -157,6 +159,7 @@ class ISVClient(BaseClient):
     def activate_suite(self, corp_id):
         """
         激活套件
+
         :param corp_id: 授权方corpid
         :return:
         """
@@ -171,6 +174,7 @@ class ISVClient(BaseClient):
     def get_access_token_by_corpid(self, corp_id):
         """
         获取企业授权的凭证
+
         :param corp_id: 授权方corpid
         :return:
         """
@@ -182,6 +186,7 @@ class ISVClient(BaseClient):
     def get_auth_info(self, corp_id):
         """
         获取企业基本信息
+
         :param corp_id: 授权方corpid
         :return:
         """
@@ -193,6 +198,7 @@ class ISVClient(BaseClient):
     def get_agent(self, corp_id, agent_id):
         """
         获取企业的应用信息
+
         :param corp_id: 授权方corpid
         :param agent_id: 授权方应用id
         :return:
@@ -210,6 +216,7 @@ class ISVClient(BaseClient):
     def get_unactive_corp(self, app_id):
         """
         获取应用未激活的企业列表
+
         :param app_id: 套件下的微应用ID
         :return:
         """
@@ -221,6 +228,7 @@ class ISVClient(BaseClient):
     def reauth_corp(self, app_id, corpid_list):
         """
         重新授权未激活应用的企业
+
         :param app_id: 套件下的微应用ID
         :param corpid_list: 未激活的corpid列表
         :return:
@@ -233,6 +241,7 @@ class ISVClient(BaseClient):
     def set_corp_ipwhitelist(self, corp_id, ip_whitelist):
         """
         ISV为授权方的企业单独设置IP白名单
+
         :param corp_id: 授权方corpid
         :param ip_whitelist: 要为其设置的IP白名单,格式支持IP段,用星号表示,注意:仅支持后两段设置为星号
         :return:
@@ -245,6 +254,7 @@ class ISVClient(BaseClient):
     def get_channel_token_by_corpid(self, corp_id):
         """
         ISV获取企业服务窗接口调用TOKEN
+
         :param corp_id: 授权方corpid
         :return:
         """

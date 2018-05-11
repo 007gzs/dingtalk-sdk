@@ -9,6 +9,7 @@ class MicroApp(DingTalkBaseAPI):
     def create(self, app_icon, app_name, app_desc, homepage_url, pc_homepage_url=None, omp_link=None):
         """
         创建微应用
+
         :param app_icon: 微应用的图标。需要调用上传接口将图标上传到钉钉服务器后获取到的mediaId
         :param app_name: 微应用的名称。长度限制为1~10个字符
         :param app_desc: 微应用的描述。长度限制为1~20个字符
@@ -34,6 +35,7 @@ class MicroApp(DingTalkBaseAPI):
                homepage_url=None, pc_homepage_url=None, omp_link=None):
         """
         更新微应用
+
         :param agent_id: 微应用实例化id
         :param app_icon: 微应用的图标。需要调用上传接口将图标上传到钉钉服务器后获取到的mediaId
         :param app_name: 微应用的名称。长度限制为1~10个字符
@@ -60,6 +62,7 @@ class MicroApp(DingTalkBaseAPI):
     def delete(self, agent_id):
         """
         删除微应用
+
         :param agent_id: 微应用实例化id，企业只能删除自建微应用
         :return:
         """
@@ -71,6 +74,7 @@ class MicroApp(DingTalkBaseAPI):
     def list(self):
         """
         列出微应用
+
         :return: 微应用列表
         """
         return self._post(
@@ -81,6 +85,7 @@ class MicroApp(DingTalkBaseAPI):
     def list_by_userid(self, userid):
         """
         列出员工可见的微应用
+
         :return: 微应用列表
         """
         return self._get(
@@ -92,6 +97,7 @@ class MicroApp(DingTalkBaseAPI):
     def visible_scopes(self, agent_id):
         """
         删除微应用
+
         :param agent_id: 需要查询的微应用实例化agentId
         :return:
         """
@@ -103,6 +109,7 @@ class MicroApp(DingTalkBaseAPI):
     def set_visible_scopes(self, agent_id, is_hidden=False, dept_visible_scopes=(), user_visible_scopes=()):
         """
         设置微应用的可见范围
+
         :param agent_id: 微应用实例化id
         :param is_hidden: 是否仅限管理员可见，true代表仅限管理员可见
         :param dept_visible_scopes: 设置可见的部门id列表

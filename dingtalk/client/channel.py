@@ -81,6 +81,7 @@ class ChannelClient(BaseClient):
     def get_channel_jsapi_ticket(self):
         """
         获取企业服务窗JSAPI鉴权ticket
+
         :return:
         """
         return self.get('/channel/get_channel_jsapi_ticket')
@@ -88,6 +89,7 @@ class ChannelClient(BaseClient):
     def get_user_list(self, offset=0, size=100):
         """
         获取服务窗关注者列表
+
         :param offset: 偏移量,必须大于等于0
         :param size: 获取数量,大于等于0,小于等于100
         :return:
@@ -100,7 +102,8 @@ class ChannelClient(BaseClient):
     def get_by_openid(self, openid):
         """
         获取关注者详情
-        :param openid: 	在本服务窗运营服务商 范围内,唯一标识关注者身份的id
+
+        :param openid: 在本服务窗运营服务商 范围内,唯一标识关注者身份的id
         :return:
         """
         return self.get(
@@ -111,6 +114,7 @@ class ChannelClient(BaseClient):
     def get_by_code(self, code):
         """
         关注者免登接口
+
         :param code: 服务窗关注者在服务窗应用中免登时生成的临时授权码
         :return:
         """
@@ -129,6 +133,7 @@ class SecretChannelClient(ChannelClient):
     def get_channel_token(self):
         """
         获取服务窗ChannelToken
+
         :return:
         """
         return self.get(

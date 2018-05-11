@@ -15,6 +15,7 @@ class Checkin(DingTalkBaseAPI):
     def record(self, department_id, start_time, end_time, offset=0, size=100, order_asc=True):
         """
         获得签到数据
+
         :param department_id: 部门id（1 表示根部门）
         :param start_time: 开始时间
         :param end_time: 结束时间
@@ -47,6 +48,7 @@ class Checkin(DingTalkBaseAPI):
     def record_get(self, userid_list, start_time, end_time, offset=0, size=100):
         """
         获取多个用户的签到记录 (如果是取1个人的数据，时间范围最大到10天，如果是取多个人的数据，时间范围最大1天。)
+
         :param userid_list: 需要查询的用户列表
         :param start_time: 起始时间
         :param end_time: 截止时间

@@ -13,6 +13,7 @@ class Ext(DingTalkBaseAPI):
     def listlabelgroups(self, offset=0, size=100):
         """
         标签列表
+
         :param offset: 偏移位置
         :param size: 分页大小,最大100
         :return:
@@ -26,6 +27,7 @@ class Ext(DingTalkBaseAPI):
     def list(self, offset=0, size=100):
         """
         外部联系人列表
+
         :param offset: 偏移位置
         :param size: 分页大小,最大100
         :return:
@@ -40,6 +42,7 @@ class Ext(DingTalkBaseAPI):
             title=None, share_deptids=(), remark=None, address=None, company_name=None, share_userids=()):
         """
         添加企业外部联系人
+
         :param name: 名称
         :param follower_userid: 负责人userId
         :param state_code: 手机号国家码

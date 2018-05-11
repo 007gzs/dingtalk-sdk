@@ -17,6 +17,7 @@ class Bpms(DingTalkBaseAPI):
     def process_copy(self, agent_id, process_code, biz_category_id=None, process_name=None, description=None):
         """
         复制审批流
+
         :param agent_id: 企业微应用标识
         :param process_code: 审批流的唯一码
         :param biz_category_id: 业务分类标识
@@ -39,6 +40,7 @@ class Bpms(DingTalkBaseAPI):
 
     def process_sync(self, agent_id, src_process_code, target_process_code, biz_category_id=None, process_name=None):
         """
+        更新审批流
 
         :param agent_id: 企业微应用标识
         :param src_process_code: 源审批流的唯一码
@@ -63,6 +65,7 @@ class Bpms(DingTalkBaseAPI):
                                agent_id=None, cc_list=(), cc_start=False, cc_finish=False):
         """
         发起审批实例
+
         :param process_code: 审批流的唯一码
         :param originator_user_id: 审批实例发起人的userid
         :param dept_id: 发起人所在的部门
@@ -110,6 +113,7 @@ class Bpms(DingTalkBaseAPI):
     def processinstance_list(self, process_code, start_time, end_time=None, cursor=0, size=10, userid_list=()):
         """
         获取审批实例列表
+
         :param process_code: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
         :param start_time: 	审批实例开始时间
         :param end_time: 审批实例结束时间，默认取当前值
@@ -145,6 +149,7 @@ class Bpms(DingTalkBaseAPI):
     def processinstance_get(self, process_instance_id):
         """
         获取单个审批实例详情
+
         :param process_instance_id: 审批实例id
         :return:
         """
@@ -157,6 +162,7 @@ class Bpms(DingTalkBaseAPI):
     def process_listbyuserid(self, userid, offset=0, size=100):
         """
         根据用户id获取可见审批模板列表
+
         :param userid: 用户id
         :param offset: 分页游标，从0开始。根据返回结果中next_cursor是否为空判断是否有下一页，且再次调用offset设置成next_cursor的值
         :param size: 分页大小，最大可设置成100

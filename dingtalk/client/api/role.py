@@ -11,6 +11,7 @@ class Role(DingTalkBaseAPI):
     def simplelist(self, role_id, offset=0, size=20):
         """
         获取角色的员工列表
+
         :param role_id: 角色ID
         :param offset: 分页大小
         :param size: 分页偏移
@@ -24,6 +25,7 @@ class Role(DingTalkBaseAPI):
     def list(self, offset=0, size=20):
         """
         获取企业角色列表
+
         :param offset: 分页大小
         :param size: 分页偏移
         :return:
@@ -36,6 +38,7 @@ class Role(DingTalkBaseAPI):
     def addrolesforemps(self, rolelid_list, userid_list):
         """
         批量为员工增加角色信息
+
         :param rolelid_list: 角色id list
         :param userid_list: 员工id list
         :return:
@@ -52,6 +55,7 @@ class Role(DingTalkBaseAPI):
     def removerolesforemps(self, rolelid_list, userid_list):
         """
         批量删除员工角的色信息
+
         :param rolelid_list: 角色id list
         :param userid_list: 员工id list
         :return:
@@ -68,6 +72,7 @@ class Role(DingTalkBaseAPI):
     def deleterole(self, role_id):
         """
         删除角色信息
+
         :param role_id: 角色id
         :return:
         """
@@ -79,6 +84,7 @@ class Role(DingTalkBaseAPI):
     def getrolegroup(self, group_id):
         """
         获取角色组信息
+
         :param group_id: 角色组的Id
         :return:
         """

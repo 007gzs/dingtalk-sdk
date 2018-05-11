@@ -10,6 +10,7 @@ class Chat(DingTalkBaseAPI):
     def create(self, name, owner, useridlist, show_history_type=False):
         """
         创建会话
+
         :param name: 群名称。长度限制为1~20个字符
         :param owner: 群主userId，员工唯一标识ID；必须为该会话useridlist的成员之一
         :param useridlist: 群成员列表，每次最多支持40人，群人数上限为1000
@@ -30,6 +31,7 @@ class Chat(DingTalkBaseAPI):
     def update(self, chatid, name=None, owner=None, add_useridlist=(), del_useridlist=()):
         """
         修改会话
+
         :param chatid: 群会话的id
         :param name: 群名称。长度限制为1~20个字符，不传则不修改
         :param owner: 群主userId，员工唯一标识ID；必须为该会话成员之一；不传则不修改
@@ -51,6 +53,7 @@ class Chat(DingTalkBaseAPI):
     def get(self, chatid):
         """
         获取会话
+
         :param chatid: 群会话的id
         :return: 群会话信息
         """
@@ -63,6 +66,7 @@ class Chat(DingTalkBaseAPI):
     def send(self, chatid, msg_body):
         """
         发送群消息
+
         :param chatid: 群会话的id
         :param msg_body: BodyBase 消息体
         :return: 加密的消息id
@@ -79,6 +83,7 @@ class Chat(DingTalkBaseAPI):
     def get_read_list(self, message_id, cursor=0, size=100):
         """
         查询群消息已读人员列表
+
         :param message_id: 发送群消息接口返回的加密消息id
         :param cursor: 分页查询的游标，第一次传0，后续传返回结果中的next_cursor。返回结果中没有next_cursor时，表示没有后续的数据了
         :param size: 分页查询的大小，最大可以传100

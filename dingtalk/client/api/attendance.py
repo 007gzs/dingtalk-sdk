@@ -13,6 +13,7 @@ class Attendance(DingTalkBaseAPI):
     def list_record(self, user_ids, check_date_from, check_date_to):
         """
         考勤打卡记录开放
+
         :param user_ids: 企业内的员工id列表，最多不能超过50个
         :param check_date_from: 查询考勤打卡记录的起始工作日
         :param check_date_to: 查询考勤打卡记录的结束工作日。注意，起始与结束工作日最多相隔7天
@@ -36,6 +37,7 @@ class Attendance(DingTalkBaseAPI):
     def list(self, work_date_from, work_date_to, user_ids=(), offset=0, limit=50):
         """
         考勤打卡数据开放
+
         :param work_date_from: 查询考勤打卡记录的起始工作日
         :param work_date_to: 查询考勤打卡记录的结束工作日
         :param user_ids: 员工在企业内的UserID列表，企业用来唯一标识用户的字段
@@ -61,7 +63,8 @@ class Attendance(DingTalkBaseAPI):
 
     def listschedule(self, work_date, offset=0, size=200):
         """
-        考勤排班信息按天全量查询接口
+        考勤排班信息按天全量查询接
+
         :param work_date: 排班时间
         :param offset: 偏移位置
         :param size: 分页大小，最大200
@@ -82,6 +85,7 @@ class Attendance(DingTalkBaseAPI):
     def getsimplegroups(self, offset=0, size=10):
         """
         获取考勤组列表详情
+
         :param offset: 偏移位置
         :param size: 分页大小，最大10
         :return:
@@ -98,6 +102,7 @@ class Attendance(DingTalkBaseAPI):
     def getleaveapproveduration(self, userid, from_date, to_date):
         """
         计算请假时长
+
         :param userid: 员工在企业内的UserID，企业用来唯一标识用户的字段。
         :param from_date: 请假开始时间
         :param to_date: 请假结束时间
@@ -121,6 +126,7 @@ class Attendance(DingTalkBaseAPI):
     def getusergroup(self, userid):
         """
         获取用户考勤组
+
         :param userid: 员工在企业内的UserID，企业用来唯一标识用户的字段。
         :return:
         """
