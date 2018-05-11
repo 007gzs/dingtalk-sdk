@@ -58,6 +58,7 @@ class BaseClient(object):
 
         kwargs['timeout'] = kwargs.get('timeout', self.timeout)
         result_processor = kwargs.pop('result_processor', None)
+        top_response_key = kwargs.pop('top_response_key', None)
         res = self._http.request(
             method=method,
             url=url,
@@ -77,7 +78,7 @@ class BaseClient(object):
             )
 
         result = self._handle_result(
-            res, method, url, result_processor, **kwargs
+            res, method, url, result_processor, top_response_key, **kwargs
         )
 
         logger.debug("\n【请求地址】: %s\n【请求参数】：%s \n%s\n【响应数据】：%s",
@@ -93,7 +94,7 @@ class BaseClient(object):
             return res
         return result
 
-    def _handle_result(self, res, method=None, url=None, result_processor=None, **kwargs):
+    def _handle_result(self, res, method=None, url=None, result_processor=None, top_response_key=None, **kwargs):
         if not isinstance(res, dict):
             # Dirty hack around asyncio based AsyncWeChatClient
             result = self._decode_result(res)
@@ -102,6 +103,34 @@ class BaseClient(object):
 
         if not isinstance(result, dict):
             return result
+        if top_response_key:
+            if 'error_response' in result:
+                error_response = result['error_response']
+                logger.error("\n【请求地址】: %s\n【请求参数】：%s \n%s\n【错误信息】：%s",
+                             url, kwargs.get('params', ''), kwargs.get('data', ''), result)
+                raise DingTalkClientException(
+                    error_response.get('code', -1),
+                    error_response.get('sub_msg', ''),
+                    client=self,
+                    request=res.request,
+                    response=res
+                )
+            top_result = result
+            if top_response_key in top_result:
+                top_result = result[top_response_key]
+                if 'result' in top_result:
+                    top_result = top_result['result']
+            if 'success' in top_result and not top_result['success']:
+                logger.error("\n【请求地址】: %s\n【请求参数】：%s \n%s\n【错误信息】：%s",
+                             url, kwargs.get('params', ''), kwargs.get('data', ''), result)
+                raise DingTalkClientException(
+                    top_result.get('ding_open_errcode', -1),
+                    top_result.get('error_msg', ''),
+                    client=self,
+                    request=res.request,
+                    response=res
+                )
+            result = top_result
 
         if 'errcode' in result:
             result['errcode'] = int(result['errcode'])
@@ -126,6 +155,8 @@ class BaseClient(object):
         return method, uri, kwargs
 
     def _handle_pre_top_request(self, params, uri):
+        if not uri.startswith(('http://', 'https://')):
+            uri = urljoin('https://eco.taobao.com', uri)
         return params, uri
 
     def _handle_request_except(self, e, func, *args, **kwargs):
@@ -138,7 +169,7 @@ class BaseClient(object):
         except DingTalkClientException as e:
             return self._handle_request_except(e, self.request, method, uri, **kwargs)
 
-    def top_request(self, method=None, params=None, format_='json', v='2.0',
+    def top_request(self, method, params=None, format_='json', v='2.0',
                     simplify='false', partner_id=None, url=None, **kwargs):
         from datetime import datetime
         if params is None:
@@ -147,21 +178,22 @@ class BaseClient(object):
             reqparams = params.copy()
         reqparams['method'] = method
         reqparams['timestamp'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        reqparams['format'] = format
+        reqparams['format'] = format_
         reqparams['v'] = v
 
         if format_ == 'json':
             reqparams['simplify'] = simplify
         if partner_id:
             reqparams['partner_id'] = partner_id
-
         base_url = url or '/router/rest'
+
+        reqparams, base_url = self._handle_pre_top_request(reqparams, base_url)
 
         if not base_url.startswith(('http://', 'https://')):
             base_url = urljoin(self.API_BASE_URL, base_url)
-
+        response_key = method.replace('.', '_') + "_response"
         try:
-            return self._request('POST', base_url, params=reqparams)
+            return self._request('POST', base_url, params=reqparams, top_response_key=response_key, **kwargs)
         except DingTalkClientException as e:
             return self._handle_request_except(e, self.request,
                                                method, format_, v, simplify, partner_id, url, params, **kwargs)

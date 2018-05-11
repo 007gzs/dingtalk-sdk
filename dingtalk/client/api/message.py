@@ -1,15 +1,30 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import copy
 import json
 
-import six
+from dingtalk.core.utils import to_text
+from six.moves.urllib_parse import urlencode
 
 from dingtalk.client.api.base import DingTalkBaseAPI
+from dingtalk.model.message import BodyBase
 
 
 class Message(DingTalkBaseAPI):
+
+    @staticmethod
+    def get_pc_url(url, pc_slide=True):
+        """
+        消息链接能在PC端打开
+        :param url: 要打开的链接
+        :param pc_slide: 如果为true代表在PC客户端打开，为false或者不写代表用浏览器打开
+        :return:
+        """
+        params = {'url': url}
+        if pc_slide:
+            params['pc_slide'] = 'true'
+        return "dingtalk://dingtalkclient/page/link?%s" % urlencode(params)
+
     def media_upload(self, media_type, media_file):
         """
         上传媒体文件
@@ -17,7 +32,11 @@ class Message(DingTalkBaseAPI):
         :param media_file: 要上传的文件，一个 File-object
         :return:
         """
-        return self._post('/media/upload', params={'type': media_type}, files={'media': media_file})
+        return self._post(
+            '/media/upload',
+            params={'type': media_type},
+            files={'media': media_file}
+        )
 
     def media_download_file(self, media_id):
         """
@@ -25,22 +44,42 @@ class Message(DingTalkBaseAPI):
         :param media_id: 媒体文件的唯一标示
         :return: requests 的 Response 实例
         """
-        return self._get('/media/downloadFile', {'media_id': media_id})
+        return self._get(
+            '/media/downloadFile',
+            {'media_id': media_id}
+        )
 
-    def send_to_conversation(self, msg_body):
+    def send_to_conversation(self, sender, cid, msg_body):
         """
         发送普通消息
-        :param msg_body: 消息体
+        :param sender: 消息发送者员工ID
+        :param cid: 群消息或者个人聊天会话Id
+        :param msg_body: BodyBase 消息体
         :return:
         """
-        return self._get('/message/send_to_conversation', msg_body)
+        if isinstance(msg_body, BodyBase):
+            msg_body = msg_body.get_dict()
+        msg_body['sender'] = sender
+        msg_body['cid'] = cid
+        return self._post('/message/send_to_conversation', msg_body)
 
-    def send(self, msg_body):
+    def send(self, agentid, msg_body, touser_list=(), toparty_list=()):
         """
         发送企业通知消息
-        :param msg_body:
-        :return: 消息体
+        :param agentid: 企业应用id，这个值代表以哪个应用的名义发送消息
+        :param msg_body: BodyBase 消息体
+        :param touser_list: 员工id列表
+        :param toparty_list: 部门id列表
+        :return:
         """
+
+        touser = "|".join(map(to_text, touser_list))
+        toparty = "|".join(map(to_text, toparty_list))
+        if isinstance(msg_body, BodyBase):
+            msg_body = msg_body.get_dict()
+        msg_body['touser'] = touser
+        msg_body['toparty'] = toparty
+        msg_body['agentid'] = agentid
         return self._post('/message/send', msg_body)
 
     def list_message_status(self, message_id):
@@ -51,32 +90,47 @@ class Message(DingTalkBaseAPI):
         """
         return self._get('/message/list_message_status', {"messageId": message_id})
 
-    def send_by_code(self, msg_body):
+    def send_by_code(self, code, msg_body):
         """
         企业通知消息接口（用户反馈式）
-        :param msg_body: 消息体
+        :param code: 用户操作产生的授权码
+        :param msg_body: BodyBase 消息体
         :return:
         """
-        return self._get('/message/sendByCode', msg_body)
+        if isinstance(msg_body, BodyBase):
+            msg_body = msg_body.get_dict()
+        msg_body['code'] = code
+        return self._post('/message/sendByCode', msg_body)
 
-    def asyncsend(self, msgtype, agent_id, msgcontent, userid_list=(), dept_id_list=(), to_all_user=False):
+    def asyncsend(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
         """
         企业会话消息异步发送
-        :param msgtype: 消息类型,如text、file、oa等，具体见文档
+        :param msg_body: BodyBase 消息体
         :param agent_id: 微应用的id
-        :param msgcontent: 与msgtype对应的消息体
         :param userid_list: 接收者的用户userid列表
         :param dept_id_list: 接收者的部门id列表
         :param to_all_user: 是否发送给企业全部用户
-        :return:
+        :return: 任务id
         """
-        userid_list = "|".join(userid_list)
-        dept_id_list = "|".join(dept_id_list)
-        if not isinstance(msgcontent, six.string_types):
-            msgcontent = json.dumps(msgcontent)
-        return self._top_request('dingtalk.corp.message.corpconversation.asyncsend',
-                                 msgtype=msgtype, agent_id=agent_id, msgcontent=msgcontent,
-                                 userid_list=userid_list, dept_id_list=dept_id_list, to_all_user=to_all_user)
+        userid_list = ",".join(map(to_text, userid_list))
+        dept_id_list = ",".join(map(to_text, dept_id_list))
+
+        if isinstance(msg_body, BodyBase):
+            msg_body = msg_body.get_dict()
+        msgtype = msg_body['msgtype']
+        msgcontent = json.dumps(msg_body[msgtype])
+        return self._top_request(
+            'dingtalk.corp.message.corpconversation.asyncsend',
+            {
+                'msgtype': msgtype,
+                'agent_id': agent_id,
+                'msgcontent': msgcontent,
+                'userid_list': userid_list,
+                'dept_id_list': dept_id_list,
+                'to_all_user': to_all_user
+            },
+            result_processor=lambda x: x['task_id']
+        )
 
     def getsendprogress(self, agent_id, task_id):
         """
@@ -85,8 +139,11 @@ class Message(DingTalkBaseAPI):
         :param task_id: 发送消息时钉钉返回的任务id
         :return:
         """
-        return self._top_request('dingtalk.corp.message.corpconversation.getsendprogress',
-                                 agent_id=agent_id, task_id=task_id)
+        return self._top_request(
+            'dingtalk.corp.message.corpconversation.getsendprogress',
+            {'agent_id': agent_id, 'task_id': task_id},
+            result_processor=lambda x: x['progress']
+        )
 
     def getsendresult(self, agent_id=None, task_id=None):
         """
@@ -95,25 +152,41 @@ class Message(DingTalkBaseAPI):
         :param task_id: 异步任务的id
         :return:
         """
-        return self._top_request('dingtalk.corp.message.corpconversation.getsendresult',
-                                 agent_id=agent_id, task_id=task_id)
+        return self._top_request(
+            'dingtalk.corp.message.corpconversation.getsendresult',
+            {'agent_id': agent_id, 'task_id': task_id},
+            result_processor=lambda x: x['send_result']
+        )
 
-    def asyncsendbycode(self, code, msgtype, agent_id, msgcontent, userid_list=(), dept_id_list=(), to_all_user=False):
+    def asyncsendbycode(self, code, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
         """
         通过用户授权码异步向企业会话发送消息
         :param code: 用户操作产生的授权码
-        :param msgtype: 消息类型,如text、file、oa等，具体见文档
+        :param msg_body: BodyBase 消息体
         :param agent_id: 微应用的id
-        :param msgcontent: 与msgtype对应的消息体
         :param userid_list: 接收者的用户userid列表
         :param dept_id_list: 接收者的部门id列表
         :param to_all_user: 是否发送给企业全部用户
-        :return:
+        :return: 任务id
         """
-        userid_list = "|".join(userid_list)
-        dept_id_list = "|".join(dept_id_list)
-        if not isinstance(msgcontent, six.string_types):
-            msgcontent = json.dumps(msgcontent)
-        return self._top_request('dingtalk.corp.message.corpconversation.asyncsendbycode',
-                                 msgtype=msgtype, agent_id=agent_id, msgcontent=msgcontent, code=code,
-                                 userid_list=userid_list, dept_id_list=dept_id_list, to_all_user=to_all_user)
+        userid_list = ",".join(map(to_text, userid_list))
+        dept_id_list = ",".join(map(to_text, dept_id_list))
+
+        if isinstance(msg_body, BodyBase):
+            msg_body = msg_body.get_dict()
+        msgtype = msg_body['msgtype']
+        msgcontent = json.dumps(msg_body[msgtype])
+
+        return self._top_request(
+            'dingtalk.corp.message.corpconversation.asyncsendbycode',
+            {
+                'msgtype': msgtype,
+                'code': code,
+                'agent_id': agent_id,
+                'msgcontent': msgcontent,
+                'userid_list': userid_list,
+                'dept_id_list': dept_id_list,
+                'to_all_user': to_all_user
+            },
+            result_processor=lambda x: x['task_id']
+        )

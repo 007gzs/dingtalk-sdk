@@ -16,9 +16,18 @@ logger = logging.getLogger(__name__)
 
 class DingTalkClient(BaseClient):
 
-    user = api.User()
+    attendance = api.Attendance()
+    bpms = api.Bpms()
+    callback = api.Callback()
+    chat = api.Chat()
+    checkin = api.Checkin()
+    cspace = api.Cspace()
     department = api.Department()
+    ext = api.Ext()
     message = api.Message()
+    microapp = api.MicroApp()
+    role = api.Role()
+    user = api.User()
 
     def __init__(self, corp_id, prefix='client', storage=None, timeout=None, auto_retry=True):
         super(DingTalkClient, self).__init__(storage, timeout, auto_retry)
@@ -78,7 +87,7 @@ class DingTalkClient(BaseClient):
             raise ValueError("uri参数中不允许有session: " + uri)
         params['session'] = self.access_token
 
-        return params, uri
+        return super(DingTalkClient, self)._handle_pre_top_request(params, uri)
 
     def _handle_request_except(self, e, func, *args, **kwargs):
         if e.errcode in (33001, 40001, 42001, 40014):

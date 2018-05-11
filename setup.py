@@ -34,7 +34,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.8',
+    version='1.1.0',
 
     keywords='dingding, ding, dtalk, dingtalk, SDK',
     description='DingTalk SDK for Python',
@@ -84,6 +84,7 @@ setup(
         'dingtalk.core',
         'dingtalk.crypto',
         'dingtalk.storage',
+        'dingtalk.model',
         'dingtalk.client',
         'dingtalk.client.api'
     ],

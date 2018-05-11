@@ -45,7 +45,7 @@ class User(DingTalkBaseAPI):
         """
         return self._get(
             '/user/get',
-            {'userid': userid}
+            {'userid': userid, 'lang': lang}
         )
 
     def create(self, user_data):
