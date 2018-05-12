@@ -16,8 +16,9 @@ import sphinx_rtd_theme
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('./../../dingtalk'))
+sys.path.insert(0, os.path.abspath('./../dingtalk'))
 
+import dingtalk
 
 # -- Project information -----------------------------------------------------
 
@@ -26,9 +27,9 @@ copyright = '2018, 007gzs'
 author = '007gzs'
 
 # The short X.Y version
-version = ''
+version = dingtalk.__version__
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = dingtalk.__version__
 
 
 # -- General configuration ---------------------------------------------------
