@@ -3,9 +3,12 @@ DingTalk Sdk for Python
 #######################
 .. image:: https://travis-ci.org/007gzs/dingtalk-sdk.svg?branch=master
        :target: https://travis-ci.org/007gzs/dingtalk-sdk
+.. image:: https://img.shields.io/pypi/v/dingtalk-sdk.svg
+       :target: https://pypi.org/project/dingtalk-sdk
 
 钉钉开放平台第三方 Python SDK。
 `【阅读文档】<https://github.com/SeayXu/>`_。
+
 *******
 功能特性
 *******
