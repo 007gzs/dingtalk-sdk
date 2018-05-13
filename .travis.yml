@@ -1,7 +1,41 @@
 language: python
-python:
-  - "2.7"
-  - "3.6"
+
+# Use container-based infrastructure
+sudo: false
+
+matrix:
+  include:
+    - env: TOX_ENV=py27-cryptography
+      python: 2.7
+    - env: TOX_ENV=py27-pycrypto
+      python: 2.7
+    - env: TOX_ENV=py34-cryptography
+      python: 3.4
+    - env: TOX_ENV=py34-pycrypto
+      python: 3.4
+    - env: TOX_ENV=py35-cryptography
+      python: 3.5
+    - env: TOX_ENV=py35-pycrypto
+      python: 3.5
+    - env: TOX_ENV=py36-cryptography
+      python: 3.6
+    - env: TOX_ENV=py36-pycrypto
+      python: 3.6
+    - env: TOX_ENV=pypy-cryptography
+      python: "pypy-5.3.1"
+    # - env: TOX_ENV=pypy-pycrypto
+    # python: "pypy-5.3.1"
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 script:
   python setup.py install
-
+after_success:
+  - |
+    if [[ "${TRAVIS_TAG:-}" != "" && "$TOX_ENV" == "py36-cryptography" ]]; then
+      python3.6 setup.py sdist bdist_wheel;
+      python3.6 -m pip install twine;
+      python3.6 -m twine upload --skip-existing dist/*;
+    fi
