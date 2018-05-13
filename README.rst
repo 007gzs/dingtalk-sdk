@@ -7,7 +7,7 @@ DingTalk Sdk for Python
        :target: https://pypi.org/project/dingtalk-sdk
 
 钉钉开放平台第三方 Python SDK。
-`【阅读文档】<https://github.com/SeayXu/>`_。
+`【阅读文档】 <http://dingtalk-sdk.readthedocs.io/zh_CN/latest/>`_。
 
 *******
 功能特性
