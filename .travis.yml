@@ -23,15 +23,23 @@ matrix:
       python: 3.6
     - env: TOX_ENV=pypy-cryptography
       python: "pypy-5.3.1"
-    # - env: TOX_ENV=pypy-pycrypto
-    # python: "pypy-5.3.1"
+    - env: TOX_ENV=pypy-pycrypto
+      python: "pypy-5.3.1"
+
+services:
+  - redis-server
+  - memcached
 
 cache:
   directories:
     - $HOME/.cache/pip
 
+install:
+  - pip install tox
+
 script:
-  python setup.py install
+  tox -e $TOX_ENV
+
 after_success:
   - |
     if [[ "${TRAVIS_TAG:-}" != "" && "$TOX_ENV" == "py36-cryptography" ]]; then
