@@ -22,9 +22,9 @@ matrix:
     - env: TOX_ENV=py36-pycrypto
       python: 3.6
     - env: TOX_ENV=pypy-cryptography
-      python: "pypy-5.3.1"
-    - env: TOX_ENV=pypy-pycrypto
-      python: "pypy-5.3.1"
+      python: "pypy=6.0.0"
+    - env: TOX_ENV=pypy3-cryptography
+      python: "pypy3=6.0.0"
 
 services:
   - redis-server
