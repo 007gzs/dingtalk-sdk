@@ -36,6 +36,10 @@ cache:
 
 install:
   - pip install tox
+  - pip install flake8
+
+before_script:
+  - python setup.py flake8
 
 script:
   tox -e $TOX_ENV
