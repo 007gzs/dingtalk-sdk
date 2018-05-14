@@ -29,8 +29,10 @@ class CryptoTestCase(unittest.TestCase):
         msg = """{"EventType":"check_create_suite_url","Random":"LPIdSnlF","TestSuiteKey":"suite4xxxxxxxxxxxxxxx"}"""
 
         expected = {
-            'msg_signature':'bcf6dcefa4ce2dbaf7b0666c7264d46fd9aad4bd',
-            'encrypt': '5DJFWzjRNOQk+5GSZxW+VrFMDWCIidPjEjg3//gm5x556BedVi62rDj1F9uXU97a4jw1R4FACUv9RCpoDobNqxhxRB2YtW901k4KHbP1/wpFJ3xdLG0n0A8U1VhENg80zKJd+YROR0YMGum4WYuoXJ6J98vt0ihYeIFoapNddLML5MyNAGM9saSpkouDMSvD+iU14i7V8ix1ia1Tb9ogog==',
+            'msg_signature': 'bcf6dcefa4ce2dbaf7b0666c7264d46fd9aad4bd',
+            'encrypt': '5DJFWzjRNOQk+5GSZxW+VrFMDWCIidPjEjg3//gm5x556BedVi62rDj1F9uXU97a4jw1R4FACUv9RCpoDobNqxhxRB2Yt'
+                       'W901k4KHbP1/wpFJ3xdLG0n0A8U1VhENg80zKJd+YROR0YMGum4WYuoXJ6J98vt0ihYeIFoapNddLML5MyNAGM9saSpko'
+                       'uDMSvD+iU14i7V8ix1ia1Tb9ogog==',
             'timeStamp': '1445827045067',
             'nonce': 'nEXhMP4r'
         }
@@ -45,7 +47,9 @@ class CryptoTestCase(unittest.TestCase):
 
     def test_decrypt_message(self):
         from dingtalk.core.utils import to_text
-        jsonstr = """{"encrypt":"1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=="}"""
+        jsonstr = '{"encrypt":"1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7g' \
+                  'TRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9Ph' \
+                  'SBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=="}'
 
         signature = '5a65ceeef9aab2d149439f82dc191dd6c5cbe2c0'
         timestamp = '1445827045067'
@@ -60,7 +64,9 @@ class CryptoTestCase(unittest.TestCase):
 
     def test_decrypt_binary_message(self):
         from dingtalk.core.utils import to_text
-        jsonbinary = b"""{"encrypt":"1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=="}"""
+        jsonbinary = b'{"encrypt":"1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMei' \
+                     b'ZI7gTRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrf' \
+                     b'gnNOS9PhSBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=="}'
 
         signature = '5a65ceeef9aab2d149439f82dc191dd6c5cbe2c0'
         timestamp = '1445827045067'
@@ -78,7 +84,9 @@ class CryptoTestCase(unittest.TestCase):
         signature = '5a65ceeef9aab2d149439f82dc191dd6c5cbe2c0'
         timestamp = '1445827045067'
         nonce = 'nEXhMP4r'
-        encrypt_str = '1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=='
+        encrypt_str = '1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUBm' \
+                      'fxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSBdH' \
+                      'legK+AGGanfwjXuQ9+0pZcy0w9lQ=='
 
         crypto = DingTalkCrypto(self.token, self.encoding_aes_key, self.suite_key)
         msg = crypto.decrypt_encrypt_str(
@@ -97,7 +105,9 @@ class CryptoTestCase(unittest.TestCase):
         signature = '5a65ceeef9aab2d149439f82dc191dd6c5cbe2c0'
         timestamp = '1445827045067'
         nonce = 'nEXhMP4r'
-        encrypt_str = b'1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=='
+        encrypt_str = b'1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUB' \
+                      b'mfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSB' \
+                      b'dHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=='
 
         crypto = DingTalkCrypto(self.token, self.encoding_aes_key, self.suite_key)
         msg = crypto.decrypt_encrypt_str(
@@ -116,7 +126,9 @@ class CryptoTestCase(unittest.TestCase):
         signature = '5a65ceeef9aab2d149439f82dc191dd6c5cbe2c0'
         timestamp = '1445827045067'
         nonce = 'xxxxx'
-        encrypt_str = b'1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUBmfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSBdHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=='
+        encrypt_str = b'1a3NBxmCFwkCJvfoQ7WhJHB+iX3qHPsc9JbaDznE1i03peOk1LaOQoRz3+nlyGNhwmwJ3vDMG+OzrHMeiZI7gTRWVdUB' \
+                      b'mfxjZ8Ej23JVYa9VrYeJ5as7XM/ZpulX8NEQis44w53h1qAgnC3PRzM7Zc/D6Ibr0rgUathB6zRHP8PYrfgnNOS9PhSB' \
+                      b'dHlegK+AGGanfwjXuQ9+0pZcy0w9lQ=='
 
         crypto = DingTalkCrypto(self.token, self.encoding_aes_key, self.suite_key)
 

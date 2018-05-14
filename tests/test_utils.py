@@ -22,4 +22,3 @@ class UtilityTestCase(unittest.TestCase):
         signature = signer.signature
 
         self.assertEqual('f7c3bc1d808e04732adf679965ccc34ca7ae3441', signature)
-

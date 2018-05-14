@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import os
-import platform
 import unittest
-
 
 
 class WeChatSessionTestCase(unittest.TestCase):
@@ -65,7 +62,7 @@ class WeChatSessionTestCase(unittest.TestCase):
         storage = KvStorage(redis)
         self.test_caches(storage)
 
-    def test_redis_storage(self):
+    def test_memcache_storage(self):
         from pymemcache.client import Client
         from dingtalk.storage.kvstorage import KvStorage
         servers = ("127.0.0.1", 11211)

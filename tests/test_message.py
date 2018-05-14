@@ -23,7 +23,7 @@ class MessagesTestCase(unittest.TestCase):
         self.assertEqual('file', msg['msgtype'])
         self.assertEqual('123456', msg['file']['media_id'])
 
-    def test_file_message(self):
+    def test_image_message(self):
         from dingtalk.model.message import ImageBody
 
         msgbody = ImageBody('123456')
@@ -107,7 +107,8 @@ class MessagesTestCase(unittest.TestCase):
     def test_button_action_card_message(self):
         from dingtalk.model.message import BtnActionCardBody
 
-        msgbody = BtnActionCardBody('title', 'markdown', '0', [{'title': 'title1', 'action_url': 'action_url1'}, {'title': 'title2', 'action_url': 'action_url2'}])
+        msgbody = BtnActionCardBody('title', 'markdown', '0', [{'title': 'title1', 'action_url': 'action_url1'},
+                                                               {'title': 'title2', 'action_url': 'action_url2'}])
         msgbody.add_btn('title3', 'action_url3')
         msg = msgbody.get_dict()
 
