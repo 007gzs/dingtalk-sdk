@@ -98,5 +98,4 @@ setup(
         'cryptography': ['cryptography'],
         'pycrypto': ['pycrypto'],
     },
-   
 )
