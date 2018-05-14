@@ -79,7 +79,7 @@ class BaseDingTalkCrypto(object):
                          nonce,
                          crypto_class=None):
         if not isinstance(msg, dict):
-            msg = json.loads(msg)
+            msg = json.loads(to_text(msg))
         encrypt = msg['encrypt']
         return self._decrypt_encrypt_str(signature, timestamp, nonce, encrypt, crypto_class)
 
