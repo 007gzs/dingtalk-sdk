@@ -26,9 +26,9 @@ matrix:
     - env: TOX_ENV=pypy3-cryptography
       python: "pypy3"
 
-# services:
-#   - redis-server
-#   - memcached
+services:
+  - redis-server
+  - memcached
 
 cache:
   directories:

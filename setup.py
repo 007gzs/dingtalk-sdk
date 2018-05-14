@@ -90,10 +90,8 @@ setup(
     include_package_data=True,
     tests_require=[
         'pytest',
-        'httmock',
         'redis',
         'pymemcache',
-        'shove',
     ],
     cmdclass=cmdclass,
     extras_require={

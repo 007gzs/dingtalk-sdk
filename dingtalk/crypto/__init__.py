@@ -37,18 +37,19 @@ class BaseDingTalkCrypto(object):
         self.token = token
         self._id = _id
 
-    def _check_signature(self,
-                         signature,
-                         timestamp,
-                         nonce,
-                         echo_str,
-                         crypto_class=None):
-        _signature = _get_signature(self.token, timestamp, nonce, echo_str)
+    def _decrypt_encrypt_str(self,
+                             signature,
+                             timestamp,
+                             nonce,
+                             encrypt_str,
+                             crypto_class=None):
+
+        _signature = _get_signature(self.token, timestamp, nonce, encrypt_str)
         if _signature != signature:
             raise InvalidSignatureException()
         assert self.key is not None
         pc = crypto_class(self.key)
-        return pc.decrypt(echo_str, self._id)
+        return pc.decrypt(encrypt_str, self._id)
 
     def _encrypt_message(self,
                          msg,
@@ -80,18 +81,16 @@ class BaseDingTalkCrypto(object):
         if not isinstance(msg, dict):
             msg = json.loads(msg)
         encrypt = msg['encrypt']
-        _signature = _get_signature(self.token, timestamp, nonce, encrypt)
-        if _signature != signature:
-            raise InvalidSignatureException()
-        assert self.key is not None
-        pc = crypto_class(self.key)
-        return pc.decrypt(encrypt, self._id)
+        return self._decrypt_encrypt_str(signature, timestamp, nonce, encrypt, crypto_class)
 
 
 class DingTalkCrypto(BaseDingTalkCrypto):
 
     def __init__(self, token, encoding_aes_key, corpid_or_suitekey):
         super(DingTalkCrypto, self).__init__(token, encoding_aes_key, corpid_or_suitekey)
+
+    def decrypt_encrypt_str(self, signature, timestamp, nonce, encrypt_str):
+        return self._decrypt_encrypt_str(signature, timestamp, nonce, encrypt_str, PrpCrypto)
 
     def encrypt_message(self, msg, nonce=None, timestamp=None):
         return self._encrypt_message(msg, nonce, timestamp, PrpCrypto)

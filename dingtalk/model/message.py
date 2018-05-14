@@ -91,7 +91,10 @@ class VoiceBody(FileBody):
 
 class LinkBody(BodyBase):
     _msgtype = 'link'
-    link = None
+    messageUrl = None
+    title = None
+    text = None
+    picUrl = None
 
     def __init__(self, message_url, pic_url, title, text, **kwargs):
         """
@@ -102,8 +105,7 @@ class LinkBody(BodyBase):
         :param title: 消息标题
         :param text: 消息描述
         """
-        super(LinkBody, self).__init__(link={'messageUrl': message_url, 'picUrl': pic_url,
-                                             'title': title, 'text': text}, **kwargs)
+        super(LinkBody, self).__init__(messageUrl=message_url, picUrl=pic_url,  title=title, text=text, **kwargs)
 
 
 class MarkdownBody(BodyBase):
@@ -124,7 +126,7 @@ class MarkdownBody(BodyBase):
 
 class OaBodyContent(BodyBase):
     title = None
-    _form = None
+    _forms = None
     rich = None
     content = None
     image = None
@@ -154,10 +156,10 @@ class OaBodyContent(BodyBase):
 
     @property
     def form(self):
-        if not self._form:
+        if not self._forms:
             return None
         ret = []
-        for k, v in self._form:
+        for k, v in self._forms.items():
             ret.append({"key": k, "value": v})
         return ret
 
@@ -215,7 +217,7 @@ class BtnActionCardBody(ActionCardBody):
     btn_orientation = None
     btn_json_list = None
 
-    def __init__(self, title, markdown, btn_orientation, btn_json_list=(), **kwargs):
+    def __init__(self, title, markdown, btn_orientation, btn_list=(), **kwargs):
         """
         独立跳转ActionCard消息
 
@@ -228,7 +230,7 @@ class BtnActionCardBody(ActionCardBody):
         btn_orientation = to_text(btn_orientation)
         assert btn_orientation in ('0', '1')
         super(BtnActionCardBody, self).__init__(title=title, markdown=markdown,
-                                                btn_orientation=btn_orientation, btn_json_list=btn_json_list, **kwargs)
+                                                btn_orientation=btn_orientation, btn_json_list=list(btn_list), **kwargs)
 
     def add_btn(self, title, action_url):
         """
