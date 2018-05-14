@@ -67,8 +67,10 @@ class MessagesTestCase(unittest.TestCase):
     def test_oa_message(self):
         from collections import OrderedDict
         from dingtalk.model.message import OaBodyContent, OaBody
-
-        body_content = OaBodyContent('title', 'content', 'author', '123', '1', OrderedDict({'key1': 'value1', 'key2': 'value2'}), '1.12', 'unit')
+        forms = OrderedDict()
+        forms['key1'] = 'value1'
+        forms['key2'] = 'value2'
+        body_content = OaBodyContent('title', 'content', 'author', '123', '1', forms, '1.12', 'unit')
         msgbody = OaBody('http://dingtalk.com', 'ffffff', 'head_text', body_content, 'http://dingtalk.com/index.html')
         msg = msgbody.get_dict()
 
