@@ -73,12 +73,16 @@ post/get接口中的access_token,top接口中的session会在请求时自动设�
    sub_dept_id_list = ret['sub_dept_id_list']
 
 
-   # post 接口：列出微应用
-   ret = client.post(
-      '/microapp/list',
-      result_processor=lambda x: x['appList']
+   # post 接口：创建会话
+   return self._post(
+      '/chat/create',
+      {
+          'name': "群名称",
+          'owner': "zhangsan",
+          'useridlist': ["zhangsan", "lisi"]
+      }
    )
-   app_list = ret['appList']
+   chatid = ret['chatid']
 
 
 示例项目
