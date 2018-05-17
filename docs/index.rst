@@ -68,8 +68,7 @@ post/get接口中的access_token,top接口中的session会在请求时自动设�
    # get 接口：获取子部门ID列表
    ret = client.get(
       '/department/list_ids',
-      {'id': 0},
-      result_processor=lambda x: x['sub_dept_id_list']
+      {'id': 0}
    )
    sub_dept_id_list = ret['sub_dept_id_list']
 
