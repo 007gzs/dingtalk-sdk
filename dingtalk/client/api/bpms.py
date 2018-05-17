@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 
 import time
 import datetime
-import json
 
 import six
 
@@ -105,7 +104,7 @@ class Bpms(DingTalkBaseAPI):
                 'agent_id': agent_id,
                 'cc_list': cc_list,
                 'cc_position': cc_position,
-                'form_component_values': json.dumps(form_component_value_list)
+                'form_component_values': form_component_value_list
             },
             result_processor=lambda x: x['process_instance_id']
         )
@@ -124,10 +123,10 @@ class Bpms(DingTalkBaseAPI):
         """
         userid_list = ','.join(map(to_text, userid_list))
 
-        if isinstance(start_time, datetime.date):
+        if isinstance(start_time, (datetime.date, datetime.datetime)):
             start_time = int(time.mktime(start_time.timetuple()) * 1000)
 
-        if isinstance(end_time, datetime.date):
+        if isinstance(end_time, (datetime.date, datetime.datetime)):
             end_time = int(time.mktime(end_time.timetuple()) * 1000)
 
         assert isinstance(start_time, six.integer_types)

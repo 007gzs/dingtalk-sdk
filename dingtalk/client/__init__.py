@@ -24,6 +24,7 @@ class DingTalkClient(BaseClient):
     cspace = api.Cspace()
     department = api.Department()
     ext = api.Ext()
+    employeerm = api.Employeerm()
     message = api.Message()
     microapp = api.MicroApp()
     role = api.Role()

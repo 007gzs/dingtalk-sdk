@@ -25,10 +25,10 @@ class Checkin(DingTalkBaseAPI):
         :return:
         """
 
-        if isinstance(start_time, datetime.date):
+        if isinstance(start_time, (datetime.date, datetime.datetime)):
             start_time = int(time.mktime(start_time.timetuple()) * 1000)
 
-        if isinstance(end_time, datetime.date):
+        if isinstance(end_time, (datetime.date, datetime.datetime)):
             end_time = int(time.mktime(end_time.timetuple()) * 1000)
 
         assert isinstance(start_time, six.integer_types) and isinstance(end_time, six.integer_types)
@@ -56,10 +56,10 @@ class Checkin(DingTalkBaseAPI):
         :param size: 分页大小
         :return:
         """
-        if isinstance(start_time, datetime.date):
+        if isinstance(start_time, (datetime.date, datetime.datetime)):
             start_time = int(time.mktime(start_time.timetuple()) * 1000)
 
-        if isinstance(end_time, datetime.date):
+        if isinstance(end_time, (datetime.date, datetime.datetime)):
             end_time = int(time.mktime(end_time.timetuple()) * 1000)
 
         assert isinstance(start_time, six.integer_types) and isinstance(end_time, six.integer_types)

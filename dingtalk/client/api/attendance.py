@@ -19,9 +19,9 @@ class Attendance(DingTalkBaseAPI):
         :param check_date_to: 查询考勤打卡记录的结束工作日。注意，起始与结束工作日最多相隔7天
         :return:
         """
-        if isinstance(check_date_from, datetime.date):
+        if isinstance(check_date_from, (datetime.date, datetime.datetime)):
             check_date_from = check_date_from.strftime(self.DATE_TIME_FORMAT)
-        if isinstance(check_date_to, datetime.date):
+        if isinstance(check_date_to, (datetime.date, datetime.datetime)):
             check_date_to = check_date_to.strftime(self.DATE_TIME_FORMAT)
 
         return self._post(
@@ -45,9 +45,9 @@ class Attendance(DingTalkBaseAPI):
         :param limit: 表示获取考勤数据的条数，最大不能超过50条
         :return:
         """
-        if isinstance(work_date_from, datetime.date):
+        if isinstance(work_date_from, (datetime.date, datetime.datetime)):
             work_date_from = work_date_from.strftime(self.DATE_TIME_FORMAT)
-        if isinstance(work_date_to, datetime.date):
+        if isinstance(work_date_to, (datetime.date, datetime.datetime)):
             work_date_to = work_date_to.strftime(self.DATE_TIME_FORMAT)
 
         return self._post(
@@ -70,7 +70,7 @@ class Attendance(DingTalkBaseAPI):
         :param size: 分页大小，最大200
         :return:
         """
-        if isinstance(work_date, datetime.date):
+        if isinstance(work_date, (datetime.date, datetime.datetime)):
             work_date = work_date.strftime(self.DATE_TIME_FORMAT)
         return self._top_request(
             'dingtalk.smartwork.attends.getsimplegroups',
@@ -108,9 +108,9 @@ class Attendance(DingTalkBaseAPI):
         :param to_date: 请假结束时间
         :return: 请假时长（单位分钟）
         """
-        if isinstance(from_date, datetime.date):
+        if isinstance(from_date, (datetime.date, datetime.datetime)):
             from_date = from_date.strftime(self.DATE_TIME_FORMAT)
-        if isinstance(to_date, datetime.date):
+        if isinstance(to_date, (datetime.date, datetime.datetime)):
             to_date = to_date.strftime(self.DATE_TIME_FORMAT)
 
         return self._top_request(

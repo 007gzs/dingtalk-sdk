@@ -56,22 +56,23 @@ class Ext(DingTalkBaseAPI):
         :param share_userids: 共享给的员工userId列表
         :return:
         """
-        contact = {
-            'name': name,
-            'follower_user': follower_userid,
-            'state_code': state_code,
-            'mobile': mobile,
-            'label_ids': label_ids,
-            'title': title,
-            'share_deptids': share_deptids,
-            'remark': remark,
-            'address': address,
-            'company_name': company_name,
-            'share_userid': share_userids
-        }
 
         return self._top_request(
             'dingtalk.corp.ext.add',
-            {'contact': json.dumps(contact)},
+            {
+                'contact': {
+                    'name': name,
+                    'follower_user': follower_userid,
+                    'state_code': state_code,
+                    'mobile': mobile,
+                    'label_ids': label_ids,
+                    'title': title,
+                    'share_deptids': share_deptids,
+                    'remark': remark,
+                    'address': address,
+                    'company_name': company_name,
+                    'share_userid': share_userids
+                }
+            },
             result_processor=lambda x: x['userid']
         )

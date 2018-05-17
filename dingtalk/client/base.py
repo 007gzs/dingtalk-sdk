@@ -171,11 +171,23 @@ class BaseClient(object):
 
     def top_request(self, method, params=None, format_='json', v='2.0',
                     simplify='false', partner_id=None, url=None, **kwargs):
+        """
+        top 接口请求
+
+        :param method: API接口名称。
+        :param params: 请求参数 （dict 格式）
+        :param format_: 响应格式（默认json，如果使用xml，需要自己对返回结果解析）
+        :param v: API协议版本，可选值：2.0。
+        :param simplify: 是否采用精简JSON返回格式
+        :param partner_id: 合作伙伴身份标识。
+        :param url: 请求url，默认为 https://eco.taobao.com/router/rest
+        """
         from datetime import datetime
-        if params is None:
-            reqparams = {}
-        else:
-            reqparams = params.copy()
+
+        reqparams = {}
+        if params is not None:
+            for key, value in params.items():
+                reqparams[key] = value if not isinstance(value, (dict, list, tuple)) else json.dumps(value)
         reqparams['method'] = method
         reqparams['timestamp'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         reqparams['format'] = format_
@@ -199,11 +211,24 @@ class BaseClient(object):
                                                method, format_, v, simplify, partner_id, url, params, **kwargs)
 
     def get(self, uri, params=None, **kwargs):
+        """
+        get 接口请求
+
+        :param uri: 请求url
+        :param params: get 参数（dict 格式）
+        """
         if params is not None:
             kwargs['params'] = params
         return self.request('GET', uri, **kwargs)
 
     def post(self, uri, data=None, params=None, **kwargs):
+        """
+        post 接口请求
+
+        :param uri: 请求url
+        :param data: post 数据（dict 格式会自动转换为json）
+        :param params: post接口中url问号后参数（dict 格式）
+        """
         if data is not None:
             kwargs['data'] = data
         if params is not None:

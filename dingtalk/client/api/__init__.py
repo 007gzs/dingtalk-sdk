@@ -9,6 +9,7 @@ from dingtalk.client.api.checkin import Checkin  # NOQA
 from dingtalk.client.api.cspace import Cspace  # NOQA
 from dingtalk.client.api.department import Department  # NOQA
 from dingtalk.client.api.ext import Ext  # NOQA
+from dingtalk.client.api.employeerm import Employeerm  # NOQA
 from dingtalk.client.api.message import Message  # NOQA
 from dingtalk.client.api.microapp import MicroApp  # NOQA
 from dingtalk.client.api.role import Role  # NOQA
