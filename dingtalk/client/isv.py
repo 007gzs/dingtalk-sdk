@@ -114,7 +114,7 @@ class ISVClient(BaseClient):
     def parse_message(self, msg, signature, timestamp, nonce):
         message = self.crypto.decrypt_message(msg, signature, timestamp, nonce)
         try:
-            message = json.loads(to_text(message))
+            message = json_loads(to_text(message))
             self.proc_message(message)
         except Exception as e:
             logger.error("proc_message error %s %s", message, e)

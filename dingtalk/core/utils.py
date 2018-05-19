@@ -2,6 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import hashlib
+import json
 import random
 import string
 
@@ -81,3 +82,7 @@ def byte2int(c):
     if six.PY2:
         return ord(c)
     return c
+
+
+def json_loads(s, object_hook=ObjectDict, **kwargs):
+    json.loads(s, object_hook=object_hook **kwargs)

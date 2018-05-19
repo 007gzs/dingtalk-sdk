@@ -6,6 +6,7 @@ import json
 import six
 
 from dingtalk.client.api.base import DingTalkBaseAPI
+from dingtalk.core.utils import json_loads
 
 
 class Ext(DingTalkBaseAPI):
@@ -21,7 +22,7 @@ class Ext(DingTalkBaseAPI):
         return self._top_request(
             'dingtalk.corp.ext.listlabelgroups',
             {'offset': offset, 'size': size},
-            result_processor=lambda x: json.loads(x) if isinstance(x, six.string_types) else x
+            result_processor=lambda x: json_loads(x) if isinstance(x, six.string_types) else x
         )
 
     def list(self, offset=0, size=100):
@@ -35,7 +36,7 @@ class Ext(DingTalkBaseAPI):
         return self._top_request(
             'dingtalk.corp.ext.list',
             {'offset': offset, 'size': size},
-            result_processor=lambda x: json.loads(x) if isinstance(x, six.string_types) else x
+            result_processor=lambda x: json_loads(x) if isinstance(x, six.string_types) else x
         )
 
     def add(self, name, follower_userid, label_ids, mobile, state_code='86',

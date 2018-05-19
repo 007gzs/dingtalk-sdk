@@ -61,8 +61,8 @@ post/get接口中的access_token,top接口中的session会在请求时自动设�
           "size": 10
       }
    )
-   has_more = ret['result']['has_more']
-   groups = ret['result']['groups']
+   has_more = ret.result.has_more
+   groups = ret.result.groups
 
 
    # get 接口：获取子部门ID列表
@@ -70,7 +70,7 @@ post/get接口中的access_token,top接口中的session会在请求时自动设�
       '/department/list_ids',
       {'id': 0}
    )
-   sub_dept_id_list = ret['sub_dept_id_list']
+   sub_dept_id_list = ret.sub_dept_id_list
 
 
    # post 接口：创建会话
@@ -82,7 +82,7 @@ post/get接口中的access_token,top接口中的session会在请求时自动设�
           'useridlist': ["zhangsan", "lisi"]
       }
    )
-   chatid = ret['chatid']
+   chatid = ret.chatid
 
 
 示例项目

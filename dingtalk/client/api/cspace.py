@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import json
 
 import six
-from dingtalk.core.utils import to_text
+from dingtalk.core.utils import to_text, json_loads
 
 from dingtalk.client.api.base import DingTalkBaseAPI
 
@@ -57,7 +57,7 @@ class Cspace(DingTalkBaseAPI):
                 'overwrite': overwrite
             },
             result_processor=lambda x:
-            json.loads(x['dentry']) if isinstance(x['dentry'], six.string_types) else x['dentry']
+                json_loads(x['dentry']) if isinstance(x['dentry'], six.string_types) else x['dentry']
         )
 
     def get_custom_space(self, domain=None, agent_id=None):

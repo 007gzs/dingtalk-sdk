@@ -9,6 +9,7 @@ from six.moves.urllib_parse import urljoin
 
 from dingtalk.client.api.base import DingTalkBaseAPI
 from dingtalk.core.exceptions import DingTalkClientException
+from dingtalk.core.utils import json_loads
 from dingtalk.storage.memorystorage import MemoryStorage
 
 
@@ -87,7 +88,7 @@ class BaseClient(object):
 
     def _decode_result(self, res):
         try:
-            result = json.loads(res.content.decode('utf-8', 'ignore'), strict=False)
+            result = json_loads(res.content.decode('utf-8', 'ignore'), strict=False)
         except (TypeError, ValueError):
             # Return origin response object if we can not decode it as JSON
             logger.debug('Can not decode response as JSON', exc_info=True)
