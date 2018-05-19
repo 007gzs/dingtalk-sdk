@@ -2,9 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
-import json
 
-from dingtalk.core.utils import to_text
+from dingtalk.core.utils import to_text, json_loads
 from dingtalk.client import DingTalkClient
 from dingtalk.client.base import BaseClient
 from dingtalk.client.channel import ChannelClient

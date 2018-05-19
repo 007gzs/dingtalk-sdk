@@ -85,4 +85,4 @@ def byte2int(c):
 
 
 def json_loads(s, object_hook=ObjectDict, **kwargs):
-    json.loads(s, object_hook=object_hook **kwargs)
+    json.loads(s, object_hook=object_hook, **kwargs)
