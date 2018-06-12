@@ -9,15 +9,15 @@ DingTalk Sdk for Python
 钉钉开放平台第三方 Python SDK。
 `【阅读文档】 <http://dingtalk-sdk.readthedocs.io/zh_CN/latest/>`_。
 
-*******
+********
 功能特性
-*******
+********
 + 企业内部开发接入api
 + 应用服务商（ISV）接入api
 
-****
+********
 安装
-****
+********
 
 目前 dingtalk-sdk 支持的 Python 环境有 2.7, 3.4, 3.5, 3.6 和 pypy。
 
@@ -43,8 +43,8 @@ dingtalk-sdk 消息加解密同时兼容 cryptography 和 PyCrypto, 优先使用
 
     pip install -U dingtalk-sdk
 
-*******
+****************
 使用示例
-*******
+****************
 
 django 示例 https://github.com/007gzs/dingtalk-django-example
