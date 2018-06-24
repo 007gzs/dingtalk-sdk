@@ -1,6 +1,11 @@
 Changelog
 ================
 
+Version 1.1.4
+------------------
+
++ 解决接口返回 ObjectDict 时 json_loads 未return bug
+
 Version 1.1.3
 ------------------
 
