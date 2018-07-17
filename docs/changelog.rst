@@ -1,6 +1,11 @@
 Changelog
 ================
 
+Version 1.1.5
+------------------
+
++ [fix]the list_message_status api 's method is post
+
 Version 1.1.4
 ------------------
 
