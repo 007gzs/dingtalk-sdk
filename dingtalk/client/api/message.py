@@ -94,7 +94,7 @@ class Message(DingTalkBaseAPI):
         :param message_id: 消息id
         :return:
         """
-        return self._get('/message/list_message_status', {"messageId": message_id})
+        return self._post('/message/list_message_status', {"messageId": message_id})
 
     def send_by_code(self, code, msg_body):
         """
