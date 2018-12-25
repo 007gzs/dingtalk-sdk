@@ -54,7 +54,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='dingtalk-sdk',
-    version='1.1.5',
+    version='1.1.6',
     keywords='dingding, ding, dtalk, dingtalk, SDK',
     description='DingTalk SDK for Python',
     long_description=long_description,
