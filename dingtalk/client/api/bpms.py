@@ -85,7 +85,7 @@ class Bpms(DingTalkBaseAPI):
         if isinstance(approvers, (list, tuple, set)):
             approvers = ','.join(map(to_text, approvers))
         form_component_value_list = []
-        for name, value in form_component_values.item():
+        for name, value in form_component_values.items():
             data = {'name': name}
             if isinstance(value, (list, tuple)):
                 if len(value) > 1:
