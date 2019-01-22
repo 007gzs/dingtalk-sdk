@@ -1,6 +1,11 @@
 Changelog
 ================
 
+Version 1.1.6
+------------------
+
++ 新增app_key app_secret 获取 access_token 的 AppKeyClient
+
 Version 1.1.5
 ------------------
 

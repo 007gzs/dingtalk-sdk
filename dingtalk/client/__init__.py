@@ -121,8 +121,9 @@ class SecretClient(DingTalkClient):
 
 class AppKeyClient(DingTalkClient):
 
-    def __init__(self, corp_id, app_key, app_secret, token=None, aes_key=None, storage=None, timeout=None, auto_retry=True):
-        super(AppKeyClient, self).__init__(corp_id, 'secret:'+corp_id, storage, timeout, auto_retry)
+    def __init__(self, corp_id, app_key, app_secret, token=None, aes_key=None, storage=None, timeout=None,
+                 auto_retry=True):
+        super(AppKeyClient, self).__init__(corp_id, 'secret:' + corp_id, storage, timeout, auto_retry)
         self.app_key = app_key
         self.app_secret = app_secret
         self.crypto = DingTalkCrypto(token, aes_key, corp_id)
