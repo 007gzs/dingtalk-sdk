@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import logging
 
-from dingtalk.client import SecretClient  # NOQA
+from dingtalk.client import SecretClient, AppKeyClient  # NOQA
 from dingtalk.client.isv import ISVClient  # NOQA
 from dingtalk.core.exceptions import DingTalkClientException, DingTalkException  # NOQA
 
