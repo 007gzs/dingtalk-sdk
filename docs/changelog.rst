@@ -1,6 +1,17 @@
 Changelog
 ================
 
+Version 1.1.8
+------------------
+
++ fix callback接口的返回失败接口 使用错误
+
+
+Version 1.1.7
+------------------
+
++ ssl._create_unverified_context 增加异常判断
+
 Version 1.1.6
 ------------------
 

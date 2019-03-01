@@ -81,4 +81,4 @@ class Callback(DingTalkBaseAPI):
 
         :return:
         """
-        return self._get('/call_back/delete_call_back')
+        return self._get('/call_back/get_call_back_failed_result')
