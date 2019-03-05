@@ -82,10 +82,13 @@ class Message(DingTalkBaseAPI):
         toparty = "|".join(map(to_text, toparty_list))
         if isinstance(msg_body, BodyBase):
             msg_body = msg_body.get_dict()
-        msg_body['touser'] = touser
-        msg_body['toparty'] = toparty
-        msg_body['agentid'] = agentid
-        return self._post('/message/send', msg_body)
+        body = {}
+        body["text"] = {"content":msg_body}
+        body['msgtype']="text"
+        body['touser'] = touser
+        body['toparty'] = toparty
+        body['agentid'] = agentid
+        return self._post('/message/send', body)
 
     def list_message_status(self, message_id):
         """
