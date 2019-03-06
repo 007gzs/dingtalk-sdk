@@ -4,6 +4,7709 @@ from __future__ import absolute_import, unicode_literals
 from dingtalk.client.api.base import DingTalkBaseAPI
 
 
+class TbDingDing(DingTalkBaseAPI):
+    """
+    钉钉API
+    """
+
+    def dingtalk_corp_message_corpconversation_sendmock(
+            self,
+            microapp_agent_id,
+            to_user,
+            to_party,
+            message_type,
+            message
+    ):
+        """
+        企业会话消息发送
+        测试接入top是否有问题
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27851
+
+        :param microapp_agent_id: 微应用agentId
+        :param to_user: 消息接收者userid列表
+        :param to_party: 消息接收者部门列表
+        :param message_type: 消息类型
+        :param message: 消息体
+        """
+        return self._top_request(
+            "dingtalk.corp.message.corpconversation.sendmock",
+            {
+                "microapp_agent_id": microapp_agent_id,
+                "to_user": to_user,
+                "to_party": to_party,
+                "message_type": message_type,
+                "message": message
+            }
+        )
+
+    def dingtalk_corp_emp_search(
+            self,
+            keyword='',
+            offset='',
+            size=''
+    ):
+        """
+        企业通讯录员工搜索
+        钉钉企业通讯录搜索接口, 支持翻页
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27910
+
+        :param keyword: 搜索关键字
+        :param offset: 偏移量
+        :param size: 请求数量
+        """
+        return self._top_request(
+            "dingtalk.corp.emp.search",
+            {
+                "keyword": keyword,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_corp_ext_add(
+            self,
+            contact
+    ):
+        """
+        添加企业外部联系人
+        钉钉企业外部通讯录, 添加外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28177
+
+        :param contact: 外部联系人信息
+        """
+        return self._top_request(
+            "dingtalk.corp.ext.add",
+            {
+                "contact": contact
+            },
+            result_processor=lambda x: x["userid"]
+        )
+
+    def dingtalk_corp_ext_list(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        外部联系人列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28178
+
+        :param size: 分页大小, 最大100
+        :param offset: 偏移位置
+        """
+        return self._top_request(
+            "dingtalk.corp.ext.list",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_corp_ext_listlabelgroups(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        标签列表
+        拉取标签列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28179
+
+        :param size: 分页大小,最大100
+        :param offset: 偏移位置
+        """
+        return self._top_request(
+            "dingtalk.corp.ext.listlabelgroups",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_corp_encryption_key_list(
+            self
+    ):
+        """
+        企业密钥列表
+        查询企业密钥列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28386
+
+        """
+        return self._top_request(
+            "dingtalk.corp.encryption.key.list"
+        )
+
+    def dingtalk_corp_conference_details_query(
+            self,
+            since_time='',
+            limit='',
+            caller_user_id='',
+            member_user_id=''
+    ):
+        """
+        钉钉企业电话会议详情记录查询
+        查询企业电话会议详情记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28418
+
+        :param since_time: 查询起始时间
+        :param limit: 查询个数，上限100
+        :param caller_user_id: 主叫userId
+        :param member_user_id: 成员userId
+        """
+        return self._top_request(
+            "dingtalk.corp.conference.details.query",
+            {
+                "since_time": since_time,
+                "limit": limit,
+                "caller_user_id": caller_user_id,
+                "member_user_id": member_user_id
+            }
+        )
+
+    def dingtalk_corp_ext_update(
+            self,
+            contact
+    ):
+        """
+        更新外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28531
+
+        :param contact: 外部联系人信息
+        """
+        return self._top_request(
+            "dingtalk.corp.ext.update",
+            {
+                "contact": contact
+            }
+        )
+
+    def dingtalk_corp_conversation_corpconversion_listmember(
+            self,
+            open_conversation_id,
+            offset,
+            count
+    ):
+        """
+        获取企业群群成员接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28620
+
+        :param open_conversation_id: 群组id
+        :param offset: 群成员列表偏移量
+        :param count: 本次请求获取群成员的大小，最大为100
+        """
+        return self._top_request(
+            "dingtalk.corp.conversation.corpconversion.listmember",
+            {
+                "open_conversation_id": open_conversation_id,
+                "offset": offset,
+                "count": count
+            }
+        )
+
+    def dingtalk_corp_conversation_corpconversion_getconversation(
+            self,
+            open_conversation_id
+    ):
+        """
+        获取企业群基本信息
+        获取企业群基本信息接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28621
+
+        :param open_conversation_id: 群组ID
+        """
+        return self._top_request(
+            "dingtalk.corp.conversation.corpconversion.getconversation",
+            {
+                "open_conversation_id": open_conversation_id
+            }
+        )
+
+    def dingtalk_corp_message_corpconversation_asyncsend(
+            self,
+            msgtype,
+            agent_id,
+            msgcontent,
+            userid_list='',
+            dept_id_list='',
+            to_all_user='false'
+    ):
+        """
+        企业会话消息异步发送
+        企业会话消息异步发送接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28915
+
+        :param msgtype: 消息类型,如text、file、oa等，具体见文档
+        :param agent_id: 微应用的id
+        :param msgcontent: 与msgtype对应的消息体，具体见文档
+        :param userid_list: 接收者的用户userid列表
+        :param dept_id_list: 接收者的部门id列表
+        :param to_all_user: 是否发送给企业全部用户
+        """
+        return self._top_request(
+            "dingtalk.corp.message.corpconversation.asyncsend",
+            {
+                "msgtype": msgtype,
+                "agent_id": agent_id,
+                "msgcontent": msgcontent,
+                "userid_list": userid_list,
+                "dept_id_list": dept_id_list,
+                "to_all_user": to_all_user
+            }
+        )
+
+    def dingtalk_corp_message_corpconversation_getsendprogress(
+            self,
+            agent_id,
+            task_id
+    ):
+        """
+        获取异步发送企业会话消息的发送进度
+        获取异步发送企业会话消息的进度
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28917
+
+        :param agent_id: 发送消息时使用的微应用的id
+        :param task_id: 发送消息时钉钉返回的任务id
+        """
+        return self._top_request(
+            "dingtalk.corp.message.corpconversation.getsendprogress",
+            {
+                "agent_id": agent_id,
+                "task_id": task_id
+            }
+        )
+
+    def dingtalk_corp_message_corpconversation_getsendresult(
+            self,
+            agent_id='',
+            task_id=''
+    ):
+        """
+        获取异步向企业会话发送消息的结果
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28918
+
+        :param agent_id: 微应用的agentid
+        :param task_id: 异步任务的id
+        """
+        return self._top_request(
+            "dingtalk.corp.message.corpconversation.getsendresult",
+            {
+                "agent_id": agent_id,
+                "task_id": task_id
+            }
+        )
+
+    def dingtalk_corp_message_corpconversation_asyncsendbycode(
+            self,
+            msgtype,
+            agent_id,
+            msgcontent,
+            code,
+            user_id_list='',
+            dept_id_list='',
+            to_all_user='false'
+    ):
+        """
+        通过用户授权码异步向企业会话发送消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28919
+
+        :param msgtype: 消息类型,如text、file、oa等，具体见文档
+        :param agent_id: 微应用的id
+        :param msgcontent: 与msgtype对应的消息体，具体见文档
+        :param code: 用户操作产生的授权码
+        :param user_id_list: 接收者的用户userid列表
+        :param dept_id_list: 接收者的部门id列表
+        :param to_all_user: 是否发送给企业全部用户
+        """
+        return self._top_request(
+            "dingtalk.corp.message.corpconversation.asyncsendbycode",
+            {
+                "msgtype": msgtype,
+                "agent_id": agent_id,
+                "msgcontent": msgcontent,
+                "code": code,
+                "user_id_list": user_id_list,
+                "dept_id_list": dept_id_list,
+                "to_all_user": to_all_user
+            }
+        )
+
+    def dingtalk_corp_chatbot_createorgbot(
+            self,
+            create_chat_bot_model
+    ):
+        """
+        isv为企业创建企业机器人
+        给ISV提供为企业创建机器人的接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28964
+
+        :param create_chat_bot_model: 创建机器人modle
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.createorgbot",
+            {
+                "create_chat_bot_model": create_chat_bot_model
+            }
+        )
+
+    def dingtalk_isv_call_getuserlist(
+            self,
+            start='0',
+            offset='200'
+    ):
+        """
+        dingtalk.isv.call.getuserlist
+        删除ISV套件对应的企业下的可以主动调用接口发起免费电话的员工
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29002
+
+        :param start: 游标开始值
+        :param offset: 批量值
+        """
+        return self._top_request(
+            "dingtalk.isv.call.getuserlist",
+            {
+                "start": start,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_isv_call_calluser(
+            self,
+            staff_id,
+            authed_corp_id,
+            authed_staff_id
+    ):
+        """
+        主叫方发起免费电话给授权企业下的授权范围内的人员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29003
+
+        :param staff_id: isv套件所属企业下的员工userid
+        :param authed_corp_id: 授权isv套件企业的corpid
+        :param authed_staff_id: 授权isv套件企业的员工userid
+        """
+        return self._top_request(
+            "dingtalk.isv.call.calluser",
+            {
+                "staff_id": staff_id,
+                "authed_corp_id": authed_corp_id,
+                "authed_staff_id": authed_staff_id
+            }
+        )
+
+    def dingtalk_isv_call_setuserlist(
+            self,
+            staff_id_list
+    ):
+        """
+        设置isv发起免费电话的主叫白名单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29004
+
+        :param staff_id_list: 套件所所属企业免费电话主叫人员工号列表
+        """
+        return self._top_request(
+            "dingtalk.isv.call.setuserlist",
+            {
+                "staff_id_list": staff_id_list
+            }
+        )
+
+    def dingtalk_isv_call_removeuserlist(
+            self,
+            staff_id_list
+    ):
+        """
+        删除isv免费电话员工名单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29005
+
+        :param staff_id_list: 要删除的员工userid列表
+        """
+        return self._top_request(
+            "dingtalk.isv.call.removeuserlist",
+            {
+                "staff_id_list": staff_id_list
+            }
+        )
+
+    def dingtalk_corp_chatbot_updateorgbot(
+            self,
+            icon,
+            name,
+            chatbot_id
+    ):
+        """
+        修改企业机器人
+        小蜜isv修改机器人名字头像接口。(接口只给小蜜用，机器人应用会白名单处理)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29054
+
+        :param icon: 头像的mediaId
+        :param name: 机器人名字
+        :param chatbot_id: 创建时返回的机器人Id
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.updateorgbot",
+            {
+                "icon": icon,
+                "name": name,
+                "chatbot_id": chatbot_id
+            }
+        )
+
+    def dingtalk_corp_chatbot_listorgbot(
+            self,
+            agent_id,
+            type
+    ):
+        """
+        机器人查询接口
+        小蜜isv查询给企业创建的机器人接口。(接口只给小蜜用，机器人应用会白名单处理)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29055
+
+        :param agent_id: 微应用id
+        :param type: 钉钉分配的类型
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.listorgbot",
+            {
+                "agent_id": agent_id,
+                "type": type
+            }
+        )
+
+    def dingtalk_corp_chatbot_listorgbotbytypeandbottype(
+            self,
+            type,
+            bot_type
+    ):
+        """
+        通过机器人type和botType查询机器人接口
+        小蜜isv查询给企业创建的机器人接口。(接口只给小蜜用，机器人应用会白名单处理)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29081
+
+        :param type: 机器人类型(钉钉分配)
+        :param bot_type: 2-企业对内机器人，3-企业对外机器人
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.listorgbotbytypeandbottype",
+            {
+                "type": type,
+                "bot_type": bot_type
+            }
+        )
+
+    def dingtalk_smartwork_attends_listschedule(
+            self,
+            work_date,
+            offset='0',
+            size='200'
+    ):
+        """
+        考勤排班信息按天全量查询接口
+        按天查询企业考勤排班全量信息，使用分页功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29082
+
+        :param work_date: 排班时间，只取年月日部分
+        :param offset: 偏移位置
+        :param size: 分页大小，最大200
+        """
+        return self._top_request(
+            "dingtalk.smartwork.attends.listschedule",
+            {
+                "work_date": work_date,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_smartwork_attends_getsimplegroups(
+            self,
+            offset='0',
+            size='10'
+    ):
+        """
+        获取考勤组列表详情
+        获取公司自身的考勤组列表详情信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29083
+
+        :param offset: 偏移位置
+        :param size: 分页大小，最大10
+        """
+        return self._top_request(
+            "dingtalk.smartwork.attends.getsimplegroups",
+            {
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_corp_role_simplelist(
+            self,
+            role_id,
+            size='20',
+            offset='0'
+    ):
+        """
+        获取角色的员工列表
+        获取企业中角色下的员工列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29204
+
+        :param role_id: 角色ID
+        :param size: 分页大小
+        :param offset: 分页偏移
+        """
+        return self._top_request(
+            "dingtalk.corp.role.simplelist",
+            {
+                "role_id": role_id,
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_corp_role_list(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        获取企业角色列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29205
+
+        :param size: 分页大小
+        :param offset: 分页偏移
+        """
+        return self._top_request(
+            "dingtalk.corp.role.list",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_smartwork_bpms_processinstance_create(
+            self,
+            process_code,
+            originator_user_id,
+            dept_id,
+            approvers,
+            form_component_values,
+            agent_id='',
+            cc_list='',
+            cc_position=''
+    ):
+        """
+        发起审批实例
+        企业或isv调用该api，来发起一个审批实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29498
+
+        :param process_code: 审批流的唯一码
+        :param originator_user_id: 审批实例发起人的userid
+        :param dept_id: 发起人所在的部门
+        :param approvers: 审批人userid列表
+        :param form_component_values: 审批流表单参数
+        :param agent_id: 企业微应用标识
+        :param cc_list: 抄送人userid列表
+        :param cc_position: 抄送时间,分为（START,FINISH,START_FINISH）
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.processinstance.create",
+            {
+                "process_code": process_code,
+                "originator_user_id": originator_user_id,
+                "dept_id": dept_id,
+                "approvers": approvers,
+                "form_component_values": form_component_values,
+                "agent_id": agent_id,
+                "cc_list": cc_list,
+                "cc_position": cc_position
+            }
+        )
+
+    def dingtalk_smartwork_checkin_record_get(
+            self,
+            userid_list,
+            start_time,
+            end_time,
+            cursor,
+            size
+    ):
+        """
+        获取多个用户的签到记录
+        查询多个用户一段时间范围内的签到记录，只给企业调用，ISV无法调用。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29538
+
+        :param userid_list: 需要查询的用户列表
+        :param start_time: 起始时间,单位毫秒
+        :param end_time: 截止时间，单位毫秒。如果是取1个人的数据，时间范围最大到10天，如果是取多个人的数据，时间范围最大1天。
+        :param cursor: 分页查询的游标，最开始可以传0
+        :param size: 分页查询的每页大小，最大100
+        """
+        return self._top_request(
+            "dingtalk.smartwork.checkin.record.get",
+            {
+                "userid_list": userid_list,
+                "start_time": start_time,
+                "end_time": end_time,
+                "cursor": cursor,
+                "size": size
+            }
+        )
+
+    def dingtalk_smartwork_bpms_process_sync(
+            self,
+            agent_id,
+            src_process_code,
+            target_process_code,
+            biz_category_id='',
+            process_name=''
+    ):
+        """
+        更新审批流
+        ISV调用该接口，可以更新对应授权企业的审批单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29766
+
+        :param agent_id: 企业微应用标识
+        :param src_process_code: 源审批流的唯一码
+        :param target_process_code: 目标审批流的唯一码
+        :param biz_category_id: 业务分类标识（建议采用JAVA包名的命名方式,如:com.alibaba）
+        :param process_name: 审批流名称
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.process.sync",
+            {
+                "agent_id": agent_id,
+                "src_process_code": src_process_code,
+                "target_process_code": target_process_code,
+                "biz_category_id": biz_category_id,
+                "process_name": process_name
+            }
+        )
+
+    def dingtalk_smartwork_bpms_processinstance_list(
+            self,
+            process_code,
+            start_time,
+            end_time='',
+            size='10',
+            cursor='0',
+            userid_list=''
+    ):
+        """
+        获取审批实例列表
+        企业可以根据审批流的唯一标识，分页获取该审批流对应的审批实例。只能取到权限范围内的相关部门的审批实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29833
+
+        :param process_code: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
+        :param start_time: 审批实例开始时间，毫秒级
+        :param end_time: 审批实例结束时间，毫秒级，默认取当前值
+        :param size: 分页参数，每页大小，最多传10
+        :param cursor: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
+        :param userid_list: 发起人用户id列表
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.processinstance.list",
+            {
+                "process_code": process_code,
+                "start_time": start_time,
+                "end_time": end_time,
+                "size": size,
+                "cursor": cursor,
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_corp_role_deleterole(
+            self,
+            role_id
+    ):
+        """
+        删除角色信息
+        企业在做企业内部组织结构角色管理的时候，如果需要删除该企业下某个角色信息，可以调用该接口。调用的前提是该角色下面的所有员工都已经被删除该角色
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29977
+
+        :param role_id: 角色id
+        """
+        return self._top_request(
+            "dingtalk.corp.role.deleterole",
+            {
+                "role_id": role_id
+            }
+        )
+
+    def dingtalk_corp_role_getrolegroup(
+            self,
+            group_id
+    ):
+        """
+        获取角色组信息
+        该接口通过groupId参数可以获取该角色组详细信息以及下面所有关联的角色的信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29978
+
+        :param group_id: 角色组的Id
+        """
+        return self._top_request(
+            "dingtalk.corp.role.getrolegroup",
+            {
+                "group_id": group_id
+            }
+        )
+
+    def dingtalk_corp_role_addrolesforemps(
+            self,
+            rolelid_list,
+            userid_list
+    ):
+        """
+        批量为员工增加角色信息
+        企业在做企业员工管理的时候，需要对部分员工进行角色分类，该接口可以批量为员工增加角色信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29979
+
+        :param rolelid_list: 角色id list
+        :param userid_list: 员工id list
+        """
+        return self._top_request(
+            "dingtalk.corp.role.addrolesforemps",
+            {
+                "rolelid_list": rolelid_list,
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_corp_role_removerolesforemps(
+            self,
+            roleid_list,
+            userid_list
+    ):
+        """
+        批量删除员工角的色信息
+        企业在做企业员工管理的时候，需要对部分员工进行角色分类，该接口可以批量删除员工的角色信息。 角色在钉钉的组织结构里面就是标签的意思，你可以批量为一批用户添加一批角色信息（dingtalk.corp.role.addrolesforemps），那么调用该接口就可以批量删除已经存在的角色和员工对应关系，角色和员工是多对多的关系。参考代码如下： req.setRolelidList('1,2,3,4,5'); // 已经存在的角色id列表 req.setUseridList('a,b,c,d,e'); // 用户的id列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29980
+
+        :param roleid_list: 角色标签id
+        :param userid_list: 用户userId
+        """
+        return self._top_request(
+            "dingtalk.corp.role.removerolesforemps",
+            {
+                "roleid_list": roleid_list,
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_corp_invoice_gettitle(
+            self
+    ):
+        """
+        获取企业开票抬头信息
+        该接口通过orgId参数可以获取该企业的发票抬头信息。
+        注意：ISV必须先加入白名单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30318
+
+        """
+        return self._top_request(
+            "dingtalk.corp.invoice.gettitle"
+        )
+
+    def dingtalk_corp_device_manage_get(
+            self,
+            device_service_id,
+            device_id
+    ):
+        """
+        获取单设备详情
+        ISV或者企业通过deviceId来获取设备详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30500
+
+        :param device_service_id: 设备服务商ID
+        :param device_id: 设备ID
+        """
+        return self._top_request(
+            "dingtalk.corp.device.manage.get",
+            {
+                "device_service_id": device_service_id,
+                "device_id": device_id
+            }
+        )
+
+    def dingtalk_corp_device_manage_querylist(
+            self,
+            device_service_id,
+            cursor,
+            size
+    ):
+        """
+        拉取企业下某类设备列表
+        此接口用于展示企业已经绑定的设备列表(分页接口)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30501
+
+        :param device_service_id: 设备服务商ID
+        :param cursor: 分页拉取设备列表的游标，首次拉取可传Null或者0
+        :param size: 单次请求的大小，最大不超过20
+        """
+        return self._top_request(
+            "dingtalk.corp.device.manage.querylist",
+            {
+                "device_service_id": device_service_id,
+                "cursor": cursor,
+                "size": size
+            }
+        )
+
+    def dingtalk_corp_device_nick_update(
+            self,
+            device_service_id,
+            device_id,
+            new_nick
+    ):
+        """
+        更改设备昵称
+        修改企业绑定的智能硬件对应的昵称
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30514
+
+        :param device_service_id: 设备服务商ID
+        :param device_id: 设备ID
+        :param new_nick: 设备新昵称
+        """
+        return self._top_request(
+            "dingtalk.corp.device.nick.update",
+            {
+                "device_service_id": device_service_id,
+                "device_id": device_id,
+                "new_nick": new_nick
+            }
+        )
+
+    def dingtalk_corp_device_manage_unbind(
+            self,
+            device_service_id,
+            device_id
+    ):
+        """
+        设备解绑
+        此接口用于解绑已经绑定到xx企业的某个设备
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30530
+
+        :param device_service_id: 设备服务商ID
+        :param device_id: 设备ID
+        """
+        return self._top_request(
+            "dingtalk.corp.device.manage.unbind",
+            {
+                "device_service_id": device_service_id,
+                "device_id": device_id
+            }
+        )
+
+    def dingtalk_corp_user_personainfo_get(
+            self,
+            userid
+    ):
+        """
+        用户画像
+        用户画像,包括用户性别，工作行业属性等
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31620
+
+        :param userid: 员工id
+        """
+        return self._top_request(
+            "dingtalk.corp.user.personainfo.get",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_corp_report_list(
+            self,
+            start_time,
+            end_time,
+            cursor,
+            size,
+            template_name='',
+            userid=''
+    ):
+        """
+        查询企业员工发出的日志列表
+        企业可以根据员工userid或者日志模板名称，分页获取员工一段时间范围内在【日志】微应用发送的日志详细信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31998
+
+        :param start_time: 查询起始时间
+        :param end_time: 查询截止时间
+        :param cursor: 查询游标，初始传入0，后续从上一次的返回值中获取
+        :param size: 每页数据量
+        :param template_name: 要查询的模板名称
+        :param userid: 员工的userid
+        """
+        return self._top_request(
+            "dingtalk.corp.report.list",
+            {
+                "start_time": start_time,
+                "end_time": end_time,
+                "cursor": cursor,
+                "size": size,
+                "template_name": template_name,
+                "userid": userid
+            }
+        )
+
+    def dingtalk_corp_chatbot_addchatbotinstance(
+            self,
+            chatbot_id,
+            open_conversation_id,
+            name='',
+            icon_media_id=''
+    ):
+        """
+        向群添加机器人接口
+        企业应用，向自己的企业群，添加已安装的企业机器人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32058
+
+        :param chatbot_id: 机器人id，由钉钉事先分配
+        :param open_conversation_id: 创建群时返回的openConvsationId
+        :param name: 机器人名字(如果为空，默认是机器人安装时的名字)
+        :param icon_media_id: 机器人头像(如果为空，默认是机器人安装时的头像)
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.addchatbotinstance",
+            {
+                "chatbot_id": chatbot_id,
+                "open_conversation_id": open_conversation_id,
+                "name": name,
+                "icon_media_id": icon_media_id
+            }
+        )
+
+    def dingtalk_smartwork_attends_getleaveapproveduration(
+            self,
+            userid,
+            from_date,
+            to_date
+    ):
+        """
+        计算请假时长
+        钉钉考勤微应用，提供了排班的功能，企业管理员可以设置排班规则，该接口可以自动根据排班规则统计出每个员工的请假时长，进而可以与企业自有的请假／财务系统对接，进行工资统计，如果您的企业使用了钉钉考勤并希望依赖考勤系统自动计算员工请假时长，可选择使用此接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32125
+
+        :param userid: 员工在企业内的UserID，企业用来唯一标识用户的字段。
+        :param from_date: 请假开始时间
+        :param to_date: 请假结束时间
+        """
+        return self._top_request(
+            "dingtalk.smartwork.attends.getleaveapproveduration",
+            {
+                "userid": userid,
+                "from_date": from_date,
+                "to_date": to_date
+            }
+        )
+
+    def dingtalk_smartwork_attends_getusergroup(
+            self,
+            userid
+    ):
+        """
+        获取用户考勤组
+        在钉钉考勤微应用中，考勤组是一类具有相同的班次、考勤位置等考勤规则的人或部门的组合，一个企业中的一个人只能属于一个考勤组。如果您的企业使用了钉钉考勤并希望获取员工的考勤组信息，可选择使用此接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32308
+
+        :param userid: 员工在企业内的UserID，企业用来唯一标识用户的字段。
+        """
+        return self._top_request(
+            "dingtalk.smartwork.attends.getusergroup",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_corp_calendar_create(
+            self,
+            create_vo=None
+    ):
+        """
+        创建日程
+        通过此接口可以把企业员工的待办事项导入到钉钉日历并在钉钉日历中展示, 支持任务, 会议,审批,普通日程等.
+        该接口处于内部灰度阶段, 申请使用请邮件联系: zhaoting.yht@alibaba-inc.com
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32840
+
+        :param create_vo: 创建日程实体
+        """
+        return self._top_request(
+            "dingtalk.corp.calendar.create",
+            {
+                "create_vo": create_vo
+            }
+        )
+
+    def dingtalk_corp_ding_create(
+            self,
+            creator_userid,
+            receiver_userids,
+            remind_type,
+            remind_time,
+            text_content,
+            attachment=None
+    ):
+        """
+        发DING通知
+        通过此接口发DING通知给企业内部员工, 支持短信DING和应用内DING.
+        该接口正在灰度内测中, 暂不对外开放
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32841
+
+        :param creator_userid: 发送者工号
+        :param receiver_userids: 接收者工号列表
+        :param remind_type: 提醒类型:1-应用内;2-短信
+        :param remind_time: 发送时间(单位:毫秒)
+        :param text_content: 通知内容
+        :param attachment: 附件内容
+        """
+        return self._top_request(
+            "dingtalk.corp.ding.create",
+            {
+                "creator_userid": creator_userid,
+                "receiver_userids": receiver_userids,
+                "remind_type": remind_type,
+                "remind_time": remind_time,
+                "text_content": text_content,
+                "attachment": attachment
+            }
+        )
+
+    def dingtalk_smartwork_bpms_processinstance_get(
+            self,
+            process_instance_id
+    ):
+        """
+        获取单个审批实例详情
+        根据审批实例id，获取审批实例详情，详情包括审批表单信息、操作记录列表、操作人、抄送人、审批任务列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32977
+
+        :param process_instance_id: 审批实例id
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.processinstance.get",
+            {
+                "process_instance_id": process_instance_id
+            }
+        )
+
+    def dingtalk_corp_chatbot_install(
+            self,
+            chatbot_vo
+    ):
+        """
+        ISV给企业安装机器人
+        企业安装微应用后，ISV可通过本接口给企业上架一个企业机器人。目前灰度几个ISV，机器人应用会白名单处理
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33009
+
+        :param chatbot_vo: 安装的机器人信息
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.install",
+            {
+                "chatbot_vo": chatbot_vo
+            }
+        )
+
+    def dingtalk_corp_chatbot_updatebychatbotid(
+            self,
+            update_type,
+            icon='',
+            name='',
+            chatbot_id='',
+            preview_media_id='',
+            description='',
+            breif=''
+    ):
+        """
+        ISV变更企业已安装机器人的名字或头像
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33010
+
+        :param update_type: 更新名字或头像时是否更新群里已添加机器人的名字或头像。         * 0-不更新群里机器人名字或头像         * 1-更新群里机器人名字或头像
+        :param icon: 机器人头像
+        :param name: 机器人名字
+        :param chatbot_id: 机器人id(钉钉分配)
+        :param preview_media_id: 机器人预览图
+        :param description: 机器人详细描述
+        :param breif: 机器人简单描述
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.updatebychatbotid",
+            {
+                "update_type": update_type,
+                "icon": icon,
+                "name": name,
+                "chatbot_id": chatbot_id,
+                "preview_media_id": preview_media_id,
+                "description": description,
+                "breif": breif
+            }
+        )
+
+    def dingtalk_corp_chatbot_listbychatbotids(
+            self,
+            chatbot_ids
+    ):
+        """
+        isv查询企业已安装的企业机器人
+        ISV根据chatbotId查询给企业已安装的机器人信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33011
+
+        :param chatbot_ids: chatbotId列表
+        """
+        return self._top_request(
+            "dingtalk.corp.chatbot.listbychatbotids",
+            {
+                "chatbot_ids": chatbot_ids
+            }
+        )
+
+    def dingtalk_corp_extcontact_create(
+            self,
+            contact
+    ):
+        """
+        外部联系人添加
+        添加企业外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33400
+
+        :param contact: 外部联系人信息
+        """
+        return self._top_request(
+            "dingtalk.corp.extcontact.create",
+            {
+                "contact": contact
+            }
+        )
+
+    def dingtalk_corp_smartdevice_hasface(
+            self,
+            userid_list
+    ):
+        """
+        查询企业员工是否已录入人脸
+        开通人脸识别的企业中，会存在部分用户录入照片，此接口用于批量查看员工是否已录入照片
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33401
+
+        :param userid_list: 查询用userid列表
+        """
+        return self._top_request(
+            "dingtalk.corp.smartdevice.hasface",
+            {
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_corp_extcontact_list(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        外部联系人列表
+        获取企业外部联系人列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33402
+
+        :param size: 分页大小, 最大100
+        :param offset: 偏移位置
+        """
+        return self._top_request(
+            "dingtalk.corp.extcontact.list",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_corp_extcontact_update(
+            self,
+            contact
+    ):
+        """
+        外部联系人更新
+        更新企业外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33403
+
+        :param contact: 外部联系人信息
+        """
+        return self._top_request(
+            "dingtalk.corp.extcontact.update",
+            {
+                "contact": contact
+            }
+        )
+
+    def dingtalk_corp_extcontact_get(
+            self,
+            user_id
+    ):
+        """
+        外部联系人详情
+        获取企业外部联系人详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33404
+
+        :param user_id: userId
+        """
+        return self._top_request(
+            "dingtalk.corp.extcontact.get",
+            {
+                "user_id": user_id
+            }
+        )
+
+    def dingtalk_corp_extcontact_delete(
+            self,
+            userid
+    ):
+        """
+        外部联系人删除
+        删除企业外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33405
+
+        :param userid: userId
+        """
+        return self._top_request(
+            "dingtalk.corp.extcontact.delete",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_corp_extcontact_listlabelgroups(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        外部联系人标签列表
+        获取企业外部联系人标签列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33406
+
+        :param size: 分页大小,最大100
+        :param offset: 偏移位置
+        """
+        return self._top_request(
+            "dingtalk.corp.extcontact.listlabelgroups",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_corp_device_manage_hasbinddevice(
+            self,
+            device_service_id
+    ):
+        """
+        查询是否绑定某个设备产品
+        允许开发者查询企业是否绑定了某个类型的钉钉智能硬件设备
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33410
+
+        :param device_service_id: 设备产品类型 产品编码：M1：9 C1：14 M2：15 D1：24
+        """
+        return self._top_request(
+            "dingtalk.corp.device.manage.hasbinddevice",
+            {
+                "device_service_id": device_service_id
+            }
+        )
+
+    def dingtalk_corp_smartdevice_addface(
+            self,
+            face_vo
+    ):
+        """
+        向企业员工添加人脸识别照片
+        为用户添加识别照片，以及指定在终端上识别的有效期，指定用户类型对应识别提示语
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33411
+
+        :param face_vo: 识别用户数据
+        """
+        return self._top_request(
+            "dingtalk.corp.smartdevice.addface",
+            {
+                "face_vo": face_vo
+            }
+        )
+
+    def dingtalk_corp_smartdevice_addrecognizenotify(
+            self,
+            notify_vo
+    ):
+        """
+        添加用户识别成功后的通知
+        当M2成功识别指定用户后，如需向指定用户发消息通知，使用些接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33417
+
+        :param notify_vo: 通知数据
+        """
+        return self._top_request(
+            "dingtalk.corp.smartdevice.addrecognizenotify",
+            {
+                "notify_vo": notify_vo
+            }
+        )
+
+    def dingtalk_corp_smartdevice_receptionist_pushinfo(
+            self,
+            microapp_agent_id,
+            desc_template,
+            desc_content
+    ):
+        """
+        智能前台消息推送
+        智能前台开放部分功能区块，区块内的显示信息由isv基于企业不同推送展示消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33418
+
+        :param microapp_agent_id: 微应用agentID
+        :param desc_template: 智能前台信息展示模板ID，需要向智能硬件团队申请
+        :param desc_content: 展示模板需要的变量数据
+        """
+        return self._top_request(
+            "dingtalk.corp.smartdevice.receptionist.pushinfo",
+            {
+                "microapp_agent_id": microapp_agent_id,
+                "desc_template": desc_template,
+                "desc_content": desc_content
+            }
+        )
+
+    def dingtalk_corp_hrm_employee_get(
+            self,
+            userid
+    ):
+        """
+        获取智能人事员工花名册详细数据
+        获取智能人事指定员工花名册详细数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33453
+
+        :param userid: 查询用户userid
+        """
+        return self._top_request(
+            "dingtalk.corp.hrm.employee.get",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_smartwork_blackboard_listtopten(
+            self,
+            userid
+    ):
+        """
+        列出用户的公告列表
+        列出用户当前有权限看到的10条公告，可用于在企业自定义工作首页进行公告轮播展示
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33463
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.smartwork.blackboard.listtopten",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_corp_health_stepinfo_list(
+            self,
+            type,
+            object_id,
+            stat_dates
+    ):
+        """
+        获取个人或部门钉钉运动步数
+        查询企业用户或部门每天的钉钉运动步数，最多可以查询31天的数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33538
+
+        :param type: 0表示取用户步数，1表示取部门步数
+        :param object_id: 可以传入用户userid或者部门id
+        :param stat_dates: 时间列表，注意时间格式是YYYYMMDD
+        """
+        return self._top_request(
+            "dingtalk.corp.health.stepinfo.list",
+            {
+                "type": type,
+                "object_id": object_id,
+                "stat_dates": stat_dates
+            }
+        )
+
+    def dingtalk_isv_blazers_generatecode(
+            self,
+            biz_id,
+            ext
+    ):
+        """
+        isv客户接入钉钉
+        约定的isv通过此接口提供其业务对象唯一标示及相关信息，钉钉返回一个引流页并提供一个token，token后续供钉钉用于识别该业务对象
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34004
+
+        :param biz_id: 业务对象唯一标示
+        :param ext: 具体业务场景下约定的数据，格式：Map<String,String>
+        """
+        return self._top_request(
+            "dingtalk.isv.blazers.generatecode",
+            {
+                "biz_id": biz_id,
+                "ext": ext
+            }
+        )
+
+    def dingtalk_corp_blazers_getbinddata(
+            self
+    ):
+        """
+        isv客户绑定数据
+        获取绑定信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34005
+
+        """
+        return self._top_request(
+            "dingtalk.corp.blazers.getbinddata"
+        )
+
+    def dingtalk_corp_blazers_getbizid(
+            self
+    ):
+        """
+        isv客户获取bizId
+        获取bizId
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34006
+
+        """
+        return self._top_request(
+            "dingtalk.corp.blazers.getbizid"
+        )
+
+    def dingtalk_corp_health_stepinfo_listbyuserid(
+            self,
+            userids,
+            stat_date
+    ):
+        """
+        批量查询多个用户的钉钉运动步数
+        根据用户列表和时间列表，批量查询钉钉运动步数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34390
+
+        :param userids: 员工userid列表，最多传50个
+        :param stat_date: 时间，注意时间格式是YYMMDD
+        """
+        return self._top_request(
+            "dingtalk.corp.health.stepinfo.listbyuserid",
+            {
+                "userids": userids,
+                "stat_date": stat_date
+            }
+        )
+
+    def dingtalk_corp_health_stepinfo_getuserstatus(
+            self,
+            userid
+    ):
+        """
+        查询用户是否开启了钉钉运动
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34391
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.corp.health.stepinfo.getuserstatus",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_corp_hrm_employee_delemployeedismissionandhandover(
+            self,
+            dismission_info_with_hand_over,
+            op_userid
+    ):
+        """
+        确认离职并指定交接人，会从通讯录删除
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34825
+
+        :param dismission_info_with_hand_over: 确认离职对象
+        :param op_userid: 操作人userid
+        """
+        return self._top_request(
+            "dingtalk.corp.hrm.employee.delemployeedismissionandhandover",
+            {
+                "dismission_info_with_hand_over": dismission_info_with_hand_over,
+                "op_userid": op_userid
+            }
+        )
+
+    def dingtalk_corp_hrm_employee_getdismissionlist(
+            self,
+            current,
+            page_size,
+            op_userid
+    ):
+        """
+        获取离职人员信息
+        智能人事开放接口-查询离职人员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34826
+
+        :param current: 第几页，从1开始
+        :param page_size: 一页多少数据，在1-100之间
+        :param op_userid: 操作人userid
+        """
+        return self._top_request(
+            "dingtalk.corp.hrm.employee.getdismissionlist",
+            {
+                "current": current,
+                "page_size": page_size,
+                "op_userid": op_userid
+            }
+        )
+
+    def dingtalk_corp_dingindex_get(
+            self,
+            stat_dates
+    ):
+        """
+        获取企业钉钉指数
+        查询企业的日钉钉指数和月平均钉钉指数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34828
+
+        :param stat_dates: 统计日期
+        """
+        return self._top_request(
+            "dingtalk.corp.dingindex.get",
+            {
+                "stat_dates": stat_dates
+            }
+        )
+
+    def dingtalk_corp_hrm_employee_modjobinfo(
+            self,
+            op_userid,
+            hrm_api_job_model
+    ):
+        """
+        更新员工工作信息
+        钉钉智能人事开放接口-更新员工工作信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34829
+
+        :param op_userid: 操作人userid，必须是拥有被操作人操作权限的管理员userid
+        :param hrm_api_job_model: 员工信息对象，被操作人userid是必填，其他信息选填，填写则更新
+        """
+        return self._top_request(
+            "dingtalk.corp.hrm.employee.modjobinfo",
+            {
+                "op_userid": op_userid,
+                "hrm_api_job_model": hrm_api_job_model
+            }
+        )
+
+    def dingtalk_corp_ding_receiverstatus_list(
+            self,
+            ding_id,
+            page_size,
+            page_no,
+            confirmed_status=''
+    ):
+        """
+        ding接收者状态列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34893
+
+        :param ding_id: dingid
+        :param page_size: 每页显示数量，最大值50
+        :param page_no: 分页页码，从1开始
+        :param confirmed_status: 确认状态，三种情况：不传表示查所有；传0表示查未确认状态；传1表示查已经确认状态；
+        """
+        return self._top_request(
+            "dingtalk.corp.ding.receiverstatus.list",
+            {
+                "ding_id": ding_id,
+                "page_size": page_size,
+                "page_no": page_no,
+                "confirmed_status": confirmed_status
+            }
+        )
+
+    def dingtalk_corp_hrm_employee_setuserworkdata(
+            self,
+            op_userid,
+            hrm_api_user_data_model
+    ):
+        """
+        更新用户绩效数据
+        钉钉智能人事开放接口-更新员工绩效信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35667
+
+        :param op_userid: 操作人userid，必须是拥有被操作人操作权限的管理员userid
+        :param hrm_api_user_data_model: 员工信息对象，被操作人userid是必填
+        """
+        return self._top_request(
+            "dingtalk.corp.hrm.employee.setuserworkdata",
+            {
+                "op_userid": op_userid,
+                "hrm_api_user_data_model": hrm_api_user_data_model
+            }
+        )
+
+    def dingtalk_smartwork_bpms_processinstance_updatevariables(
+            self,
+            process_instance_id,
+            variables,
+            remark=''
+    ):
+        """
+        更新审批实例的表单值
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35764
+
+        :param process_instance_id: 审批实例id
+        :param variables: 表单参数列表
+        :param remark: 评论
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.processinstance.updatevariables",
+            {
+                "process_instance_id": process_instance_id,
+                "variables": variables,
+                "remark": remark
+            }
+        )
+
+    def dingtalk_smartwork_bpms_processinstance_getwithform(
+            self,
+            process_instance_id
+    ):
+        """
+        获取审批实例的详情和表单信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35765
+
+        :param process_instance_id: 审批实例id
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.processinstance.getwithform",
+            {
+                "process_instance_id": process_instance_id
+            }
+        )
+
+    def dingtalk_corp_ding_task_create(
+            self,
+            task_send_v_o
+    ):
+        """
+        ding任务创建接口
+        ding任务创建。不过会有一些限制，只能发送文本任务，不能设置抄送人，只能有一个任务执行人。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35778
+
+        :param task_send_v_o: 任务对外接口
+        """
+        return self._top_request(
+            "dingtalk.corp.ding.task.create",
+            {
+                "task_send_v_o": task_send_v_o
+            }
+        )
+
+    def dingtalk_smartwork_bpms_process_getbybiztype(
+            self,
+            biz_type
+    ):
+        """
+        根据审批套件标识获取审批模板
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35826
+
+        :param biz_type: 套件开发时与审批约定的业务标识
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.process.getbybiztype",
+            {
+                "biz_type": biz_type
+            }
+        )
+
+    def dingtalk_smartwork_bpms_process_getvisible(
+            self,
+            userid,
+            process_code_list
+    ):
+        """
+        检测用户是否有审批模板的可用权限
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35827
+
+        :param userid: 员工ID
+        :param process_code_list: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.process.getvisible",
+            {
+                "userid": userid,
+                "process_code_list": process_code_list
+            }
+        )
+
+    def dingtalk_smartwork_bpms_processinstanceid_list(
+            self,
+            process_code,
+            start_time,
+            end_time='',
+            cursor='',
+            size='',
+            userid_list=''
+    ):
+        """
+        获取审批实例ID列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35878
+
+        :param process_code: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
+        :param start_time: 审批实例开始时间，毫秒级
+        :param end_time: 审批实例结束时间，毫秒级，默认取当前值
+        :param cursor: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
+        :param size: 分页参数，每页大小，最多传20
+        :param userid_list: 发起人用户id列表
+        """
+        return self._top_request(
+            "dingtalk.smartwork.bpms.processinstanceid.list",
+            {
+                "process_code": process_code,
+                "start_time": start_time,
+                "end_time": end_time,
+                "cursor": cursor,
+                "size": size,
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_corp_deptgroup_syncuser(
+            self,
+            userid='',
+            dept_id=''
+    ):
+        """
+        单个成员的部门群同步
+        从部门成员同步到部门群
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35919
+
+        :param userid: 用户id
+        :param dept_id: 部门id
+        """
+        return self._top_request(
+            "dingtalk.corp.deptgroup.syncuser",
+            {
+                "userid": userid,
+                "dept_id": dept_id
+            }
+        )
+
+    def dingtalk_corp_liveness_get(
+            self
+    ):
+        """
+        获取企业活跃度
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36176
+
+        """
+        return self._top_request(
+            "dingtalk.corp.liveness.get"
+        )
+
+    def dingtalk_corp_blazers_unbind(
+            self
+    ):
+        """
+        完全解绑
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36499
+
+        """
+        return self._top_request(
+            "dingtalk.corp.blazers.unbind"
+        )
+
+    def dingtalk_corp_blazers_removemapping(
+            self,
+            biz_id=''
+    ):
+        """
+        移除绑定关系
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36500
+
+        :param biz_id: 商户唯一标识
+        """
+        return self._top_request(
+            "dingtalk.corp.blazers.removemapping",
+            {
+                "biz_id": biz_id
+            }
+        )
+
+    def dingtalk_corp_search_corpcontact_baseinfo(
+            self,
+            query,
+            offset,
+            size
+    ):
+        """
+        搜索企业通讯录基本接口
+        根据姓名和工号搜索企业员工
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36791
+
+        :param query: 搜索词,长度大于2开始搜
+        :param offset: 开始位置,从0开始
+        :param size: 拉取个数上限100
+        """
+        return self._top_request(
+            "dingtalk.corp.search.corpcontact.baseinfo",
+            {
+                "query": query,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_corp_smartdevice_getface(
+            self,
+            userid=''
+    ):
+        """
+        获取用户授权底图照片
+        获取指定企业员工的识别底图照片
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36860
+
+        :param userid: 员工ID
+        """
+        return self._top_request(
+            "dingtalk.corp.smartdevice.getface",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_process_listbyuserid(
+            self,
+            offset,
+            size,
+            userid=''
+    ):
+        """
+        根据用户id获取可见审批模板列表
+        根据userid分页获取用户可见的审批模板列表，每次最多获取100个模板。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36861
+
+        :param offset: 分页游标，从0开始。根据返回结果里的next_cursor是否为空来判断是否还有下一页，且再次调用时offset设置成next_cursor的值
+        :param size: 分页大小，最大可设置成100
+        :param userid: 用户id, 不传表示查询企业下所有审批模板
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.listbyuserid",
+            {
+                "offset": offset,
+                "size": size,
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_report_template_listbyuserid(
+            self,
+            userid='',
+            offset='0',
+            size='100'
+    ):
+        """
+        根据用户id获取可见的日志模板列表
+        根据用户userId获取当前企业下可见的日志模板列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36909
+
+        :param userid: 员工userId, 不传递表示获取所有日志模板
+        :param offset: 分页游标，从0开始。根据返回结果里的next_cursor是否为空来判断是否还有下一页，且再次调用时offset设置成next_cursor的值
+        :param size: 分页大小，最大可设置成100
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.template.listbyuserid",
+            {
+                "userid": userid,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_test_test(
+            self,
+            input=''
+    ):
+        """
+        test
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36910
+
+        :param input: 1
+        """
+        return self._top_request(
+            "dingtalk.oapi.test.test",
+            {
+                "input": input
+            }
+        )
+
+    def dingtalk_oapi_attendance_listschedule(
+            self,
+            work_date,
+            offset='0',
+            size='200'
+    ):
+        """
+        考勤排班信息按天全量查询接口
+        按天查询企业考勤排班全量信息，使用分页功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36979
+
+        :param work_date: 排班时间，只取年月日部分
+        :param offset: 偏移位置
+        :param size: 分页大小，最大200
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.listschedule",
+            {
+                "workDate": work_date,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_role_list(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        获取企业角色列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36980
+
+        :param size: 分页大小
+        :param offset: 分页偏移
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.list",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_oapi_extcontact_create(
+            self,
+            contact
+    ):
+        """
+        添加企业外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36981
+
+        :param contact: 外部联系人信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.extcontact.create",
+            {
+                "contact": contact
+            }
+        )
+
+    def dingtalk_oapi_role_simplelist(
+            self,
+            role_id,
+            size='20',
+            offset='0'
+    ):
+        """
+        获取角色的员工列表
+        获取企业中角色下的员工列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36982
+
+        :param role_id: 角色ID
+        :param size: 分页大小
+        :param offset: 分页偏移
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.simplelist",
+            {
+                "role_id": role_id,
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_oapi_attendance_getsimplegroups(
+            self,
+            offset='0',
+            size='10'
+    ):
+        """
+        获取考勤组列表详情
+        获取公司自身的考勤组列表详情信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36983
+
+        :param offset: 偏移位置
+        :param size: 分页大小，最大10
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getsimplegroups",
+            {
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_attendance_getleaveapproveduration(
+            self,
+            userid,
+            from_date,
+            to_date
+    ):
+        """
+        计算请假时长
+        钉钉考勤微应用，提供了排班的功能，企业管理员可以设置排班规则，该接口可以自动根据排班规则统计出每个员工的请假时长，进而可以与企业自有的请假／财务系统对接，进行工资统计，如果您的企业使用了钉钉考勤并希望依赖考勤系统自动计算员工请假时长，可选择使用此接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36984
+
+        :param userid: 员工在企业内的UserID，企业用来唯一标识用户的字段。
+        :param from_date: 请假开始时间
+        :param to_date: 请假结束时间
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getleaveapproveduration",
+            {
+                "userid": userid,
+                "from_date": from_date,
+                "to_date": to_date
+            }
+        )
+
+    def dingtalk_oapi_role_addrolesforemps(
+            self,
+            role_ids,
+            user_ids
+    ):
+        """
+        批量为员工增加角色信息
+        企业在做企业员工管理的时候，需要对部分员工进行角色分类，该接口可以批量为员工增加角色信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36985
+
+        :param role_ids: 角色id list
+        :param user_ids: 员工id list
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.addrolesforemps",
+            {
+                "roleIds": role_ids,
+                "userIds": user_ids
+            }
+        )
+
+    def dingtalk_oapi_extcontact_get(
+            self,
+            user_id
+    ):
+        """
+        获取企业外部联系人详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36986
+
+        :param user_id: userId
+        """
+        return self._top_request(
+            "dingtalk.oapi.extcontact.get",
+            {
+                "user_id": user_id
+            }
+        )
+
+    def dingtalk_oapi_attendance_getusergroup(
+            self,
+            userid
+    ):
+        """
+        获取用户考勤组
+        在钉钉考勤微应用中，考勤组是一类具有相同的班次、考勤位置等考勤规则的人或部门的组合，一个企业中的一个人只能属于一个考勤组。如果您的企业使用了钉钉考勤并希望获取员工的考勤组信息，可选择使用此接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36987
+
+        :param userid: 员工在企业内的UserID，企业用来唯一标识用户的字段。
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getusergroup",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_role_removerolesforemps(
+            self,
+            role_ids,
+            user_ids
+    ):
+        """
+        批量删除员工角的色信息
+        企业在做企业员工管理的时候，需要对部分员工进行角色分类，该接口可以批量删除员工的角色信息。 角色在钉钉的组织结构里面就是标签的意思，你可以批量为一批用户添加一批角色信息（dingtalk.corp.role.addrolesforemps），那么调用该接口就可以批量删除已经存在的角色和员工对应关系，角色和员工是多对多的关系。参考代码如下： req.setRolelidList('1,2,3,4,5'); // 已经存在的角色id列表 req.setUseridList('a,b,c,d,e'); // 用户的id列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36991
+
+        :param role_ids: 角色标签id
+        :param user_ids: 用户userId
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.removerolesforemps",
+            {
+                "roleIds": role_ids,
+                "userIds": user_ids
+            }
+        )
+
+    def dingtalk_oapi_role_deleterole(
+            self,
+            role_id
+    ):
+        """
+        删除角色信息
+        企业在做企业内部组织结构角色管理的时候，如果需要删除该企业下某个角色信息，可以调用该接口。调用的前提是该角色下面的所有员工都已经被删除该角色
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36992
+
+        :param role_id: 角色id
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.deleterole",
+            {
+                "role_id": role_id
+            }
+        )
+
+    def dingtalk_oapi_role_getrolegroup(
+            self,
+            group_id
+    ):
+        """
+        获取角色组信息
+        该接口通过groupId参数可以获取该角色组详细信息以及下面所有关联的角色的信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36997
+
+        :param group_id: 角色组的Id
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.getrolegroup",
+            {
+                "group_id": group_id
+            }
+        )
+
+    def dingtalk_oapi_checkin_record_get(
+            self,
+            userid_list,
+            start_time,
+            end_time,
+            cursor,
+            size
+    ):
+        """
+        获取多个用户的签到记录
+        查询多个用户一段时间范围内的签到记录，只给企业调用，ISV无法调用。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37000
+
+        :param userid_list: 需要查询的用户列表
+        :param start_time: 起始时间,单位毫秒
+        :param end_time: 截止时间，单位毫秒。如果是取1个人的数据，时间范围最大到10天，如果是取多个人的数据，时间范围最大1天。
+        :param cursor: 分页查询的游标，最开始可以传0
+        :param size: 分页查询的每页大小，最大100
+        """
+        return self._top_request(
+            "dingtalk.oapi.checkin.record.get",
+            {
+                "userid_list": userid_list,
+                "start_time": start_time,
+                "end_time": end_time,
+                "cursor": cursor,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_extcontact_update(
+            self,
+            contact
+    ):
+        """
+        更新企业外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37001
+
+        :param contact: 外部联系人信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.extcontact.update",
+            {
+                "contact": contact
+            }
+        )
+
+    def dingtalk_oapi_extcontact_delete(
+            self,
+            user_id
+    ):
+        """
+        删除企业外部联系人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37002
+
+        :param user_id: userId
+        """
+        return self._top_request(
+            "dingtalk.oapi.extcontact.delete",
+            {
+                "user_id": user_id
+            }
+        )
+
+    def dingtalk_oapi_process_sync(
+            self,
+            agent_id,
+            src_process_code,
+            target_process_code,
+            biz_category_id='',
+            process_name=''
+    ):
+        """
+        更新审批流
+        ISV调用该接口，可以更新对应授权企业的审批单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37003
+
+        :param agent_id: 企业微应用标识
+        :param src_process_code: 源审批流的唯一码
+        :param target_process_code: 目标审批流的唯一码
+        :param biz_category_id: 业务分类标识（建议采用JAVA包名的命名方式,如:com.alibaba）
+        :param process_name: 审批流名称
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.sync",
+            {
+                "agent_id": agent_id,
+                "src_process_code": src_process_code,
+                "target_process_code": target_process_code,
+                "biz_category_id": biz_category_id,
+                "process_name": process_name
+            }
+        )
+
+    def dingtalk_oapi_extcontact_list(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        获取企业外部联系人列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37004
+
+        :param size: 分页大小, 最大100
+        :param offset: 偏移位置
+        """
+        return self._top_request(
+            "dingtalk.oapi.extcontact.list",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_oapi_extcontact_listlabelgroups(
+            self,
+            size='20',
+            offset='0'
+    ):
+        """
+        获取企业外部联系人标签列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37005
+
+        :param size: 分页大小,最大100
+        :param offset: 偏移位置
+        """
+        return self._top_request(
+            "dingtalk.oapi.extcontact.listlabelgroups",
+            {
+                "size": size,
+                "offset": offset
+            }
+        )
+
+    def dingtalk_oapi_processinstance_create(
+            self,
+            process_code,
+            originator_user_id,
+            dept_id,
+            form_component_values,
+            agent_id='',
+            approvers='',
+            cc_list='',
+            cc_position=''
+    ):
+        """
+        发起审批实例
+        企业或isv调用该api，来发起一个审批实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37006
+
+        :param process_code: 审批流的唯一码
+        :param originator_user_id: 审批实例发起人的userid
+        :param dept_id: 发起人所在的部门
+        :param form_component_values: 审批流表单参数
+        :param agent_id: 企业微应用标识
+        :param approvers: 审批人userid列表
+        :param cc_list: 抄送人userid列表
+        :param cc_position: 抄送时间,分为（START,FINISH,START_FINISH）
+        """
+        return self._top_request(
+            "dingtalk.oapi.processinstance.create",
+            {
+                "process_code": process_code,
+                "originator_user_id": originator_user_id,
+                "dept_id": dept_id,
+                "form_component_values": form_component_values,
+                "agent_id": agent_id,
+                "approvers": approvers,
+                "cc_list": cc_list,
+                "cc_position": cc_position
+            }
+        )
+
+    def dingtalk_oapi_processinstance_list(
+            self,
+            process_code,
+            start_time,
+            end_time='',
+            size='10',
+            cursor='0',
+            userid_list=''
+    ):
+        """
+        获取审批实例列表
+        企业可以根据审批流的唯一标识，分页获取该审批流对应的审批实例。只能取到权限范围内的相关部门的审批实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37007
+
+        :param process_code: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
+        :param start_time: 审批实例开始时间，毫秒级
+        :param end_time: 审批实例结束时间，毫秒级，默认取当前值
+        :param size: 分页参数，每页大小，最多传10
+        :param cursor: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
+        :param userid_list: 发起人用户id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.processinstance.list",
+            {
+                "process_code": process_code,
+                "start_time": start_time,
+                "end_time": end_time,
+                "size": size,
+                "cursor": cursor,
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_oapi_processinstance_get(
+            self,
+            process_instance_id
+    ):
+        """
+        获取单个审批实例详情
+        根据审批实例id，获取审批实例详情，详情包括审批表单信息、操作记录列表、操作人、抄送人、审批任务列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37008
+
+        :param process_instance_id: 审批实例id
+        """
+        return self._top_request(
+            "dingtalk.oapi.processinstance.get",
+            {
+                "process_instance_id": process_instance_id
+            }
+        )
+
+    def dingtalk_oapi_report_list(
+            self,
+            start_time,
+            end_time,
+            cursor,
+            size,
+            template_name='',
+            userid=''
+    ):
+        """
+        查询企业员工发出的日志列表
+        企业可以根据员工userid或者日志模板名称，分页获取员工一段时间范围内在【日志】微应用发送的日志详细信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37009
+
+        :param start_time: 查询起始时间
+        :param end_time: 查询截止时间
+        :param cursor: 查询游标，初始传入0，后续从上一次的返回值中获取
+        :param size: 每页数据量
+        :param template_name: 要查询的模板名称
+        :param userid: 员工的userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.list",
+            {
+                "start_time": start_time,
+                "end_time": end_time,
+                "cursor": cursor,
+                "size": size,
+                "template_name": template_name,
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_blackboard_listtopten(
+            self,
+            userid
+    ):
+        """
+        列出用户的公告列表
+        列出用户当前有权限看到的10条公告，可用于在企业自定义工作首页进行公告轮播展示
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37010
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.blackboard.listtopten",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_health_stepinfo_list(
+            self,
+            type,
+            object_id,
+            stat_dates
+    ):
+        """
+        获取个人或部门钉钉运动步数
+        查询企业用户或部门每天的钉钉运动步数，最多可以查询31天的数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37011
+
+        :param type: 0表示取用户步数，1表示取部门步数
+        :param object_id: 可以传入用户userid或者部门id
+        :param stat_dates: 时间列表，注意时间格式是YYYYMMDD
+        """
+        return self._top_request(
+            "dingtalk.oapi.health.stepinfo.list",
+            {
+                "type": type,
+                "object_id": object_id,
+                "stat_dates": stat_dates
+            }
+        )
+
+    def dingtalk_oapi_health_stepinfo_listbyuserid(
+            self,
+            userids,
+            stat_date
+    ):
+        """
+        批量查询多个用户的钉钉运动步数
+        根据用户列表和时间列表，批量查询钉钉运动步数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37012
+
+        :param userids: 员工userid列表，最多传50个
+        :param stat_date: 时间，注意时间格式是YYMMDD
+        """
+        return self._top_request(
+            "dingtalk.oapi.health.stepinfo.listbyuserid",
+            {
+                "userids": userids,
+                "stat_date": stat_date
+            }
+        )
+
+    def dingtalk_oapi_health_stepinfo_getuserstatus(
+            self,
+            userid
+    ):
+        """
+        查询用户是否开启了钉钉运动
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37013
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.health.stepinfo.getuserstatus",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_process_copy(
+            self,
+            agent_id,
+            process_code,
+            biz_category_id='',
+            process_name='',
+            description='',
+            copy_type='1'
+    ):
+        """
+        复制审批流
+        审批接口开放中的第一步，ISV调用此接口把它自身的审批流复制都授权企业中
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37014
+
+        :param agent_id: 企业微应用标识
+        :param process_code: 审批流的唯一码
+        :param biz_category_id: 业务分类标识（建议采用JAVA包名的命名方式，）
+        :param process_name: 审批流名称
+        :param description: 审批流描述
+        :param copy_type: 复制类型，1 不包含流程信息，2 包含流程信息且审批中员工可见。默认为1
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.copy",
+            {
+                "agent_id": agent_id,
+                "process_code": process_code,
+                "biz_category_id": biz_category_id,
+                "process_name": process_name,
+                "description": description,
+                "copy_type": copy_type
+            }
+        )
+
+    def dingtalk_oapi_message_corpconversation_asyncsendbycode(
+            self,
+            msgtype,
+            agent_id,
+            msgcontent,
+            code,
+            user_id_list='',
+            dept_id_list='',
+            to_all_user='false'
+    ):
+        """
+        通过用户授权码异步向企业会话发送消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37019
+
+        :param msgtype: 消息类型,如text、file、oa等，具体见文档
+        :param agent_id: 微应用的id
+        :param msgcontent: 与msgtype对应的消息体，具体见文档
+        :param code: 用户操作产生的授权码
+        :param user_id_list: 接收者的用户userid列表
+        :param dept_id_list: 接收者的部门id列表
+        :param to_all_user: 是否发送给企业全部用户
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.asyncsendbycode",
+            {
+                "msgtype": msgtype,
+                "agent_id": agent_id,
+                "msgcontent": msgcontent,
+                "code": code,
+                "user_id_list": user_id_list,
+                "dept_id_list": dept_id_list,
+                "to_all_user": to_all_user
+            }
+        )
+
+    def dingtalk_oapi_message_corpconversation_asyncsend(
+            self,
+            msgtype,
+            agent_id,
+            msgcontent,
+            userid_list='',
+            dept_id_list='',
+            to_all_user='false'
+    ):
+        """
+        企业会话消息异步发送
+        企业会话消息异步发送接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37020
+
+        :param msgtype: 消息类型,如text、file、oa等，具体见文档
+        :param agent_id: 微应用的id
+        :param msgcontent: 与msgtype对应的消息体，具体见文档
+        :param userid_list: 接收者的用户userid列表
+        :param dept_id_list: 接收者的部门id列表
+        :param to_all_user: 是否发送给企业全部用户
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.asyncsend",
+            {
+                "msgtype": msgtype,
+                "agent_id": agent_id,
+                "msgcontent": msgcontent,
+                "userid_list": userid_list,
+                "dept_id_list": dept_id_list,
+                "to_all_user": to_all_user
+            }
+        )
+
+    def dingtalk_corp_hrm_employee_addresumerecord(
+            self,
+            userid='',
+            title='',
+            content='',
+            k_v_content='',
+            phone_url='',
+            pc_url='',
+            web_url='',
+            record_time_stamp=''
+    ):
+        """
+        新增成长记录
+        企业员工的成长记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37022
+
+        :param userid: 被操作人userid
+        :param title: 成长记录title
+        :param content: 成长记录第一条内容
+        :param k_v_content: 厂长记录kv展示内容：json格式，顺序展示
+        :param phone_url: 手机端url
+        :param pc_url: pc端url
+        :param web_url: webOA后台url
+        :param record_time_stamp: 20180428 零点零分零秒
+        """
+        return self._top_request(
+            "dingtalk.corp.hrm.employee.addresumerecord",
+            {
+                "userid": userid,
+                "title": title,
+                "content": content,
+                "k_v_content": k_v_content,
+                "phone_url": phone_url,
+                "pc_url": pc_url,
+                "web_url": web_url,
+                "record_time_stamp": record_time_stamp
+            }
+        )
+
+    def dingtalk_oapi_message_corpconversation_getsendprogress(
+            self,
+            agent_id,
+            task_id
+    ):
+        """
+        获取异步发送企业会话消息的发送进度
+        获取异步发送企业会话消息的进度
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37023
+
+        :param agent_id: 发送消息时使用的微应用的id
+        :param task_id: 发送消息时钉钉返回的任务id
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.getsendprogress",
+            {
+                "agent_id": agent_id,
+                "task_id": task_id
+            }
+        )
+
+    def dingtalk_oapi_message_corpconversation_getsendresult(
+            self,
+            agent_id='',
+            task_id=''
+    ):
+        """
+        获取异步向企业会话发送消息的结果
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37024
+
+        :param agent_id: 微应用的agentid
+        :param task_id: 异步任务的id
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.getsendresult",
+            {
+                "agent_id": agent_id,
+                "task_id": task_id
+            }
+        )
+
+    def dingtalk_oapi_media_upload(
+            self,
+            media,
+            type=''
+    ):
+        """
+        上传媒体文件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37051
+
+        :param media: form-data中媒体文件标识，有filename、filelength、content-type等信息
+        :param type: 媒体文件类型，分别有图片（image）、语音（voice）、普通文件(file)
+        """
+        return self._top_request(
+            "dingtalk.oapi.media.upload",
+            {
+                "media": media,
+                "type": type
+            }
+        )
+
+    def dingtalk_oapi_user_getuserinfo(
+            self,
+            code=''
+    ):
+        """
+        通过免登码获取用户userid
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37091
+
+        :param code: requestAuthCode接口中获取的CODE
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.getuserinfo",
+            {
+                "code": code
+            }
+        )
+
+    def dingtalk_oapi_attendance_list(
+            self,
+            work_date_from='',
+            work_date_to='',
+            user_id_list='',
+            offset='',
+            limit='',
+            is_i18n=''
+    ):
+        """
+        考勤打卡数据开放
+        该接口仅限企业接入使用，用于返回企业内员工的实际打卡结果。比如，企业给一个员工设定的排班是上午9点和下午6点各打一次卡，即使员工在这期间打了多次，该接口也只会返回两条记录，包括上午的打卡结果和下午的打卡结果
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37092
+
+        :param work_date_from: 查询考勤打卡记录的起始工作日
+        :param work_date_to: 查询考勤打卡记录的结束工作日
+        :param user_id_list: 员工在企业内的UserID列表，企业用来唯一标识用户的字段
+        :param offset: 表示获取考勤数据的起始点，第一次传0，如果还有多余数据，下次获取传的offset值为之前的offset+limit
+        :param limit: 表示获取考勤数据的条数，最大不能超过50条
+        :param is_i18n: 是否国际化
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.list",
+            {
+                "workDateFrom": work_date_from,
+                "workDateTo": work_date_to,
+                "userIdList": user_id_list,
+                "offset": offset,
+                "limit": limit,
+                "isI18n": is_i18n
+            }
+        )
+
+    def dingtalk_oapi_attendance_listRecord(
+            self,
+            user_ids,
+            check_date_from,
+            check_date_to,
+            is_i18n=''
+    ):
+        """
+        考勤打卡记录开放
+        该接口仅限企业接入使用，用于返回企业内员工的实际打卡记录。比如，企业给一个员工设定的排班是上午9点和下午6点各打一次卡，但是员工在这期间打了多次，该接口会把所有的打卡记录都返回。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37094
+
+        :param user_ids: 企业内的员工id列表，最多不能超过50个
+        :param check_date_from: 查询考勤打卡记录的结束工作日。注意，起始与结束工作日最多相隔7天
+        :param check_date_to: 查询考勤打卡记录的结束工作日。注意，起始与结束工作日最多相隔7天
+        :param is_i18n: 是否国际化
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.listRecord",
+            {
+                "userIds": user_ids,
+                "checkDateFrom": check_date_from,
+                "checkDateTo": check_date_to,
+                "isI18n": is_i18n
+            }
+        )
+
+    def dingtalk_oapi_service_set_corp_ipwhitelist(
+            self,
+            auth_corpid='',
+            ip_whitelist=''
+    ):
+        """
+        ISV为授权方的企业单独设置IP白名单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37095
+
+        :param auth_corpid: 授权方corpid
+        :param ip_whitelist: 要为其设置的IP白名单,格式支持IP段,用星号表示,如【5.6.*.*】,代表从【5.6.0.*】到【5.6.255.*】的任意IP,在第三段设为星号时,将忽略第四段的值,注意:仅支持后两段设置为星号
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.set_corp_ipwhitelist",
+            {
+                "auth_corpid": auth_corpid,
+                "ip_whitelist": ip_whitelist
+            }
+        )
+
+    def dingtalk_oapi_service_reauth_corp(
+            self,
+            app_id='',
+            corpid_list=''
+    ):
+        """
+        重新授权未激活应用的企业
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37096
+
+        :param app_id: 套件下的微应用ID
+        :param corpid_list: 未激活的corpid列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.reauth_corp",
+            {
+                "app_id": app_id,
+                "corpid_list": corpid_list
+            }
+        )
+
+    def dingtalk_oapi_chat_send(
+            self,
+            chatid='',
+            action_card=None,
+            oa=None,
+            voice=None,
+            file=None,
+            image=None,
+            link=None,
+            text=None,
+            msgtype='',
+            markdown=None,
+            msg=None
+    ):
+        """
+        发送群消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37099
+
+        :param chatid: 群会话id
+        :param action_card: actionCard消息
+        :param oa: OA消息
+        :param voice: 语音消息
+        :param file: 文件消息
+        :param image: 图片消息
+        :param link: 链接消息
+        :param text: 文本消息
+        :param msgtype: 消息类型
+        :param markdown: markdown消息
+        :param msg: 消息格式
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.send",
+            {
+                "chatid": chatid,
+                "action_card": action_card,
+                "oa": oa,
+                "voice": voice,
+                "file": file,
+                "image": image,
+                "link": link,
+                "text": text,
+                "msgtype": msgtype,
+                "markdown": markdown,
+                "msg": msg
+            }
+        )
+
+    def dingtalk_oapi_chat_getReadList(
+            self,
+            message_id='',
+            cursor='',
+            size=''
+    ):
+        """
+        查询群消息已读人员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37100
+
+        :param message_id: 发送群消息接口返回的加密消息id
+        :param cursor: 分页查询的游标，第一次可以传0，后续传返回结果中的next_cursor的值。当返回结果中，没有next_cursor时，表示没有后续的数据了，可以结束调用
+        :param size: 分页查询的大小，最大可以传100
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.getReadList",
+            {
+                "messageId": message_id,
+                "cursor": cursor,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_chat_update(
+            self,
+            chatid='',
+            name='',
+            owner='',
+            owner_type='',
+            add_useridlist='',
+            del_useridlist='',
+            add_extidlist='',
+            del_extidlist='',
+            icon='',
+            is_ban='',
+            searchable='',
+            validation_type='',
+            mention_all_authority='',
+            management_type='',
+            chat_banned_type=''
+    ):
+        """
+        修改群会话
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37102
+
+        :param chatid: 群会话id
+        :param name: 群名称
+        :param owner: 群主的userId
+        :param owner_type: 群主类型，emp：企业员工，ext：外部联系人
+        :param add_useridlist: 添加成员列表
+        :param del_useridlist: 删除成员列表
+        :param add_extidlist: 添加外部联系人成员列表
+        :param del_extidlist: 删除外部联系人成员列表
+        :param icon: 群头像mediaId
+        :param is_ban: 是否禁言
+        :param searchable: 群可搜索，0-默认，不可搜索，1-可搜索
+        :param validation_type: 入群验证，0：不入群验证（默认） 1：入群验证
+        :param mention_all_authority: @all 权限，0-默认，所有人，1-仅群主可@all
+        :param management_type: 管理类型，0-默认，所有人可管理，1-仅群主可管理
+        :param chat_banned_type: 群禁言，0-默认，不禁言，1-全员禁言
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.update",
+            {
+                "chatid": chatid,
+                "name": name,
+                "owner": owner,
+                "ownerType": owner_type,
+                "add_useridlist": add_useridlist,
+                "del_useridlist": del_useridlist,
+                "add_extidlist": add_extidlist,
+                "del_extidlist": del_extidlist,
+                "icon": icon,
+                "isBan": is_ban,
+                "searchable": searchable,
+                "validationType": validation_type,
+                "mentionAllAuthority": mention_all_authority,
+                "managementType": management_type,
+                "chatBannedType": chat_banned_type
+            }
+        )
+
+    def dingtalk_oapi_department_list_parent_depts(
+            self,
+            user_id=''
+    ):
+        """
+        查询指定用户的所有上级父部门路径
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37103
+
+        :param user_id: 用户userId
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.list_parent_depts",
+            {
+                "userId": user_id
+            }
+        )
+
+    def dingtalk_oapi_department_list_parent_depts_by_dept(
+            self,
+            id=''
+    ):
+        """
+        查询部门的所有上级父部门路径
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37104
+
+        :param id: 部门id
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.list_parent_depts_by_dept",
+            {
+                "id": id
+            }
+        )
+
+    def dingtalk_oapi_chat_create(
+            self,
+            name='',
+            owner='',
+            useridlist='',
+            owner_type='',
+            conversation_tag='',
+            show_history_type='',
+            extidlist='',
+            searchable='',
+            validation_type='',
+            mention_all_authority='',
+            management_type='',
+            chat_banned_type=''
+    ):
+        """
+        创建群会话
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37105
+
+        :param name: 群名称
+        :param owner: 群主的userId
+        :param useridlist: 群成员userId列表
+        :param owner_type: 群主类型，emp：企业员工，ext：外部联系人
+        :param conversation_tag: 群类型，2：企业群，0：普通群
+        :param show_history_type: 新成员可查看100条聊天历史消息的类型，1：可查看，默认或0：不可查看
+        :param extidlist: 外部联系人成员列表
+        :param searchable: 群可搜索，0-默认，不可搜索，1-可搜索
+        :param validation_type: 入群验证，0：不入群验证（默认） 1：入群验证
+        :param mention_all_authority: @all 权限，0-默认，所有人，1-仅群主可@all
+        :param management_type: 管理类型，0-默认，所有人可管理，1-仅群主可管理
+        :param chat_banned_type: 群禁言，0-默认，不禁言，1-全员禁言
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.create",
+            {
+                "name": name,
+                "owner": owner,
+                "useridlist": useridlist,
+                "ownerType": owner_type,
+                "conversationTag": conversation_tag,
+                "showHistoryType": show_history_type,
+                "extidlist": extidlist,
+                "searchable": searchable,
+                "validationType": validation_type,
+                "mentionAllAuthority": mention_all_authority,
+                "managementType": management_type,
+                "chatBannedType": chat_banned_type
+            }
+        )
+
+    def dingtalk_oapi_department_update(
+            self,
+            id='',
+            org_dept_owner='',
+            outer_permit_users='',
+            outer_permit_depts='',
+            outer_dept='',
+            user_perimits='',
+            dept_perimits='',
+            dept_hiding='',
+            dept_manager_userid_list='',
+            auto_add_user='',
+            create_dept_group='',
+            order='',
+            parentid='',
+            lang='',
+            name='',
+            source_identifier='',
+            user_permits='',
+            dept_permits='',
+            outer_dept_only_self='',
+            group_contain_sub_dept='',
+            group_contain_outer_dept='',
+            group_contain_hidden_dept=''
+    ):
+        """
+        更新部门
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37106
+
+        :param id: 部门id
+        :param org_dept_owner: 企业群群主
+        :param outer_permit_users: 本部门的员工仅可见员工自己为true时，可以配置额外可见人员，值为userid组成的的字符串，使用|符号进行分割。总数不能超过200。
+        :param outer_permit_depts: 本部门的员工仅可见员工自己为true时，可以配置额外可见部门，值为部门id组成的的字符串，使用|符号进行分割。总数不能超过200。
+        :param outer_dept: 是否本部门的员工仅可见员工自己, 为true时，本部门员工默认只能看到员工自己
+        :param user_perimits: 可以查看指定隐藏部门的其他人员列表，如果部门隐藏，则此值生效，取值为其他的人员userid组成的的字符串，使用| 符号进行分割。总数不能超过200。
+        :param dept_perimits: 可以查看指定隐藏部门的其他部门列表，如果部门隐藏，则此值生效，取值为其他的部门id组成的的字符串，使用 | 符号进行分割。总数不能超过200。
+        :param dept_hiding: 是否隐藏部门, true表示隐藏, false表示显示
+        :param dept_manager_userid_list: 部门的主管列表,取值为由主管的userid组成的字符串，不同的userid使用’| 符号进行分割
+        :param auto_add_user: 如果有新人加入部门是否会自动加入部门群
+        :param create_dept_group: 是否创建一个关联此部门的企业群
+        :param order: 在父部门中的次序值。order值小的排序靠前
+        :param parentid: 父部门id。根部门id为1
+        :param lang: 通讯录语言(默认zh_CN另外支持en_US)
+        :param name: 部门名称。长度限制为1~64个字符。不允许包含字符‘-’‘，’以及‘,’。
+        :param source_identifier: 部门标识字段，开发者可用该字段来唯一标识一个部门，并与钉钉外部通讯录里的部门做映射
+        :param user_permits: 可以查看指定隐藏部门的其他人员列表，如果部门隐藏，则此值生效，取值为其他的人员userid组成的的字符串，使用| 符号进行分割。总数不能超过200。
+        :param dept_permits: 可以查看指定隐藏部门的其他部门列表，如果部门隐藏，则此值生效，取值为其他的部门id组成的的字符串，使用 | 符号进行分割。总数不能超过200。
+        :param outer_dept_only_self: 是否只能看到所在部门及下级部门通讯录
+        :param group_contain_sub_dept: 本门群是否包含子部门
+        :param group_contain_outer_dept: 部门群是否包含外包部门
+        :param group_contain_hidden_dept: 部门群是否包含隐藏部门
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.update",
+            {
+                "id": id,
+                "orgDeptOwner": org_dept_owner,
+                "outerPermitUsers": outer_permit_users,
+                "outerPermitDepts": outer_permit_depts,
+                "outerDept": outer_dept,
+                "userPerimits": user_perimits,
+                "deptPerimits": dept_perimits,
+                "deptHiding": dept_hiding,
+                "deptManagerUseridList": dept_manager_userid_list,
+                "autoAddUser": auto_add_user,
+                "createDeptGroup": create_dept_group,
+                "order": order,
+                "parentid": parentid,
+                "lang": lang,
+                "name": name,
+                "sourceIdentifier": source_identifier,
+                "userPermits": user_permits,
+                "deptPermits": dept_permits,
+                "outerDeptOnlySelf": outer_dept_only_self,
+                "groupContainSubDept": group_contain_sub_dept,
+                "groupContainOuterDept": group_contain_outer_dept,
+                "groupContainHiddenDept": group_contain_hidden_dept
+            }
+        )
+
+    def dingtalk_oapi_department_list(
+            self,
+            lang='',
+            fetch_child='',
+            id=''
+    ):
+        """
+        获取部门列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37107
+
+        :param lang: 通讯录语言(默认zh_CN，未来会支持en_US)
+        :param fetch_child: 是否递归部门的全部子部门，ISV微应用固定传递false。
+        :param id: 父部门id(如果不传，默认部门为根部门，根部门ID为1)
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.list",
+            {
+                "lang": lang,
+                "fetch_child": fetch_child,
+                "id": id
+            }
+        )
+
+    def dingtalk_oapi_user_getUseridByUnionid(
+            self,
+            unionid=''
+    ):
+        """
+        根据unionid获取成员的userid
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37108
+
+        :param unionid: 用户在当前钉钉开放平台账号范围内的唯一标识，同一个钉钉开放平台账号可以包含多个开放应用，同时也包含ISV的套件应用及企业应用
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.getUseridByUnionid",
+            {
+                "unionid": unionid
+            }
+        )
+
+    def dingtalk_oapi_user_can_access_microapp(
+            self,
+            app_id='',
+            user_id=''
+    ):
+        """
+        获取管理员的微应用管理权限
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37109
+
+        :param app_id: 微应用id
+        :param user_id: 员工唯一标识ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.can_access_microapp",
+            {
+                "appId": app_id,
+                "userId": user_id
+            }
+        )
+
+    def dingtalk_oapi_user_get_admin(
+            self
+    ):
+        """
+        获取管理员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37110
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.get_admin"
+        )
+
+    def dingtalk_oapi_user_list(
+            self,
+            lang='',
+            department_id='',
+            offset='',
+            size='',
+            order=''
+    ):
+        """
+        获取部门成员（详情）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37111
+
+        :param lang: 通讯录语言(默认zh_CN另外支持en_US)
+        :param department_id: 获取的部门id
+        :param offset: 支持分页查询，与size参数同时设置时才生效，此参数代表偏移量
+        :param size: 支持分页查询，与offset参数同时设置时才生效，此参数代表分页大小，最大100
+        :param order: 支持分页查询，部门成员的排序规则，默认不传是按自定义排序；entry_asc代表按照进入部门的时间升序，entry_desc代表按照进入部门的时间降序，modify_asc代表按照部门信息修改时间升序，modify_desc代表按照部门信息修改时间降序，custom代表用户定义(未定义时按照拼音)排序
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.list",
+            {
+                "lang": lang,
+                "department_id": department_id,
+                "offset": offset,
+                "size": size,
+                "order": order
+            }
+        )
+
+    def dingtalk_oapi_user_simplelist(
+            self,
+            lang='',
+            department_id='',
+            offset='',
+            size='',
+            order=''
+    ):
+        """
+        获取部门成员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37113
+
+        :param lang: 通讯录语言(默认zh_CN另外支持en_US)
+        :param department_id: 获取的部门id
+        :param offset: 支持分页查询，与size参数同时设置时才生效，此参数代表偏移量
+        :param size: 支持分页查询，与offset参数同时设置时才生效，此参数代表分页大小，最大100
+        :param order: 支持分页查询，部门成员的排序规则，默认不传是按自定义排序；entry_asc代表按照进入部门的时间升序，entry_desc代表按照进入部门的时间降序，modify_asc代表按照部门信息修改时间升序，modify_desc代表按照部门信息修改时间降序，custom代表用户定义(未定义时按照拼音)排序
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.simplelist",
+            {
+                "lang": lang,
+                "department_id": department_id,
+                "offset": offset,
+                "size": size,
+                "order": order
+            }
+        )
+
+    def dingtalk_oapi_user_batchdelete(
+            self,
+            useridlist=''
+    ):
+        """
+        批量删除成员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37115
+
+        :param useridlist: 员工UserID列表。列表长度在1到20之间
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.batchdelete",
+            {
+                "useridlist": useridlist
+            }
+        )
+
+    def dingtalk_oapi_user_delete(
+            self,
+            userid=''
+    ):
+        """
+        删除成员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37116
+
+        :param userid: 员工唯一标识ID（不可修改）
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.delete",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_user_create(
+            self,
+            userid='',
+            is_senior='',
+            is_hide='',
+            jobnumber='',
+            email='',
+            remark='',
+            work_place='',
+            tel='',
+            mobile='',
+            position='',
+            department='',
+            name='',
+            extattr='',
+            org_email='',
+            order_in_depts=''
+    ):
+        """
+        创建成员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37117
+
+        :param userid: 员工唯一标识ID（不可修改），企业内必须唯一。长度为1~64个字符，如果不传，服务器将自动生成一个userid
+        :param is_senior: 是否高管模式，true表示是，false表示不是。开启后，手机号码对所有员工隐藏。普通员工无法对其发DING、发起钉钉免费商务电话。高管之间不受影响。
+        :param is_hide: 是否号码隐藏, true表示隐藏, false表示不隐藏。隐藏手机号后，手机号在个人资料页隐藏，但仍可对其发DING、发起钉钉免费商务电话。
+        :param jobnumber: 员工工号。对应显示到OA后台和客户端个人资料的工号栏目。长度为0~64个字符
+        :param email: 邮箱。长度为0~64个字符。企业内必须唯一，不可重复
+        :param remark: 备注，长度为0~1000个字符
+        :param work_place: 办公地点，长度为0~50个字符
+        :param tel: 分机号，长度为0~50个字符，企业内必须唯一，不可重复
+        :param mobile: 手机号码，企业内必须唯一，不可重复
+        :param position: 职位信息。长度为0~64个字符
+        :param department: 数组类型，数组里面值为整型，成员所属部门id列表
+        :param name: 成员名称。长度为1~64个字符
+        :param extattr: 扩展属性，可以设置多种属性(但手机上最多只能显示10个扩展属性，具体显示哪些属性，请到OA管理后台->设置->通讯录信息设置和OA管理后台->设置->手机端显示信息设置)
+        :param org_email: 员工的企业邮箱，员工的企业邮箱已开通，才能增加此字段， 否则会报错
+        :param order_in_depts: 在对应的部门中的排序, Map结构的json字符串, key是部门的Id, value是人员在这个部门的排序值
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.create",
+            {
+                "userid": userid,
+                "isSenior": is_senior,
+                "isHide": is_hide,
+                "jobnumber": jobnumber,
+                "email": email,
+                "remark": remark,
+                "workPlace": work_place,
+                "tel": tel,
+                "mobile": mobile,
+                "position": position,
+                "department": department,
+                "name": name,
+                "extattr": extattr,
+                "orgEmail": org_email,
+                "orderInDepts": order_in_depts
+            }
+        )
+
+    def dingtalk_oapi_department_list_ids(
+            self,
+            id=''
+    ):
+        """
+        获取子部门ID列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37118
+
+        :param id: 部门id
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.list_ids",
+            {
+                "id": id
+            }
+        )
+
+    def dingtalk_oapi_user_update(
+            self,
+            userid='',
+            name='',
+            work_place='',
+            remark='',
+            is_senior='',
+            org_email='',
+            manager_userid='',
+            tel='',
+            order_in_depts='',
+            mobile='',
+            department='',
+            email='',
+            position='',
+            extattr='',
+            jobnumber='',
+            is_hide='',
+            lang=''
+    ):
+        """
+        更新用户详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37119
+
+        :param userid: 用户id
+        :param name: 名字
+        :param work_place: 工作地点
+        :param remark: 备注
+        :param is_senior: 是否高管模式
+        :param org_email: 公司邮箱
+        :param manager_userid: 主管
+        :param tel: 分机号，长度为0~50个字符
+        :param order_in_depts: 实际是Map的序列化字符串
+        :param mobile: 手机号
+        :param department: 部门列表
+        :param email: 邮箱
+        :param position: 职位
+        :param extattr: 扩展属性
+        :param jobnumber: 工号
+        :param is_hide: 是否号码隐藏
+        :param lang: 通讯录语言(默认zh_CN另外支持en_US)
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.update",
+            {
+                "userid": userid,
+                "name": name,
+                "workPlace": work_place,
+                "remark": remark,
+                "isSenior": is_senior,
+                "orgEmail": org_email,
+                "managerUserid": manager_userid,
+                "tel": tel,
+                "orderInDepts": order_in_depts,
+                "mobile": mobile,
+                "department": department,
+                "email": email,
+                "position": position,
+                "extattr": extattr,
+                "jobnumber": jobnumber,
+                "isHide": is_hide,
+                "lang": lang
+            }
+        )
+
+    def dingtalk_oapi_user_get(
+            self,
+            userid
+    ):
+        """
+        获取用户详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37120
+
+        :param userid: userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.get",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_sso_getuserinfo(
+            self,
+            code='',
+            access_token=''
+    ):
+        """
+        通过CODE换取微应用管理员的身份信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37121
+
+        :param code: 再次强调，此token不同于一般的accesstoken，需要调用获取微应用管理员免登需要的AccessToken
+        :param access_token: 通过Oauth认证给URL带上的CODE
+        """
+        return self._top_request(
+            "dingtalk.oapi.sso.getuserinfo",
+            {
+                "code": code,
+                "access_token": access_token
+            }
+        )
+
+    def dingtalk_oapi_chat_get(
+            self,
+            chatid=''
+    ):
+        """
+        获取群会话
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37139
+
+        :param chatid: 群会话的id
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.get",
+            {
+                "chatid": chatid
+            }
+        )
+
+    def dingtalk_oapi_department_get(
+            self,
+            id='',
+            lang=''
+    ):
+        """
+        获取部门详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37140
+
+        :param id: 部门id
+        :param lang: 通讯录语言(默认zh_CN，未来会支持en_US)
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.get",
+            {
+                "id": id,
+                "lang": lang
+            }
+        )
+
+    def dingtalk_oapi_department_delete(
+            self,
+            id=''
+    ):
+        """
+        删除部门
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37141
+
+        :param id: 部门id
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.delete",
+            {
+                "id": id
+            }
+        )
+
+    def dingtalk_oapi_department_create(
+            self,
+            parentid='',
+            parent_balance_first='',
+            share_balance='',
+            outer_permit_users='',
+            outer_permit_depts='',
+            outer_dept='',
+            user_perimits='',
+            dept_perimits='',
+            dept_hiding='',
+            create_dept_group='',
+            order='',
+            name='',
+            source_identifier='',
+            dept_permits='',
+            user_permits='',
+            outer_dept_only_self=''
+    ):
+        """
+        创建部门
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37142
+
+        :param parentid: 父部门id。根部门id为1
+        :param parent_balance_first: 是否优先使用父部门的预算
+        :param share_balance: 是否共享预算
+        :param outer_permit_users: 本部门的员工仅可见员工自己为true时，可以配置额外可见人员，值为userid组成的的字符串，使用|符号进行分割。总数不能超过200。
+        :param outer_permit_depts: 本部门的员工仅可见员工自己为true时，可以配置额外可见部门，值为部门id组成的的字符串，使用|符号进行分割。总数不能超过200。
+        :param outer_dept: 是否本部门的员工仅可见员工自己, 为true时，本部门员工默认只能看到员工自己
+        :param user_perimits: 已废弃
+        :param dept_perimits: 已废弃
+        :param dept_hiding: 是否隐藏部门, true表示隐藏, false表示显示
+        :param create_dept_group: 是否创建一个关联此部门的企业群，默认为false
+        :param order: 在父部门中的次序值。order值小的排序靠前
+        :param name: 部门名称。长度限制为1~64个字符。不允许包含字符‘-’‘，’以及‘,’
+        :param source_identifier: 部门标识字段，开发者可用该字段来唯一标识一个部门，并与钉钉外部通讯录里的部门做映射
+        :param dept_permits: 可以查看指定隐藏部门的其他部门列表，如果部门隐藏，则此值生效，取值为其他的部门id组成的的字符串，使用 | 符号进行分割。总数不能超过200。
+        :param user_permits: 可以查看指定隐藏部门的其他人员列表，如果部门隐藏，则此值生效，取值为其他的人员userid组成的的字符串，使用| 符号进行分割。总数不能超过200。
+        :param outer_dept_only_self: 是否只能看到所在部门及下级部门通讯录
+        """
+        return self._top_request(
+            "dingtalk.oapi.department.create",
+            {
+                "parentid": parentid,
+                "parentBalanceFirst": parent_balance_first,
+                "shareBalance": share_balance,
+                "outerPermitUsers": outer_permit_users,
+                "outerPermitDepts": outer_permit_depts,
+                "outerDept": outer_dept,
+                "userPerimits": user_perimits,
+                "deptPerimits": dept_perimits,
+                "deptHiding": dept_hiding,
+                "createDeptGroup": create_dept_group,
+                "order": order,
+                "name": name,
+                "sourceIdentifier": source_identifier,
+                "deptPermits": dept_permits,
+                "userPermits": user_permits,
+                "outerDeptOnlySelf": outer_dept_only_self
+            }
+        )
+
+    def dingtalk_oapi_gettoken(
+            self,
+            corpid='',
+            corpsecret='',
+            appkey='',
+            appsecret=''
+    ):
+        """
+        获取企业token
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37143
+
+        :param corpid: corpid
+        :param corpsecret: corpsecret
+        :param appkey: appkey
+        :param appsecret: appsecret
+        """
+        return self._top_request(
+            "dingtalk.oapi.gettoken",
+            {
+                "corpid": corpid,
+                "corpsecret": corpsecret,
+                "appkey": appkey,
+                "appsecret": appsecret
+            }
+        )
+
+    def dingtalk_oapi_call_back_delete_call_back(
+            self
+    ):
+        """
+        删除事件回调接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37145
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.call_back.delete_call_back"
+        )
+
+    def dingtalk_oapi_call_back_update_call_back(
+            self,
+            call_back_tag='',
+            aes_key='',
+            token='',
+            url=''
+    ):
+        """
+        更新事件回调接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37146
+
+        :param call_back_tag: 需要监听的事件类型，有20种，“user_add_org”, “user_modify_org”, “user_leave_org”,“org_admin_add”, “org_admin_remove”, “org_dept_create”, “org_dept_modify”, “org_dept_remove”, “org_remove”, “chat_add_member”, “chat_remove_member”, “chat_quit”, “chat_update_owner”, “chat_update_title”, “chat_disband”, “chat_disband_microapp”, “check_in”,“bpms_task_change”,“bpms_instance_change”,,“label_user_change”,“label_conf_add”, “label_conf_modify”,“label_conf_del”,
+        :param aes_key: 数据加密密钥。用于回调数据的加密，长度固定为43个字符，从a-z, A-Z, 0-9共62个字符中选取,您可以随机生成，ISV(服务提供商)推荐使用注册套件时填写的EncodingAESKey
+        :param token: 加解密需要用到的token，ISV(服务提供商)推荐使用注册套件时填写的token，普通企业可以随机填写
+        :param url: 更新事件回调接口
+        """
+        return self._top_request(
+            "dingtalk.oapi.call_back.update_call_back",
+            {
+                "call_back_tag": call_back_tag,
+                "aes_key": aes_key,
+                "token": token,
+                "url": url
+            }
+        )
+
+    def dingtalk_oapi_call_back_get_call_back(
+            self
+    ):
+        """
+        查询事件回调接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37147
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.call_back.get_call_back"
+        )
+
+    def dingtalk_oapi_sns_get_sns_token(
+            self,
+            persistent_code='',
+            openid=''
+    ):
+        """
+        获取用户授权的SNS_TOKEN
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37148
+
+        :param persistent_code: 用户授权给钉钉开放应用的持久授权码
+        :param openid: 用户的openid
+        """
+        return self._top_request(
+            "dingtalk.oapi.sns.get_sns_token",
+            {
+                "persistent_code": persistent_code,
+                "openid": openid
+            }
+        )
+
+    def dingtalk_oapi_service_get_unactive_corp(
+            self,
+            app_id=''
+    ):
+        """
+        获取应用未激活的企业列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37149
+
+        :param app_id: 套件下的微应用ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.get_unactive_corp",
+            {
+                "app_id": app_id
+            }
+        )
+
+    def dingtalk_oapi_service_get_agent(
+            self,
+            agentid='',
+            permanent_code='',
+            auth_corpid='',
+            suite_key=''
+    ):
+        """
+        获取企业的应用信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37150
+
+        :param agentid: agentid
+        :param permanent_code: permanent_code
+        :param auth_corpid: auth_corpid
+        :param suite_key: suite_key
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.get_agent",
+            {
+                "agentid": agentid,
+                "permanent_code": permanent_code,
+                "auth_corpid": auth_corpid,
+                "suite_key": suite_key
+            }
+        )
+
+    def dingtalk_oapi_service_get_auth_info(
+            self,
+            suite_key='',
+            auth_corpid=''
+    ):
+        """
+        获取企业基本信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37151
+
+        :param suite_key: 套件key
+        :param auth_corpid: 授权方corpid
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.get_auth_info",
+            {
+                "suite_key": suite_key,
+                "auth_corpid": auth_corpid
+            }
+        )
+
+    def dingtalk_oapi_service_get_corp_token(
+            self,
+            auth_corpid='',
+            permanent_code=''
+    ):
+        """
+        获取企业授权的凭证
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37152
+
+        :param auth_corpid: 授权方corpid
+        :param permanent_code: 永久授权码，通过get_permanent_code获取
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.get_corp_token",
+            {
+                "auth_corpid": auth_corpid,
+                "permanent_code": permanent_code
+            }
+        )
+
+    def dingtalk_oapi_service_activate_suite(
+            self,
+            suite_key='',
+            auth_corpid='',
+            permanent_code=''
+    ):
+        """
+        激活套件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37153
+
+        :param suite_key: 套件key
+        :param auth_corpid: 授权方corpid
+        :param permanent_code: 永久授权码，从get_permanent_code接口中获取
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.activate_suite",
+            {
+                "suite_key": suite_key,
+                "auth_corpid": auth_corpid,
+                "permanent_code": permanent_code
+            }
+        )
+
+    def dingtalk_oapi_service_get_permanent_code(
+            self,
+            tmp_auth_code=''
+    ):
+        """
+        获取企业授权的永久授权码
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37154
+
+        :param tmp_auth_code: 回调接口（tmp_auth_code）获取的临时授权码
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.get_permanent_code",
+            {
+                "tmp_auth_code": tmp_auth_code
+            }
+        )
+
+    def dingtalk_oapi_service_get_suite_token(
+            self,
+            suite_key='',
+            suite_secret='',
+            suite_ticket=''
+    ):
+        """
+        获取应用套件令牌Token
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37155
+
+        :param suite_key: 套件key，开发者后台创建套件后获取
+        :param suite_secret: 套件secret，开发者后台创建套件后获取
+        :param suite_ticket: 钉钉推送的ticket
+        """
+        return self._top_request(
+            "dingtalk.oapi.service.get_suite_token",
+            {
+                "suite_key": suite_key,
+                "suite_secret": suite_secret,
+                "suite_ticket": suite_ticket
+            }
+        )
+
+    def dingtalk_oapi_call_back_get_call_back_failed_result(
+            self
+    ):
+        """
+        获取回调失败的结果
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37156
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.call_back.get_call_back_failed_result"
+        )
+
+    def dingtalk_oapi_call_back_register_call_back(
+            self,
+            call_back_tag='',
+            token='',
+            aes_key='',
+            url=''
+    ):
+        """
+        注册事件回调接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37157
+
+        :param call_back_tag: 需要监听的事件类型，有20种，“user_add_org”, “user_modify_org”, “user_leave_org”,“org_admin_add”, “org_admin_remove”, “org_dept_create”, “org_dept_modify”, “org_dept_remove”, “org_remove”,“label_user_change”, “label_conf_add”, “label_conf_modify”,“label_conf_del”,“org_change”, “chat_add_member”, “chat_remove_member”, “chat_quit”, “chat_update_owner”, “chat_update_title”, “chat_disband”, “chat_disband_microapp”,“check_in”,“bpms_task_change”,“bpms_instance_change”
+        :param token: 加解密需要用到的token，ISV(服务提供商)推荐使用注册套件时填写的token，普通企业可以随机填写
+        :param aes_key: 数据加密密钥。用于回调数据的加密，长度固定为43个字符，从a-z, A-Z, 0-9共62个字符中选取,您可以随机生成，ISV(服务提供商)推荐使用注册套件时填写的EncodingAESKey
+        :param url: 接收事件回调的url
+        """
+        return self._top_request(
+            "dingtalk.oapi.call_back.register_call_back",
+            {
+                "call_back_tag": call_back_tag,
+                "token": token,
+                "aes_key": aes_key,
+                "url": url
+            }
+        )
+
+    def dingtalk_oapi_user_get_org_user_count(
+            self,
+            only_active=''
+    ):
+        """
+        获取企业员工人数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37158
+
+        :param only_active: 0：包含未激活钉钉的人员数量 1：不包含未激活钉钉的人员数量
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.get_org_user_count",
+            {
+                "onlyActive": only_active
+            }
+        )
+
+    def dingtalk_oapi_message_send_to_conversation(
+            self,
+            sender='',
+            markdown=None,
+            oa=None,
+            voice=None,
+            file=None,
+            link=None,
+            image=None,
+            text=None,
+            msgtype='',
+            cid='',
+            action_card=None,
+            msg=None
+    ):
+        """
+        发送普通消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37159
+
+        :param sender: 消息发送者员工ID
+        :param markdown: markdown消息
+        :param oa: OA消息
+        :param voice: voice消息
+        :param file: file消息
+        :param link: link消息
+        :param image: image消息
+        :param text: text消息
+        :param msgtype: text
+        :param cid: 群消息或者个人聊天会话Id，(通过JSAPI之pickConversation接口唤起联系人界面选择之后即可拿到会话ID，之后您可以使用获取到的cid调用此接口）
+        :param action_card: ActionCard消息
+        :param msg: 消息内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.send_to_conversation",
+            {
+                "sender": sender,
+                "markdown": markdown,
+                "oa": oa,
+                "voice": voice,
+                "file": file,
+                "link": link,
+                "image": image,
+                "text": text,
+                "msgtype": msgtype,
+                "cid": cid,
+                "action_card": action_card,
+                "msg": msg
+            }
+        )
+
+    def dingtalk_oapi_sns_getuserinfo(
+            self,
+            sns_token=''
+    ):
+        """
+        获取用户授权的个人信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37160
+
+        :param sns_token: 用户授权给开放应用的token
+        """
+        return self._top_request(
+            "dingtalk.oapi.sns.getuserinfo",
+            {
+                "sns_token": sns_token
+            }
+        )
+
+    def dingtalk_oapi_sns_get_persistent_code(
+            self,
+            tmp_auth_code=''
+    ):
+        """
+        获取用户授权的持久授权码
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37161
+
+        :param tmp_auth_code: 用户授权给钉钉开放应用的临时授权码
+        """
+        return self._top_request(
+            "dingtalk.oapi.sns.get_persistent_code",
+            {
+                "tmp_auth_code": tmp_auth_code
+            }
+        )
+
+    def dingtalk_oapi_microapp_create(
+            self,
+            app_icon='',
+            app_desc='',
+            homepage_url='',
+            pc_homepage_url='',
+            omp_link='',
+            app_name=''
+    ):
+        """
+        创建微应用
+        企业开发者通过接口创建微应用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37162
+
+        :param app_icon: 微应用的图标。需要调用上传接口将图标上传到钉钉服务器后获取到的mediaId
+        :param app_desc: 钉钉测试微应用
+        :param homepage_url: 微应用的移动端主页，必须以http开头或https开头
+        :param pc_homepage_url: 微应用的PC端主页，必须以http开头或https开头，如果不为空则必须与homepageUrl的域名一致
+        :param omp_link: 微应用的OA后台管理主页，必须以http开头或https开头。微应用后台管理员免登 开发
+        :param app_name: 微应用的名称。长度限制为1~10个字符
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.create",
+            {
+                "appIcon": app_icon,
+                "appDesc": app_desc,
+                "homepageUrl": homepage_url,
+                "pcHomepageUrl": pc_homepage_url,
+                "ompLink": omp_link,
+                "appName": app_name
+            }
+        )
+
+    def dingtalk_oapi_microapp_update(
+            self,
+            app_name='',
+            app_icon='',
+            app_desc='',
+            homepage_url='',
+            pc_homepage_url='',
+            omp_link='',
+            agent_id=''
+    ):
+        """
+        更新微应用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37163
+
+        :param app_name: 微应用的名称。长度限制为1~10个字符
+        :param app_icon: 微应用的图标。需要调用上传接口将图标上传到钉钉服务器后获取到的mediaId
+        :param app_desc: 微应用的描述。长度限制为1~20个字符
+        :param homepage_url: 微应用的移动端主页，必须以http开头或https开头
+        :param pc_homepage_url: 微应用的PC端主页，必须以http开头或https开头，如果不为空则必须与homepageUrl的域名一致
+        :param omp_link: 微应用的OA后台管理主页，必须以http开头或https开头
+        :param agent_id: 微应用实例化id
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.update",
+            {
+                "appName": app_name,
+                "appIcon": app_icon,
+                "appDesc": app_desc,
+                "homepageUrl": homepage_url,
+                "pcHomepageUrl": pc_homepage_url,
+                "ompLink": omp_link,
+                "agentId": agent_id
+            }
+        )
+
+    def dingtalk_oapi_microapp_list(
+            self
+    ):
+        """
+        列出微应用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37164
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.list"
+        )
+
+    def dingtalk_oapi_checkin_record(
+            self,
+            department_id='',
+            end_time='',
+            start_time='',
+            offset='',
+            size='',
+            order=''
+    ):
+        """
+        获得签到数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37165
+
+        :param department_id: 部门id（1 表示根部门）
+        :param end_time: 开始时间，精确到毫秒，注意字段的位数 例：1520956800000
+        :param start_time: 结束时间，精确到毫秒，注意字段的位数 例：1520956800000（默认为当前时间）
+        :param offset: 支持分页查询，与size 参数同时设置时才生效，此参数代表偏移量，从0 开始
+        :param size: 支持分页查询，与offset 参数同时设置时才生效，此参数代表分页大小，最大100
+        :param order: 排序，asc 为正序，desc 为倒序
+        """
+        return self._top_request(
+            "dingtalk.oapi.checkin.record",
+            {
+                "department_id": department_id,
+                "end_time": end_time,
+                "start_time": start_time,
+                "offset": offset,
+                "size": size,
+                "order": order
+            }
+        )
+
+    def dingtalk_oapi_microapp_delete(
+            self,
+            agent_id=''
+    ):
+        """
+        删除微应用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37166
+
+        :param agent_id: 微应用实例化id，企业只能删除自建微应用
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.delete",
+            {
+                "agentId": agent_id
+            }
+        )
+
+    def dingtalk_oapi_microapp_list_by_userid(
+            self,
+            userid=''
+    ):
+        """
+        列出员工可见的微应用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37167
+
+        :param userid: 员工userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.list_by_userid",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_microapp_visible_scopes(
+            self,
+            agent_id=''
+    ):
+        """
+        获取企业设置的微应用可见范围
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37168
+
+        :param agent_id: 微应用实例化id
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.visible_scopes",
+            {
+                "agentId": agent_id
+            }
+        )
+
+    def dingtalk_oapi_microapp_set_visible_scopes(
+            self,
+            user_visible_scopes='',
+            dept_visible_scopes='',
+            is_hidden='',
+            agent_id=''
+    ):
+        """
+        设置微应用的可见范围
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37169
+
+        :param user_visible_scopes: 设置可见的员工id列表，格式为JSON数组
+        :param dept_visible_scopes: 设置可见的部门id列表，格式为JSON数组
+        :param is_hidden: 是否仅限管理员可见，true代表仅限管理员可见
+        :param agent_id: 微应用实例化id
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.set_visible_scopes",
+            {
+                "userVisibleScopes": user_visible_scopes,
+                "deptVisibleScopes": dept_visible_scopes,
+                "isHidden": is_hidden,
+                "agentId": agent_id
+            }
+        )
+
+    def dingtalk_oapi_microapp_rule_get_rule_list(
+            self,
+            userid='',
+            agent_id=''
+    ):
+        """
+        微应用规则绑定服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37170
+
+        :param userid: 用户在企业内的唯一标识
+        :param agent_id: 微应用在企业内的id
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.rule.get_rule_list",
+            {
+                "userid": userid,
+                "agentId": agent_id
+            }
+        )
+
+    def dingtalk_oapi_microapp_rule_get_user_total(
+            self,
+            agent_id='',
+            rule_id_list=''
+    ):
+        """
+        获取规则绑定的用户数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37171
+
+        :param agent_id: 规则所属的微应用agentId
+        :param rule_id_list: 需要查询的规则id集合
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.rule.get_user_total",
+            {
+                "agentId": agent_id,
+                "ruleIdList": rule_id_list
+            }
+        )
+
+    def dingtalk_oapi_sso_gettoken(
+            self,
+            corpid='',
+            corpsecret=''
+    ):
+        """
+        获取微应用后台免登的SsoToken
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37172
+
+        :param corpid: 企业Id
+        :param corpsecret: 这里必须填写专属的SSOSecret
+        """
+        return self._top_request(
+            "dingtalk.oapi.sso.gettoken",
+            {
+                "corpid": corpid,
+                "corpsecret": corpsecret
+            }
+        )
+
+    def dingtalk_oapi_get_jsapi_ticket(
+            self
+    ):
+        """
+        获取jsapi_ticket
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37173
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.get_jsapi_ticket"
+        )
+
+    def dingtalk_oapi_microapp_rule_delete(
+            self,
+            agent_id='',
+            rule_id=''
+    ):
+        """
+        删除规则
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37174
+
+        :param agent_id: 规则所属的微应用agentId
+        :param rule_id: 被删除的规则id
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.rule.delete",
+            {
+                "agentId": agent_id,
+                "ruleId": rule_id
+            }
+        )
+
+    def dingtalk_oapi_sns_gettoken(
+            self,
+            appid='',
+            appsecret=''
+    ):
+        """
+        获取钉钉开放应用的ACCESS_TOKEN
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37175
+
+        :param appid: 由钉钉开放平台提供给开放应用的唯一标识
+        :param appsecret: 由钉钉开放平台提供的密钥
+        """
+        return self._top_request(
+            "dingtalk.oapi.sns.gettoken",
+            {
+                "appid": appid,
+                "appsecret": appsecret
+            }
+        )
+
+    def dingtalk_oapi_auth_scopes(
+            self
+    ):
+        """
+        获取CorpSecret授权范围
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37176
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.auth.scopes"
+        )
+
+    def dingtalk_oapi_process_gettodonum(
+            self,
+            userid
+    ):
+        """
+        获取待我审批数量
+        获取用户待审批数量
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37188
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.gettodonum",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_report_getunreadcount(
+            self,
+            userid=''
+    ):
+        """
+        查询企业员工的日志未读数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37189
+
+        :param userid: 员工id
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.getunreadcount",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_visitor_addvisitor(
+            self,
+            visitor_vo
+    ):
+        """
+        添加企业访客邀约记录信息
+        ISV向钉钉智能硬件添加授权企业的访客邀约记录，以实现与智能识别设备的打通流程
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37221
+
+        :param visitor_vo: 访客预约模型
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.visitor.addvisitor",
+            {
+                "visitor_vo": visitor_vo
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_visitor_editvisitor(
+            self,
+            reservation_id,
+            visitor_vo
+    ):
+        """
+        编辑企业访客预约数据
+        ISV向钉钉智能硬件同步授权企业的访问预约记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37222
+
+        :param reservation_id: 预约编号
+        :param visitor_vo: 预约数据
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.visitor.editvisitor",
+            {
+                "reservation_id": reservation_id,
+                "visitor_vo": visitor_vo
+            }
+        )
+
+    def dingtalk_oapi_robot_send(
+            self,
+            msgtype,
+            text=None,
+            at=None,
+            link=None,
+            markdown=None,
+            action_card=None,
+            feed_card=None
+    ):
+        """
+        自定义机器人发送消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37246
+
+        :param msgtype: 消息类型
+        :param text: text类型
+        :param at: 被@人的手机号
+        :param link: 消息类型，此时固定为:link
+        :param markdown: 此消息类型为固定markdown
+        :param action_card: 此消息类型为固定actionCard
+        :param feed_card: 此消息类型为固定feedCard
+        """
+        return self._top_request(
+            "dingtalk.oapi.robot.send",
+            {
+                "msgtype": msgtype,
+                "text": text,
+                "at": at,
+                "link": link,
+                "markdown": markdown,
+                "actionCard": action_card,
+                "feedCard": feed_card
+            }
+        )
+
+    def dingtalk_oapi_calendar_create(
+            self,
+            create_vo=None
+    ):
+        """
+        创建日程
+        通过此接口可以把企业员工的待办事项导入到钉钉日历并在钉钉日历中展示, 支持任务, 会议,审批,普通日程等.
+        该接口处于内部灰度阶段, 申请使用请邮件联系:wusuan.yby@alibaba-inc.com
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37264
+
+        :param create_vo: 创建日程实体
+        """
+        return self._top_request(
+            "dingtalk.oapi.calendar.create",
+            {
+                "create_vo": create_vo
+            }
+        )
+
+    def dingtalk_oapi_ding_create(
+            self,
+            creator_userid,
+            receiver_userids,
+            remind_type,
+            remind_time,
+            text_content,
+            attachment=None
+    ):
+        """
+        发DING通知
+        通过此接口发DING通知给企业内部员工, 支持短信DING和应用内DING.
+        该接口正在灰度内测中, 暂不对外开放
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37267
+
+        :param creator_userid: 发送者工号
+        :param receiver_userids: 接收者工号列表
+        :param remind_type: 提醒类型:1-应用内;2-短信
+        :param remind_time: 发送时间(单位:毫秒)
+        :param text_content: 通知内容
+        :param attachment: 附件内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.ding.create",
+            {
+                "creator_userid": creator_userid,
+                "receiver_userids": receiver_userids,
+                "remind_type": remind_type,
+                "remind_time": remind_time,
+                "text_content": text_content,
+                "attachment": attachment
+            }
+        )
+
+    def dingtalk_oapi_chat_updategroupnick(
+            self,
+            userid,
+            chatid,
+            group_nick
+    ):
+        """
+        设置群昵称
+        设置群成员的群昵称
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37291
+
+        :param userid: 用户userid
+        :param chatid: chatid
+        :param group_nick: 群昵称
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.updategroupnick",
+            {
+                "userid": userid,
+                "chatid": chatid,
+                "group_nick": group_nick
+            }
+        )
+
+    def dingtalk_oapi_attendance_getupdatedata(
+            self,
+            userid,
+            work_date
+    ):
+        """
+        获取考勤更新数据
+        增加这个api的目的是为了给外部企业提供考勤数据变更，提升外部企业的考勤统计数据的准确度。外部企业只能通过入参获取数据，属于只读接口。
+        接口的入参是 查询用户corpId，userid以及查询日期，这些参数是我们开放平台推送给用户的变更。
+        返回的结果是三个list结果：分别是打卡流水记录 打卡结果 以及 审批列表 都是被查询用户在查询日期内的数据。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37307
+
+        :param userid: 用户id
+        :param work_date: 工作日
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getupdatedata",
+            {
+                "userid": userid,
+                "work_date": work_date
+            }
+        )
+
+    def dingtalk_oapi_cspace_add_to_single_chat(
+            self,
+            file_name='',
+            media_id='',
+            userid='',
+            agent_id=''
+    ):
+        """
+        发送文件给指定用户
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37310
+
+        :param file_name: 文件名(需包含含扩展名),需要utf-8 urlEncode
+        :param media_id: 调用钉盘上传文件接口得到的mediaid,需要utf-8 urlEncode
+        :param userid: 文件发送者微应用的agentId
+        :param agent_id: 文件接收人的userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.cspace.add_to_single_chat",
+            {
+                "file_name": file_name,
+                "media_id": media_id,
+                "userid": userid,
+                "agent_id": agent_id
+            }
+        )
+
+    def dingtalk_oapi_cspace_add(
+            self,
+            agent_id='',
+            code='',
+            media_id='',
+            folder_id='',
+            space_id='',
+            name='',
+            overwrite=''
+    ):
+        """
+        新增文件到用户钉盘
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37324
+
+        :param agent_id: 微应用的agentId
+        :param code: 如果是微应用，code值为微应用免登授权码,如果是服务窗应用，code值为服务窗免登授权码。code为临时授权码，只能消费一次，下次请求需要重新获取新的code。
+        :param media_id: 调用钉盘上传文件接口得到的mediaid, 需要utf-8 urlEncode
+        :param folder_id: 调用云盘选择控件后获取的用户钉盘空间ID
+        :param space_id: 调用云盘选择控件后获取的用户钉盘文件夹ID
+        :param name: 上传文件的名称，不能包含非法字符，需要utf-8 urlEncode
+        :param overwrite: 遇到同名文件是否覆盖，若不覆盖，则会自动重命名本次新增的文件，默认为false
+        """
+        return self._top_request(
+            "dingtalk.oapi.cspace.add",
+            {
+                "agent_id": agent_id,
+                "code": code,
+                "media_id": media_id,
+                "folder_id": folder_id,
+                "space_id": space_id,
+                "name": name,
+                "overwrite": overwrite
+            }
+        )
+
+    def dingtalk_oapi_cspace_get_custom_space(
+            self,
+            domain='',
+            agent_id=''
+    ):
+        """
+        获取企业下的自定义空间
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37325
+
+        :param domain: 企业调用时传入，需要为10个字节以内的字符串，仅可包含字母和数字，大小写不敏感
+        :param agent_id: ISV调用时传入，微应用agentId
+        """
+        return self._top_request(
+            "dingtalk.oapi.cspace.get_custom_space",
+            {
+                "domain": domain,
+                "agent_id": agent_id
+            }
+        )
+
+    def dingtalk_oapi_cspace_grant_custom_space(
+            self,
+            agent_id='',
+            domain='',
+            type='',
+            userid='',
+            path='',
+            fileids='',
+            duration=''
+    ):
+        """
+        授权用户访问企业下的自定义空间
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37326
+
+        :param agent_id: ISV调用时传入，授权访问指定微应用的自定义空间
+        :param domain: 权限类型，目前支持上传和下载，上传请传add，下载请传download
+        :param type: 企业调用时传入，授权访问该domain的自定义空间
+        :param userid: 企业用户userid
+        :param path: 授权访问的路径，如授权访问所有文件传“/”，授权访问/doc文件夹传“/doc/” 需要utf-8 urlEncode
+        :param fileids: 授权访问的文件id列表，id之间用英文逗号隔开，如“fileId1,fileId2”
+        :param duration: 权限有效时间，有效范围为0~3600秒，超出此范围或不传默认为30秒
+        """
+        return self._top_request(
+            "dingtalk.oapi.cspace.grant_custom_space",
+            {
+                "agent_id": agent_id,
+                "domain": domain,
+                "type": type,
+                "userid": userid,
+                "path": path,
+                "fileids": fileids,
+                "duration": duration
+            }
+        )
+
+    def dingtalk_oapi_file_upload_transaction(
+            self,
+            agent_id='',
+            file_size='',
+            chunk_numbers='',
+            upload_id=''
+    ):
+        """
+        开启文件上传事务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37327
+
+        :param agent_id: 微应用的agentId
+        :param file_size: 文件大小
+        :param chunk_numbers: 文件总块数
+        :param upload_id: 上传事务id 需要utf-8 urlEncode
+        """
+        return self._top_request(
+            "dingtalk.oapi.file.upload.transaction",
+            {
+                "agent_id": agent_id,
+                "file_size": file_size,
+                "chunk_numbers": chunk_numbers,
+                "upload_id": upload_id
+            }
+        )
+
+    def dingtalk_oapi_file_upload_chunk(
+            self,
+            agent_id='',
+            upload_id='',
+            chunk_sequence='',
+            file=''
+    ):
+        """
+        上传文件块
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37328
+
+        :param agent_id: 微应用的agentId
+        :param upload_id: 上传事务id 需要utf-8 urlEncode
+        :param chunk_sequence: 文件块号，从1开始计数
+        :param file: 文件内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.file.upload.chunk",
+            {
+                "agent_id": agent_id,
+                "upload_id": upload_id,
+                "chunk_sequence": chunk_sequence,
+                "file": file
+            }
+        )
+
+    def dingtalk_oapi_file_upload_single(
+            self,
+            agent_id='',
+            file_size='',
+            file=''
+    ):
+        """
+        单步文件上传
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37329
+
+        :param agent_id: 微应用的agentId
+        :param file_size: 文件大小
+        :param file: 文件内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.file.upload.single",
+            {
+                "agent_id": agent_id,
+                "file_size": file_size,
+                "file": file
+            }
+        )
+
+    def dingtalk_oapi_org_setoaurl(
+            self,
+            oa_url,
+            oa_title=''
+    ):
+        """
+        设置企业工作台首页
+        企业可使用该接口来设置工作台首页地址，效果类似于在oa管理后台手动设置工作台地址
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37360
+
+        :param oa_url: 工作台首页地址，必须是https开头
+        :param oa_title: 工作台名称，认证企业才能设置
+        """
+        return self._top_request(
+            "dingtalk.oapi.org.setoaurl",
+            {
+                "oa_url": oa_url,
+                "oa_title": oa_title
+            }
+        )
+
+    def dingtalk_oapi_call_removeuserlist(
+            self,
+            staff_id_list
+    ):
+        """
+        删除isv免费电话员工名单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37370
+
+        :param staff_id_list: 要删除的员工userid列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.call.removeuserlist",
+            {
+                "staff_id_list": staff_id_list
+            }
+        )
+
+    def dingtalk_oapi_call_setuserlist(
+            self,
+            staff_id_list
+    ):
+        """
+        设置isv发起免费电话的主叫白名单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37371
+
+        :param staff_id_list: 套件所所属企业免费电话主叫人员工号列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.call.setuserlist",
+            {
+                "staff_id_list": staff_id_list
+            }
+        )
+
+    def dingtalk_oapi_call_calluser(
+            self,
+            staff_id,
+            authed_corp_id,
+            authed_staff_id
+    ):
+        """
+        主叫方发起免费电话给授权企业下的授权范围内的人员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37372
+
+        :param staff_id: isv套件所属企业下的员工userid
+        :param authed_corp_id: 授权isv套件企业的corpid
+        :param authed_staff_id: 授权isv套件企业的员工userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.call.calluser",
+            {
+                "staff_id": staff_id,
+                "authed_corp_id": authed_corp_id,
+                "authed_staff_id": authed_staff_id
+            }
+        )
+
+    def dingtalk_oapi_call_getuserlist(
+            self,
+            offset='0',
+            size=''
+    ):
+        """
+        查询可以主动调用接口发起免费电话的员工
+        删除ISV套件对应的企业下的可以主动调用接口发起免费电话的员工
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37373
+
+        :param offset: 偏移量
+        :param size: size
+        """
+        return self._top_request(
+            "dingtalk.oapi.call.getuserlist",
+            {
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_org_setscreen(
+            self,
+            media_id,
+            end_time,
+            jump_url=''
+    ):
+        """
+        企业设置开机闪屏动画信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37412
+
+        :param media_id: 开机图片资源id，可以通过/media/upload接口上传图片获取
+        :param end_time: yyyy-MM-dd显示截止时间
+        :param jump_url: 点击开机图片跳转地址
+        """
+        return self._top_request(
+            "dingtalk.oapi.org.setscreen",
+            {
+                "mediaId": media_id,
+                "endTime": end_time,
+                "jumpUrl": jump_url
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_removeface(
+            self,
+            userid
+    ):
+        """
+        从企业删除员工人脸识别照片
+        删除企业中员工的人脸识别照片
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37428
+
+        :param userid: 员工ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.removeface",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_sns_getuserinfo_bycode(
+            self,
+            tmp_auth_code=''
+    ):
+        """
+        根据sns临时授权码获取用户信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37515
+
+        :param tmp_auth_code: 登录的临时授权码
+        """
+        return self._top_request(
+            "dingtalk.oapi.sns.getuserinfo_bycode",
+            {
+                "tmp_auth_code": tmp_auth_code
+            }
+        )
+
+    def dingtalk_oapi_hrm_employee_getdismissionlist(
+            self,
+            current,
+            page_size,
+            op_userid
+    ):
+        """
+        智能人事开放接口-查询离职人员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37535
+
+        :param current: 第几页，从1开始
+        :param page_size: 一页多少数据，在1-100之间
+        :param op_userid: 操作人userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.hrm.employee.getdismissionlist",
+            {
+                "current": current,
+                "page_size": page_size,
+                "op_userid": op_userid
+            }
+        )
+
+    def dingtalk_oapi_hrm_employee_get(
+            self,
+            userid
+    ):
+        """
+        获取智能人事指定员工花名册详细数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37536
+
+        :param userid: 查询用户userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.hrm.employee.get",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_hrm_employee_addresumerecord(
+            self,
+            userid='',
+            title='',
+            content='',
+            k_v_content='',
+            phone_url='',
+            pc_url='',
+            web_url='',
+            record_timestamp=''
+    ):
+        """
+        添加企业员工的成长记录
+        企业员工的成长记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37577
+
+        :param userid: 被操作人userid
+        :param title: 成长记录title
+        :param content: 成长记录第一条内容
+        :param k_v_content: 厂长记录kv展示内容：json格式，顺序展示
+        :param phone_url: 手机端url
+        :param pc_url: pc端url
+        :param web_url: webOA后台url
+        :param record_timestamp: 20180428 零点零分零秒
+        """
+        return self._top_request(
+            "dingtalk.oapi.hrm.employee.addresumerecord",
+            {
+                "userid": userid,
+                "title": title,
+                "content": content,
+                "k_v_content": k_v_content,
+                "phone_url": phone_url,
+                "pc_url": pc_url,
+                "web_url": web_url,
+                "record_timestamp": record_timestamp
+            }
+        )
+
+    def dingtalk_oapi_impaas_conversation_sendmessage(
+            self,
+            chatid,
+            type,
+            content
+    ):
+        """
+        impaas发送群消息接口
+        发送群消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37583
+
+        :param chatid: 群id
+        :param type: 1. 优惠券 2 系统消息
+        :param content: 消息内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.conversation.sendmessage",
+            {
+                "chatid": chatid,
+                "type": type,
+                "content": content
+            }
+        )
+
+    def dingtalk_oapi_impaas_conversation_create(
+            self,
+            channel,
+            owner_userid,
+            userid_list,
+            name
+    ):
+        """
+        impaas创建群接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37584
+
+        :param channel: 渠道
+        :param owner_userid: 群主员工id
+        :param userid_list: 成员员工id列表
+        :param name: 群名称
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.conversation.create",
+            {
+                "channel": channel,
+                "owner_userid": owner_userid,
+                "userid_list": userid_list,
+                "name": name
+            }
+        )
+
+    def dingtalk_oapi_impaas_conversation_modifymember(
+            self,
+            chatid,
+            memberid_list,
+            type,
+            channel
+    ):
+        """
+        修改群成员接口
+        IMPAAS修改群成员接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37585
+
+        :param chatid: 群ID
+        :param memberid_list: 会员ID列表
+        :param type: 1 添加 2 删除
+        :param channel: 渠道
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.conversation.modifymember",
+            {
+                "chatid": chatid,
+                "memberid_list": memberid_list,
+                "type": type,
+                "channel": channel
+            }
+        )
+
+    def dingtalk_oapi_hrm_employee_updateresumerecord(
+            self,
+            userid,
+            resume_id,
+            title='',
+            content='',
+            k_v_content='',
+            phone_url='',
+            pc_url='',
+            web_url='',
+            record_timestamp=''
+    ):
+        """
+        智能人事-更新成长记录
+        更新成长记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37587
+
+        :param userid: 被操作人员工userid
+        :param resume_id: 成长记录唯一标识
+        :param title: 成长记录title
+        :param content: 成长记录第一条内容
+        :param k_v_content: 成长记录kv展示内容：json格式，顺序展示
+        :param phone_url: 手机端url
+        :param pc_url: pc端url
+        :param web_url: webOA后台url
+        :param record_timestamp: 20180428 零点零分零秒
+        """
+        return self._top_request(
+            "dingtalk.oapi.hrm.employee.updateresumerecord",
+            {
+                "userid": userid,
+                "resume_id": resume_id,
+                "title": title,
+                "content": content,
+                "k_v_content": k_v_content,
+                "phone_url": phone_url,
+                "pc_url": pc_url,
+                "web_url": web_url,
+                "record_timestamp": record_timestamp
+            }
+        )
+
+    def dingtalk_oapi_hrm_employee_delresumerecord(
+            self,
+            userid,
+            resume_id
+    ):
+        """
+        智能人事-删除成长记录
+        支持开放删除成长记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37588
+
+        :param userid: 员工userid
+        :param resume_id: 成长记录唯一标识
+        """
+        return self._top_request(
+            "dingtalk.oapi.hrm.employee.delresumerecord",
+            {
+                "userid": userid,
+                "resume_id": resume_id
+            }
+        )
+
+    def dingtalk_oapi_role_getrole(
+            self,
+            role_id
+    ):
+        """
+        获取角色详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37691
+
+        :param role_id: 角色id
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.getrole",
+            {
+                "roleId": role_id
+            }
+        )
+
+    def dingtalk_oapi_message_corpconversation_asyncsend_v2(
+            self,
+            agent_id,
+            msg,
+            userid_list='',
+            dept_id_list='',
+            to_all_user='false'
+    ):
+        """
+        企业会话消息异步发送接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37692
+
+        :param agent_id: 微应用的id
+        :param msg: 消息体，具体见文档
+        :param userid_list: 接收者的用户userid列表
+        :param dept_id_list: 接收者的部门id列表
+        :param to_all_user: 是否发送给企业全部用户
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.asyncsend_v2",
+            {
+                "agent_id": agent_id,
+                "msg": msg,
+                "userid_list": userid_list,
+                "dept_id_list": dept_id_list,
+                "to_all_user": to_all_user
+            }
+        )
+
+    def dingtalk_oapi_certify_queryinfo(
+            self,
+            userid
+    ):
+        """
+        查询实名认证信息
+        提供查询实名认证信息（仅支持2018云栖大会）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38022
+
+        :param userid: 员工userId，也称staffId
+        """
+        return self._top_request(
+            "dingtalk.oapi.certify.queryinfo",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_ccoservice_servicegroup_get(
+            self,
+            open_group_id
+    ):
+        """
+        查询服务群信息
+        企业查询自己企业内服务群的信息，会把服务群的群主信息，dingtalkid，nick，真实姓名和群名称返回。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38055
+
+        :param open_group_id: 服务群id
+        """
+        return self._top_request(
+            "dingtalk.ccoservice.servicegroup.get",
+            {
+                "open_group_id": open_group_id
+            }
+        )
+
+    def dingtalk_ccoservice_servicegroup_addmember(
+            self,
+            userid,
+            open_group_id
+    ):
+        """
+        把企业某个员工加入到服务群
+        此API主要就是把某个企业的员工加入到此企业的某个服务群内
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38056
+
+        :param userid: 企业员工id
+        :param open_group_id: 服务群id
+        """
+        return self._top_request(
+            "dingtalk.ccoservice.servicegroup.addmember",
+            {
+                "userid": userid,
+                "open_group_id": open_group_id
+            }
+        )
+
+    def dingtalk_oapi_microapp_addwithuserid(
+            self,
+            agent_id,
+            userids
+    ):
+        """
+        添加用户到微应用可见范围
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38097
+
+        :param agent_id: 微应用实例化id，表示企业和微应用的唯一关系
+        :param userids: 用户id列表，最多10个
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.addwithuserid",
+            {
+                "agentId": agent_id,
+                "userids": userids
+            }
+        )
+
+    def dingtalk_oapi_microapp_delwithuserid(
+            self,
+            agent_id,
+            userids
+    ):
+        """
+        去掉用户的微应用可见范围
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38098
+
+        :param agent_id: 微应用实例化id，表示企业和微应用的唯一关系
+        :param userids: 用户id列表，最多10个
+        """
+        return self._top_request(
+            "dingtalk.oapi.microapp.delwithuserid",
+            {
+                "agentId": agent_id,
+                "userids": userids
+            }
+        )
+
+    def dingtalk_oapi_org_listshortcut(
+            self
+    ):
+        """
+        查询企业工作台快捷方式
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38101
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.org.listshortcut"
+        )
+
+    def dingtalk_oapi_org_setshortcut(
+            self,
+            agent_ids=''
+    ):
+        """
+        设置企业工作台快捷方式列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38102
+
+        :param agent_ids: 微应用实例id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.org.setshortcut",
+            {
+                "agentIds": agent_ids
+            }
+        )
+
+    def dingtalk_oapi_impaas_newretail_sendstaffmessage(
+            self,
+            msg_type='0',
+            sender='',
+            userid_list='',
+            content=''
+    ):
+        """
+        新零售发送单聊消息给员工
+        新零售场景下，通过系统账号或员工账号向员工发送单聊账号
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38164
+
+        :param msg_type: 0系统消息
+        :param sender: 系统账号
+        :param userid_list: 用账号列表
+        :param content: 消息体
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.newretail.sendstaffmessage",
+            {
+                "msg_type": msg_type,
+                "sender": sender,
+                "userid_list": userid_list,
+                "content": content
+            }
+        )
+
+    def dingtalk_oapi_impaas_newretail_sendstaffgroupmessage(
+            self,
+            msg_type='0',
+            sender='',
+            chat_id='',
+            content=''
+    ):
+        """
+        新零售的系统账号发送群聊消息
+        新零售场景下，先创建某企业的内部群。
+        然后用特定的系统账号向群内发送群聊消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38183
+
+        :param msg_type: 消息类型
+        :param sender: 系统账号名
+        :param chat_id: 加密后的群号
+        :param content: 消息内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.newretail.sendstaffgroupmessage",
+            {
+                "msg_type": msg_type,
+                "sender": sender,
+                "chat_id": chat_id,
+                "content": content
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_visitor_removevisitor(
+            self,
+            reservation_id
+    ):
+        """
+        取消企业访客邀约记录信息
+        ISV向钉钉智能硬件取消授权企业的访客邀约记录，以实现与智能识别设备的打通流程
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38184
+
+        :param reservation_id: 预约编号
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.visitor.removevisitor",
+            {
+                "reservation_id": reservation_id
+            }
+        )
+
+    def dingtalk_oapi_impaas_group_getbydeptid(
+            self,
+            dept_id
+    ):
+        """
+        新零售场景下，获取企业全员群id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38514
+
+        :param dept_id: 1企业全员群
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.group.getbydeptid",
+            {
+                "dept_id": dept_id
+            }
+        )
+
+    def dingtalk_oapi_role_updaterole(
+            self,
+            role_id,
+            role_name
+    ):
+        """
+        更新角色
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38575
+
+        :param role_id: 1
+        :param role_name: 1
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.updaterole",
+            {
+                "roleId": role_id,
+                "roleName": role_name
+            }
+        )
+
+    def dingtalk_oapi_role_addrole(
+            self,
+            role_name,
+            group_id
+    ):
+        """
+        添加角色
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38576
+
+        :param role_name: test
+        :param group_id: test
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.addrole",
+            {
+                "roleName": role_name,
+                "groupId": group_id
+            }
+        )
+
+    def dingtalk_oapi_role_addrolegroup(
+            self,
+            name
+    ):
+        """
+        创建角色组
+        添加角色组
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38577
+
+        :param name: 名称
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.addrolegroup",
+            {
+                "name": name
+            }
+        )
+
+    def dingtalk_oapi_impaas_relation_add(
+            self,
+            src_im_openid,
+            dst_im_openid,
+            is_double_way,
+            begin_time,
+            end_time
+    ):
+        """
+        impaas关系导入
+        二方关系导入钉钉
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38619
+
+        :param src_im_openid: 发送者钉钉的openid
+        :param dst_im_openid: 接收者钉钉的openid
+        :param is_double_way: 是否双向关系
+        :param begin_time: 时间戳精确到毫秒
+        :param end_time: 时间戳精确到毫秒
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.relation.add",
+            {
+                "request": {
+                    "src_im_openid": src_im_openid,
+                    "dst_im_openid": dst_im_openid,
+                    "is_double_way": is_double_way,
+                    "begin_time": begin_time,
+                    "end_time": end_time
+                }
+            }
+        )
+
+    def dingtalk_oapi_chat_transform(
+            self,
+            open_conversation_id
+    ):
+        """
+        将conversationId转换成chatId
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38620
+
+        :param open_conversation_id: 开放cid
+        """
+        return self._top_request(
+            "dingtalk.oapi.chat.transform",
+            {
+                "open_conversation_id": open_conversation_id
+            }
+        )
+
+    def dingtalk_oapi_impaas_user_addprofile(
+            self,
+            id,
+            nick,
+            channel,
+            extension='',
+            avatar_mediaid=''
+    ):
+        """
+        二方账号导入
+        二方渠道导入账号
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38621
+
+        :param id: 账号id
+        :param nick: 账号nick
+        :param channel: 渠道
+        :param extension: 附加信息
+        :param avatar_mediaid: 头像mediaid
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.user.addprofile",
+            {
+                "request": {
+                    "id": id,
+                    "nick": nick,
+                    "channel": channel,
+                    "extension": extension,
+                    "avatar_mediaid": avatar_mediaid
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_relation_del(
+            self,
+            src_im_openid,
+            dst_im_openid,
+            is_double_way
+    ):
+        """
+        二方关系删除
+        删除二方关系
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38622
+
+        :param src_im_openid: 发送者的im的openid
+        :param dst_im_openid: 接受者的im的openid
+        :param is_double_way: 是否双向关系
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.relation.del",
+            {
+                "request": {
+                    "src_im_openid": src_im_openid,
+                    "dst_im_openid": dst_im_openid,
+                    "is_double_way": is_double_way
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_groupmember_modifymemberinfo(
+            self,
+            chatid,
+            member_info
+    ):
+        """
+        IMPAAS修改群成员信息
+        修改群成员信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38679
+
+        :param chatid: 群ID
+        :param member_info: 要修改的成员信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.groupmember.modifymemberinfo",
+            {
+                "request": {
+                    "chatid": chatid,
+                    "member_info": member_info
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_group_dismiss(
+            self,
+            chatid
+    ):
+        """
+        impaas解散群接口
+        IMPAAS解散群接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38680
+
+        :param chatid: 群ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.group.dismiss",
+            {
+                "request": {
+                    "chatid": chatid
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_groupmember_getmemberlist(
+            self,
+            chatid,
+            offset='0',
+            length='1000'
+    ):
+        """
+        IMPAAS获取群成员列表
+        获取群成员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38681
+
+        :param chatid: 群ID
+        :param offset: 群成员列表偏移
+        :param length: 本次请求返回的群成员列表数量
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.groupmember.getmemberlist",
+            {
+                "request": {
+                    "chatid": chatid,
+                    "offset": offset,
+                    "length": length
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_conversaion_changegroupowner(
+            self,
+            chatid='',
+            userid='',
+            channel=''
+    ):
+        """
+        impaas群名称更改
+        盒马接入钉钉sdk，群主转交功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38711
+
+        :param chatid: 钉钉会话id
+        :param userid: 员工id
+        :param channel: 应用channel
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.conversaion.changegroupowner",
+            {
+                "chatid": chatid,
+                "userid": userid,
+                "channel": channel
+            }
+        )
+
+    def dingtalk_oapi_impaas_message_asyncsend(
+            self,
+            msg_content,
+            msg_type,
+            group_id='',
+            msg_extension='',
+            receiverid_list='',
+            senderid=None,
+            msg_feature='',
+            xpn_model=None
+    ):
+        """
+        impaas消息异步发送
+        消息异步发送，返回taskid，根据taskid获取消息是否成功
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38716
+
+        :param msg_content: 消息内容，根据msgtype不同，解析方式不同
+        :param msg_type: 消息类型：text，image，user-defined
+        :param group_id: 群ID
+        :param msg_extension: 消息的可扩展字段，透传
+        :param receiverid_list: 接受者，暂不支持，可不填
+        :param senderid: 发送者，暂不支持，可不填
+        :param msg_feature: 消息的特性：静默消息，系统消息
+        :param xpn_model: 推送信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.message.asyncsend",
+            {
+                "request": {
+                    "msg_content": msg_content,
+                    "msg_type": msg_type,
+                    "group_id": group_id,
+                    "msg_extension": msg_extension,
+                    "receiverid_list": receiverid_list,
+                    "senderid": senderid,
+                    "msg_feature": msg_feature,
+                    "xpn_model": xpn_model
+                }
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_train_city_suggest(
+            self,
+            rq
+    ):
+        """
+        火车票城市搜索
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38724
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.train.city.suggest",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_impaas_message_getmessagestatus(
+            self,
+            taskid,
+            senderid=None
+    ):
+        """
+        获取消息的发送状态
+        获取消息发送的状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38725
+
+        :param taskid: 异步返回的任务ID
+        :param senderid: 账号信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.message.getmessagestatus",
+            {
+                "request": {
+                    "taskid": taskid,
+                    "senderid": senderid
+                }
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_entity_delete(
+            self,
+            rq
+    ):
+        """
+        删除成本中心人员信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38726
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.entity.delete",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_approval_new(
+            self,
+            rq
+    ):
+        """
+        用户新建审批单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38730
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.approval.new",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_category_address_get(
+            self,
+            rq
+    ):
+        """
+        获取类目预定页跳转地址
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38731
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.category.address.get",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_ccoservice_servicegroup_isignoreproblemcheck(
+            self,
+            open_conversation_id,
+            dingtalk_id
+    ):
+        """
+        是否忽略问题模型判断
+        接口描述：是否忽略问题模型判断，返回值：true: 可以忽略; false: 不能忽略,走正常逻辑;
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38761
+
+        :param open_conversation_id: 群id
+        :param dingtalk_id: 用户dingtalk加密id
+        """
+        return self._top_request(
+            "dingtalk.oapi.ccoservice.servicegroup.isignoreproblemcheck",
+            {
+                "open_conversation_id": open_conversation_id,
+                "dingtalk_id": dingtalk_id
+            }
+        )
+
+    def dingtalk_oapi_ccoservice_servicegroup_updateservicetime(
+            self,
+            open_conversation_id,
+            start_time,
+            end_time,
+            time_type=''
+    ):
+        """
+        修改服务群入群文案时间
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38776
+
+        :param open_conversation_id: 群加密id
+        :param start_time: 服务开始时间
+        :param end_time: 服务结束时间
+        :param time_type: 日期类型,0-工作日;1-每日;99-端上不显示
+        """
+        return self._top_request(
+            "dingtalk.oapi.ccoservice.servicegroup.updateservicetime",
+            {
+                "open_conversation_id": open_conversation_id,
+                "start_time": start_time,
+                "end_time": end_time,
+                "time_type": time_type
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_apply_search(
+            self,
+            rq
+    ):
+        """
+        搜索企业审批单数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38777
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.apply.search",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_apply_get(
+            self,
+            rq
+    ):
+        """
+        获取单个申请单的详情数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38778
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.apply.get",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_transfer(
+            self,
+            rq
+    ):
+        """
+        商旅成本中心转换为外部成本中心
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38803
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.transfer",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_invoice_search(
+            self,
+            rq
+    ):
+        """
+        差旅申请用户搜索可用发票列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38806
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.invoice.search",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_flight_order_search(
+            self,
+            rq
+    ):
+        """
+        获取企业机票订单数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38807
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.flight.order.search",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_train_order_search(
+            self,
+            rq
+    ):
+        """
+        获取企业火车票订单数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38808
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.train.order.search",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_entity_add(
+            self,
+            rq
+    ):
+        """
+        增加成本中心人员信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38809
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.entity.add",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_hotel_order_search(
+            self,
+            rq
+    ):
+        """
+        企业获取商旅酒店订单数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38810
+
+        :param rq: rq
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.hotel.order.search",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_entity_set(
+            self,
+            rq=None
+    ):
+        """
+        设置成本中心人员信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38836
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.entity.set",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_delete(
+            self,
+            rq
+    ):
+        """
+        删除成本中心
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38837
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.delete",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_modify(
+            self,
+            rq
+    ):
+        """
+        修改成本中心基本信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38838
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.modify",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_new(
+            self,
+            rq
+    ):
+        """
+        新建成本中心
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38839
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.new",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_approval_update(
+            self,
+            rq
+    ):
+        """
+        更新审批单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38840
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.approval.update",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_cost_center_query(
+            self,
+            rq
+    ):
+        """
+        查询成本中心
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38841
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.cost.center.query",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_impaas_groupmember_modify(
+            self,
+            modify_type,
+            member_list,
+            channel,
+            chatid
+    ):
+        """
+        修改群成员
+        支持通过IMPaaS创建的群的成员添加、删除操作。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38860
+
+        :param modify_type: 该参数表示本次请求的操作类型，“1”表示添加成员，“2”表示删除成员。
+        :param member_list: 待操作成员列表
+        :param channel: 接入方channel信息，该值由接入方接入IMPaaS平台时，向IMPaaS平台申请，例如“hema”“eleme”等。
+        :param chatid: 群ID，由创建群接口返回。
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.groupmember.modify",
+            {
+                "request": {
+                    "modify_type": modify_type,
+                    "member_list": member_list,
+                    "channel": channel,
+                    "chatid": chatid
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_group_modify(
+            self,
+            group_owner,
+            group_name,
+            chatid
+    ):
+        """
+        impaas群信息修改
+        修改通过IMPaaS创建的群的群信息
+        当前支持修改群主，修改群名称两种类型的操作
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38861
+
+        :param group_owner: 修改后的群主，若为空或与当前群主相同，则不会对群主进行变更操作。
+        :param group_name: 修改后的群名称
+        :param chatid: 群ID，由创建群接口返回
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.group.modify",
+            {
+                "request": {
+                    "group_owner": group_owner,
+                    "group_name": group_name,
+                    "chatid": chatid
+                }
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_vehicle_order_search(
+            self,
+            rq
+    ):
+        """
+        用车订单查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38876
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.vehicle.order.search",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_alitrip_btrip_flight_city_suggest(
+            self,
+            rq
+    ):
+        """
+        机票城市搜索
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38877
+
+        :param rq: 请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.alitrip.btrip.flight.city.suggest",
+            {
+                "rq": rq
+            }
+        )
+
+    def dingtalk_oapi_attendance_isopensmartreport(
+            self
+    ):
+        """
+        判断是否开启考勤智能报表
+        考勤智能报表是考勤为了满足企业个性化的统计需求而开发的一套智能的可编程的报表系统，企业可以通过简单勾选或者高级编程模式来定制自己的统计规则，通过智能报表可以非常方便地输出便于计算薪酬结果的统计数据。该接口可以通过企业corpId来判断企业是否开启了考勤智能报表。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38905
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.isopensmartreport"
+        )
+
+    def dingtalk_oapi_attendance_getattcolumns(
+            self
+    ):
+        """
+        获取企业考勤报表列
+        该接口用于获取企业智能考勤报表中的列信息，通过获取列信息中的id值，ISV可以根据列的id查询考勤智能报表中该列的统计数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38907
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getattcolumns"
+        )
+
+    def dingtalk_oapi_attendance_getcolumnval(
+            self,
+            userid='',
+            column_id_list='',
+            from_date='',
+            to_date=''
+    ):
+        """
+        获取智能考勤报表的列值
+        该接口用于获取钉钉智能考勤报表的列值数据，其中包含了一定时间段内报表某一列的所有数据，以及相关的列信息，可以供指定的ISV进行使用。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38908
+
+        :param userid: 用户的userId
+        :param column_id_list: 列id
+        :param from_date: 开始时间
+        :param to_date: 结束时间
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getcolumnval",
+            {
+                "userid": userid,
+                "column_id_list": column_id_list,
+                "from_date": from_date,
+                "to_date": to_date
+            }
+        )
+
+    def dingtalk_oapi_impaas_relation_get(
+            self,
+            src_im_openid,
+            dst_im_openids
+    ):
+        """
+        impaas关系查询
+        impaas关系查询, 查询 sender im openid 跟 receiver im openid的关系
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38909
+
+        :param src_im_openid: 发送者钉钉的openid
+        :param dst_im_openids: 接收者钉钉的openid
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.relation.get",
+            {
+                "request": {
+                    "src_im_openid": src_im_openid,
+                    "dst_im_openids": dst_im_openids
+                }
+            }
+        )
+
+    def dingtalk_oapi_impaas_user_getlogintoken(
+            self,
+            id,
+            channel
+    ):
+        """
+        获取免登token
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38910
+
+        :param id: 二方账号
+        :param channel: 渠道类型
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.user.getlogintoken",
+            {
+                "request": {
+                    "id": id,
+                    "channel": channel
+                }
+            }
+        )
+
+    def dingtalk_oapi_user_getDeptMember(
+            self,
+            dept_id=''
+    ):
+        """
+        根据部门id获取员工ID列表
+        aa
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39028
+
+        :param dept_id: a
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.getDeptMember",
+            {
+                "deptId": dept_id
+            }
+        )
+
+    def dingtalk_oapi_workrecord_add(
+            self,
+            userid,
+            create_time,
+            title,
+            url,
+            form_item_list
+    ):
+        """
+        新增待办事项
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39074
+
+        :param userid: 用户id
+        :param create_time: 待办时间。Unix时间戳
+        :param title: 标题
+        :param url: 待办跳转url
+        :param form_item_list: 表单列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.workrecord.add",
+            {
+                "userid": userid,
+                "create_time": create_time,
+                "title": title,
+                "url": url,
+                "formItemList": form_item_list
+            }
+        )
+
+    def dingtalk_oapi_workrecord_update(
+            self,
+            userid,
+            record_id
+    ):
+        """
+        更新待办事项状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39075
+
+        :param userid: 用户id
+        :param record_id: 待办事项唯一id
+        """
+        return self._top_request(
+            "dingtalk.oapi.workrecord.update",
+            {
+                "userid": userid,
+                "record_id": record_id
+            }
+        )
+
+    def dingtalk_oapi_attendance_getleavetimebynames(
+            self,
+            userid='',
+            leave_names='',
+            from_date='',
+            to_date=''
+    ):
+        """
+        获取考勤智能报表的假期数据
+        该接口用于根据字段名和用户id获取钉钉智能考勤报表的假期数据，其中包含了一定时间段内报表假期列的所有数据，由于假期列是一个动态列，因此需要根据假期名称获取数据，可以供指定的ISV进行使用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39271
+
+        :param userid: 用户的userId
+        :param leave_names: 列id
+        :param from_date: 开始时间
+        :param to_date: 结束时间
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getleavetimebynames",
+            {
+                "userid": userid,
+                "leave_names": leave_names,
+                "from_date": from_date,
+                "to_date": to_date
+            }
+        )
+
+    def dingtalk_oapi_ding_task_status_update(
+            self,
+            task_id='',
+            task_status='',
+            operator_userid=''
+    ):
+        """
+        更新任务完成状态
+        企业更新已经发送到用户的任务完成状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39343
+
+        :param task_id: 任务ID
+        :param task_status: 任务状态:1-未完成;2-完成
+        :param operator_userid: 操作人id
+        """
+        return self._top_request(
+            "dingtalk.oapi.ding.task.status.update",
+            {
+                "task_id": task_id,
+                "task_status": task_status,
+                "operator_userid": operator_userid
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_querydimission(
+            self,
+            offset,
+            size
+    ):
+        """
+        智能人事查询公司离职员工列表
+        智能人事业务，提供企业/ISV分页查询公司离职员工id列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39418
+
+        :param offset: 分页游标，从0开始。根据返回结果里的next_cursor是否为空来判断是否还有下一页，且再次调用时offset设置成next_cursor的值
+        :param size: 分页大小，最大50
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.querydimission",
+            {
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_listdimission(
+            self,
+            userid_list=''
+    ):
+        """
+        批量获取员工离职信息
+        根据传入的staffId列表，批量查询员工的离职信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39419
+
+        :param userid_list: 员工id
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.listdimission",
+            {
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_oapi_newretail_sendsms(
+            self,
+            smsmodule=None
+    ):
+        """
+        天地会短信通知用户激活
+        提供给天地会调用发短信，提醒用户激活钉钉
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39422
+
+        :param smsmodule: 短信接受者信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.newretail.sendsms",
+            {
+                "smsmodule": smsmodule
+            }
+        )
+
+    def dingtalk_oapi_ccoservice_entrance_sendnotify(
+            self,
+            app_id,
+            userid,
+            content
+    ):
+        """
+        通过企业的系统账号给企业员工发送消息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39429
+
+        :param app_id: 微应用ID
+        :param userid: 员工ID
+        :param content: 文本的通知
+        """
+        return self._top_request(
+            "dingtalk.oapi.ccoservice.entrance.sendnotify",
+            {
+                "app_id": app_id,
+                "userid": userid,
+                "content": content
+            }
+        )
+
+    def dingtalk_oapi_impaas_user_modprofile(
+            self,
+            account_info,
+            extension='',
+            nick='',
+            avatar_mediaid=''
+    ):
+        """
+        修改profile信息
+        修改profile信息，开放 nick， extension， avatarMediaId
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39433
+
+        :param account_info: 账号信息
+        :param extension: 附带信息
+        :param nick: nick
+        :param avatar_mediaid: 头像
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.user.modprofile",
+            {
+                "request": {
+                    "account_info": account_info,
+                    "extension": extension,
+                    "nick": nick,
+                    "avatar_mediaid": avatar_mediaid
+                }
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_list(
+            self,
+            userid_list,
+            field_filter_list=''
+    ):
+        """
+        批量获取员工花名册字段信息
+        智能人事业务，企业/ISV根据员工id批量访问员工花名册信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39434
+
+        :param userid_list: 员工id列表
+        :param field_filter_list: 需要获取的花名册字段信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.list",
+            {
+                "userid_list": userid_list,
+                "field_filter_list": field_filter_list
+            }
+        )
+
+    def dingtalk_oapi_processinstance_listids(
+            self,
+            process_code,
+            start_time,
+            end_time='',
+            size='10',
+            cursor='0',
+            userid_list=''
+    ):
+        """
+        分页获取审批实例id列表
+        企业可以根据审批流的唯一标识，分页获取该审批流对应的审批实例id。只能取到权限范围内的相关部门的审批实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39471
+
+        :param process_code: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
+        :param start_time: 审批实例开始时间，毫秒级
+        :param end_time: 审批实例结束时间，毫秒级，默认取当前值
+        :param size: 分页参数，每页大小，最多传10
+        :param cursor: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
+        :param userid_list: 发起人用户id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.processinstance.listids",
+            {
+                "process_code": process_code,
+                "start_time": start_time,
+                "end_time": end_time,
+                "size": size,
+                "cursor": cursor,
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_addpreentry(
+            self,
+            param
+    ):
+        """
+        智能人事添加企业待入职员工
+        智能人事添加待入职员工信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39500
+
+        :param param: 添加待入职入参
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.addpreentry",
+            {
+                "param": param
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_querypreentry(
+            self,
+            offset,
+            size
+    ):
+        """
+        智能人事查询公司待入职员工列表
+        智能人事业务，企业/ISV分页查询公司待入职员工id列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39501
+
+        :param offset: 分页起始值，默认0开始
+        :param size: 分页大小，最大50
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.querypreentry",
+            {
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_queryonjob(
+            self,
+            status_list,
+            offset,
+            size
+    ):
+        """
+        智能人事查询公司在职员工列表
+        智能人事业务，提供企业/ISV按在职状态分页查询公司在职员工id列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39502
+
+        :param status_list: 在职员工子状态筛选。2，试用期；3，正式；5，待离职；-1，无状态
+        :param offset: 分页起始值，默认0开始
+        :param size: 分页大小，最大50
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.queryonjob",
+            {
+                "status_list": status_list,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_visitor_sendnotify(
+            self,
+            visitor_notify_vo=None,
+            reservation_id=''
+    ):
+        """
+        为访客ISV提供发送通知的功能
+        提供向被访者或访客接待人员发送通知信息的功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39519
+
+        :param visitor_notify_vo: 访客通知模型
+        :param reservation_id: 预约ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.visitor.sendnotify",
+            {
+                "visitor_notify_vo": visitor_notify_vo,
+                "reservation_id": reservation_id
+            }
+        )
+
+    def dingtalk_oapi_sns_send_msg(
+            self,
+            code='',
+            msg=None
+    ):
+        """
+        个人E应用消息推送
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39594
+
+        :param code: form表单提交成功后获取的formId
+        :param msg: 消息内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.sns.send_msg",
+            {
+                "code": code,
+                "msg": msg
+            }
+        )
+
+    def dingtalk_oapi_user_get_admin_scope(
+            self,
+            userid
+    ):
+        """
+        查询管理员通讯录权限范围
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39683
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.get_admin_scope",
+            {
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_listcontact(
+            self,
+            userid_list
+    ):
+        """
+        批量获取离职员工通讯录信息
+        ISV批量获取离职员工的通讯录花名册字段信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39977
+
+        :param userid_list: 员工id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.listcontact",
+            {
+                "userid_list": userid_list
+            }
+        )
+
+    def dingtalk_oapi_user_listbypage(
+            self,
+            offset,
+            size,
+            lang='',
+            department_id='',
+            order=''
+    ):
+        """
+        获取部门成员(详情)
+        获取部门成员（详情）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40282
+
+        :param offset: 支持分页查询，与size参数同时设置时才生效，此参数代表偏移量
+        :param size: 支持分页查询，与offset参数同时设置时才生效，此参数代表分页大小，最大100
+        :param lang: 通讯录语言(默认zh_CN另外支持en_US)
+        :param department_id: 获取的部门id
+        :param order: 支持分页查询，部门成员的排序规则，默认不传是按自定义排序；entry_asc代表按照进入部门的时间升序，entry_desc代表按照进入部门的时间降序，modify_asc代表按照部门信息修改时间升序，modify_desc代表按照部门信息修改时间降序，custom代表用户定义(未定义时按照拼音)排序
+        """
+        return self._top_request(
+            "dingtalk.oapi.user.listbypage",
+            {
+                "offset": offset,
+                "size": size,
+                "lang": lang,
+                "department_id": department_id,
+                "order": order
+            }
+        )
+
+    def dingtalk_oapi_impaas_conversation_updateentranceid(
+            self,
+            entrance_id,
+            accounts,
+            uuid,
+            channel,
+            cid,
+            extension=''
+    ):
+        """
+        IMPaaS设置二级会话的入口id
+        在二级会话功能中，部分场景需要修改会话入口。另外，数据初始化时，也需要该接口做一部分数据订正
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40563
+
+        :param entrance_id: 入口id，数字
+        :param accounts: 要设置的用户列表
+        :param uuid: 该请求的唯一id，用于去重、打日志
+        :param channel: 业务channel
+        :param cid: 会话id
+        :param extension: 扩展信息，可选
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.conversation.updateentranceid",
+            {
+                "request": {
+                    "entrance_id": entrance_id,
+                    "accounts": accounts,
+                    "uuid": uuid,
+                    "channel": channel,
+                    "cid": cid,
+                    "extension": extension
+                }
+            }
+        )
+
+    def dingtalk_oapi_attendance_getleavestatus(
+            self,
+            userid_list,
+            start_time,
+            end_time,
+            offset,
+            size
+    ):
+        """
+        请假状态查询接口
+        该接口用于查询指定企业下的指定用户在指定时间段内的请假状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40614
+
+        :param userid_list: 待查询用户id列表，支持最多100个用户的批量查询
+        :param start_time: 开始时间 ，时间戳，支持最多180天的查询
+        :param end_time: 结束时间，时间戳，支持最多180天的查询
+        :param offset: 分页偏移，非负整数
+        :param size: 分页大小，正整数，最大20
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.getleavestatus",
+            {
+                "userid_list": userid_list,
+                "start_time": start_time,
+                "end_time": end_time,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def qimen_dingtalk_flow_form(
+            self,
+            corp_id,
+            user_id,
+            process_code,
+            action,
+            form=None
+    ):
+        """
+        钉钉审批开放表单
+        审批表单接入第三方企业数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40627
+
+        :param corp_id: 钉钉企业ID
+        :param user_id: 员工ID
+        :param process_code: 审批模板唯一编码
+        :param action: 表单渲染动作：RENDER, UPDATE, SUBMIT, 分别对应表单的初始化，内容更新以及提交前检查
+        :param form: 表单数据
+        """
+        return self._top_request(
+            "qimen.dingtalk.flow.form",
+            {
+                "corpId": corp_id,
+                "userId": user_id,
+                "processCode": process_code,
+                "action": action,
+                "form": form
+            }
+        )
+
+    def dingtalk_oapi_workrecord_getbyuserid(
+            self,
+            userid,
+            offset,
+            limit,
+            status
+    ):
+        """
+        获取用户的待办事项
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40726
+
+        :param userid: 用户唯一ID
+        :param offset: 分页游标，从0开始，如返回结果中has_more为true，则表示还有数据，offset再传上一次的offset+limit
+        :param limit: 分页大小，最多50
+        :param status: 待办事项状态，0表示未完成，1表示完成
+        """
+        return self._top_request(
+            "dingtalk.oapi.workrecord.getbyuserid",
+            {
+                "userid": userid,
+                "offset": offset,
+                "limit": limit,
+                "status": status
+            }
+        )
+
+    def dingtalk_oapi_process_template_list(
+            self,
+            userid='',
+            offset='',
+            size=''
+    ):
+        """
+        分页获取企业下所有的流程模板
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41001
+
+        :param userid: abc123
+        :param offset: 游标属性
+        :param size: 每页数量
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.template.list",
+            {
+                "userid": userid,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_process_property_update(
+            self,
+            userid='',
+            process_code='',
+            component_id='',
+            props=None
+    ):
+        """
+        修改用户指定审批流程模板的支付属性
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41002
+
+        :param userid: 员工工号 企业唯一
+        :param process_code: 模板code
+        :param component_id: 控件id
+        :param props: 控件属性集
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.property.update",
+            {
+                "userid": userid,
+                "process_code": process_code,
+                "component_id": component_id,
+                "props": props
+            }
+        )
+
+    def dingtalk_oapi_chatbot_pictureurl_get(
+            self,
+            download_code
+    ):
+        """
+        下载机器人授权的图片
+        通过downloadCode获取下载url
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41003
+
+        :param download_code: 图片临时下载码
+        """
+        return self._top_request(
+            "dingtalk.oapi.chatbot.pictureurl.get",
+            {
+                "download_code": download_code
+            }
+        )
+
+    def dingtalk_oapi_conference_publish(
+            self,
+            conference_id,
+            userid
+    ):
+        """
+        智能会务发布
+        钉钉智能会务，将会务信息发布到工作台，参会者可见
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41023
+
+        :param conference_id: 会务id
+        :param userid: 操作用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.conference.publish",
+            {
+                "conference_id": conference_id,
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_conference_get(
+            self,
+            conference_id
+    ):
+        """
+        智能会务获取会务基础信息
+        钉钉智能会务，提供给ISV获取会务基础信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41024
+
+        :param conference_id: 会务Id
+        """
+        return self._top_request(
+            "dingtalk.oapi.conference.get",
+            {
+                "conference_id": conference_id
+            }
+        )
+
+    def dingtalk_oapi_conference_unpublish(
+            self,
+            conference_id,
+            userid
+    ):
+        """
+        智能会务撤销发布
+        钉钉智能会务，将会务信息从工作台tag中撤销，参会者不可见
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41025
+
+        :param conference_id: 会务id
+        :param userid: 操作用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.conference.unpublish",
+            {
+                "conference_id": conference_id,
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_edu_guardian_list(
+            self,
+            class_id,
+            page_no,
+            page_size
+    ):
+        """
+        查询班级下家长列表
+        查询班级下家长列表信息，通过班级id查询家长的nick（如：小A的爸爸），非真实姓名，关系类别（妈妈、爸爸、其他亲属），学生userid
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41051
+
+        :param class_id: 班级ID
+        :param page_no: 分页页数
+        :param page_size: 每页大小
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.guardian.list",
+            {
+                "class_id": class_id,
+                "page_no": page_no,
+                "page_size": page_size
+            }
+        )
+
+    def dingtalk_oapi_edu_guardian_get(
+            self,
+            class_id,
+            guardian_userid
+    ):
+        """
+        家长信息查询
+        家长信息查询，查询家长信息，通过orgid，班级id查询家长的nick（如：小A的爸爸），非真实姓名，关系类别（妈妈、爸爸、其他亲属），学生staffid
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41052
+
+        :param class_id: 班级ID
+        :param guardian_userid: 家长ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.guardian.get",
+            {
+                "class_id": class_id,
+                "guardian_userid": guardian_userid
+            }
+        )
+
+    def dingtalk_oapi_edu_student_get(
+            self,
+            class_id,
+            student_userid
+    ):
+        """
+        学生信息查询
+        学生信息查询，通过orgid，学生id，班级id,查询学生的名称、所在校区id、年级id、学段id、学生的staffid
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41053
+
+        :param class_id: 班级ID
+        :param student_userid: 学生ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.student.get",
+            {
+                "class_id": class_id,
+                "student_userid": student_userid
+            }
+        )
+
+    def dingtalk_oapi_edu_student_list(
+            self,
+            class_id,
+            page_no,
+            page_size
+    ):
+        """
+        学生列表信息
+        学生列表信息查询,查询学生的名称、所在的班级id、校区id、年级id、学段id、学生的staffid
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41054
+
+        :param class_id: 班级ID
+        :param page_no: 页码
+        :param page_size: 每页大小
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.student.list",
+            {
+                "class_id": class_id,
+                "page_no": page_no,
+                "page_size": page_size
+            }
+        )
+
+    def dingtalk_oapi_edu_class_get(
+            self,
+            class_id
+    ):
+        """
+        班级信息查询
+        班级信息查询，通过orgid、班级id查询班级名称、所在学段id、校区id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41055
+
+        :param class_id: 班级ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.class.get",
+            {
+                "class_id": class_id
+            }
+        )
+
+    def dingtalk_oapi_edu_class_list(
+            self,
+            grade_id,
+            page_no,
+            page_size
+    ):
+        """
+        班级列表信息
+        班级列表信息，通过orgid、班级id查询班级名称、所在学段id、校区id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41056
+
+        :param grade_id: 年级ID
+        :param page_no: 分页页数
+        :param page_size: 分页每页大小
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.class.list",
+            {
+                "grade_id": grade_id,
+                "page_no": page_no,
+                "page_size": page_size
+            }
+        )
+
+    def dingtalk_oapi_edu_grade_get(
+            self,
+            grade_id
+    ):
+        """
+        年级信息查询
+        年级信息查询接口，通过组织id和年级id查询年级名称、年级的级别、学段id、校区id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41057
+
+        :param grade_id: 年级ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.grade.get",
+            {
+                "grade_id": grade_id
+            }
+        )
+
+    def dingtalk_oapi_edu_grade_list(
+            self,
+            period_id
+    ):
+        """
+        年级列表查询
+        年级列表查询，通过学段id查询其下面的年级信息列表，最多返回10条数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41058
+
+        :param period_id: 学段ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.grade.list",
+            {
+                "period_id": period_id
+            }
+        )
+
+    def dingtalk_oapi_edu_teacher_get(
+            self,
+            class_id,
+            teacher_userid
+    ):
+        """
+        查询老师信息
+        查询老师信息，查询班级下老师列表，通过组织id和班级id查询老师的名称、班级id、staffid、是否为班主任、校区id信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41059
+
+        :param class_id: 班级ID
+        :param teacher_userid: 用户ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.teacher.get",
+            {
+                "class_id": class_id,
+                "teacher_userid": teacher_userid
+            }
+        )
+
+    def dingtalk_oapi_edu_campus_list(
+            self
+    ):
+        """
+        查询校区列表
+        查询某个组织下面的学校信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41060
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.campus.list"
+        )
+
+    def dingtalk_oapi_edu_campus_get(
+            self,
+            campus_id
+    ):
+        """
+        校区信息查询
+        查询校区基本信息接口，返回校区的名称和校区id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41061
+
+        :param campus_id: 校区ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.campus.get",
+            {
+                "campus_id": campus_id
+            }
+        )
+
+    def dingtalk_oapi_edu_period_list(
+            self,
+            campus_id
+    ):
+        """
+        学段列表查询
+        学段列表查询，每个校区仅有4个学段，幼儿园、小学、初中、高中，因此最多4条数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41062
+
+        :param campus_id: 校区ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.period.list",
+            {
+                "campus_id": campus_id
+            }
+        )
+
+    def dingtalk_oapi_edu_period_get(
+            self,
+            period_id
+    ):
+        """
+        查询学段信息
+        学段信息查询接口，通过orgid，学段id查询学段信息，返回学段名称、nick、校区id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41063
+
+        :param period_id: 学段ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.period.get",
+            {
+                "period_id": period_id
+            }
+        )
+
+    def dingtalk_oapi_edu_teacher_list(
+            self,
+            class_id
+    ):
+        """
+        查询班级下老师列表
+        查询班级下老师列表，通过组织id和班级id查询老师的名称、班级id、staffid、是否为班主任、校区id信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41064
+
+        :param class_id: 班级ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.edu.teacher.list",
+            {
+                "class_id": class_id
+            }
+        )
+
+    def dingtalk_oapi_corp_conversation_member_list(
+            self,
+            chat_id,
+            offset,
+            size
+    ):
+        """
+        分页获取群成员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41168
+
+        :param chat_id: 会话ID
+        :param offset: 偏移位置，从0开始，后续传offset+size的值。member_list返回为空表示结束了。
+        :param size: 请求数量
+        """
+        return self._top_request(
+            "dingtalk.oapi.corp.conversation.member.list",
+            {
+                "chat_id": chat_id,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_faceauth_get(
+            self,
+            tmp_auth_code,
+            app_biz_id
+    ):
+        """
+        实名认证中的人脸扫描结果查询
+        实名认证中的人脸扫描结果查询开放
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41270
+
+        :param tmp_auth_code: 人脸扫描的授权码
+        :param app_biz_id: 业务方定义的id
+        """
+        return self._top_request(
+            "dingtalk.oapi.faceauth.get",
+            {
+                "tmp_auth_code": tmp_auth_code,
+                "app_biz_id": app_biz_id
+            }
+        )
+
+    def dingtalk_oapi_impaas_otoconversation_create(
+            self,
+            account_info_list=None,
+            entrance_id_list='',
+            uuid='',
+            channel='',
+            extension=''
+    ):
+        """
+        创建单聊二级会话
+        部分新零售场景需要支持二级会话，也就是把部分同类会话聚合在一起
+        本接口给二方提供了创建二级单聊会话的能力
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41535
+
+        :param account_info_list: 账号列表，size=2。第一个表示自己，第二个表示对方
+        :param entrance_id_list: 入口id列表，size=2。普通会话填0，二级会话填entrnaceid
+        :param uuid: 用于去重和追踪
+        :param channel: channel名称
+        :param extension: 扩展信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.impaas.otoconversation.create",
+            {
+                "request": {
+                    "account_info_list": account_info_list,
+                    "entrance_id_list": entrance_id_list,
+                    "uuid": uuid,
+                    "channel": channel,
+                    "extension": extension
+                }
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_member_update(
+            self,
+            biz_id,
+            add_user_ids='',
+            del_user_ids=''
+    ):
+        """
+        人脸识别组人员更新
+        更新人脸识别组的人员，如新增人员、移除人员
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41758
+
+        :param biz_id: 业务id
+        :param add_user_ids: 需新增的用户id列表
+        :param del_user_ids: 需移除的用户id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.member.update",
+            {
+                "biz_id": biz_id,
+                "add_user_ids": add_user_ids,
+                "del_user_ids": del_user_ids
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_member_list(
+            self,
+            biz_id,
+            cursor,
+            size
+    ):
+        """
+        查询已在识别组的人员
+        查询已在识别组的人员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41759
+
+        :param biz_id: 业务id
+        :param cursor: 游标，第一次传 <=0的值，后续传本调用的返回值
+        :param size: 分页大小
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.member.list",
+            {
+                "biz_id": biz_id,
+                "cursor": cursor,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_device_update(
+            self,
+            biz_id,
+            add_device_ids='',
+            del_device_ids=''
+    ):
+        """
+        更新识别组关联的人脸设备
+        更新人脸识别组绑定是设备，如新增、移除关联的设备
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41760
+
+        :param biz_id: 业务id
+        :param add_device_ids: 需新增的设备id列表
+        :param del_device_ids: 需移除的设备id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.device.update",
+            {
+                "biz_id": biz_id,
+                "add_device_ids": add_device_ids,
+                "del_device_ids": del_device_ids
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_device_list(
+            self,
+            biz_id,
+            size,
+            mode,
+            type,
+            cursor
+    ):
+        """
+        查询人脸设备列表
+        查询人脸设备列表，可选择查询已关联设备列表、或企业已有设备的列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41761
+
+        :param biz_id: 业务id
+        :param size: 分页大小
+        :param mode: 查询模式：all-企业所有设备；bound-本组已关联设备
+        :param type: 需查询的设备类型
+        :param cursor: 游标，第一次传 <=0的值，后续传本调用的返回值
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.device.list",
+            {
+                "biz_id": biz_id,
+                "size": size,
+                "mode": mode,
+                "type": type,
+                "cursor": cursor
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_get(
+            self,
+            biz_id
+    ):
+        """
+        查询人脸识别组
+        通过业务id查询识别组基础信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41762
+
+        :param biz_id: 业务id
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.get",
+            {
+                "biz_id": biz_id
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_create(
+            self,
+            biz_id,
+            title,
+            start_time,
+            end_time,
+            status,
+            greeting_msg='',
+            bg_img_url=''
+    ):
+        """
+        创建人脸识别组
+        创建人脸识别组基础信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41763
+
+        :param biz_id: 业务id【不区分大小写】：调用方内保证唯一即可，可容纳23个字符，推荐前三个字符表示业务编号，留19个字符存储业务的记录id
+        :param title: 识别组的标题
+        :param start_time: 开始时间
+        :param end_time: 结束时间
+        :param status: 识别组启用状态：1-已启用；2未启用；
+        :param greeting_msg: 识别成功后的问候语
+        :param bg_img_url: M2上的定制UI
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.create",
+            {
+                "biz_id": biz_id,
+                "title": title,
+                "start_time": start_time,
+                "end_time": end_time,
+                "status": status,
+                "greeting_msg": greeting_msg,
+                "bg_img_url": bg_img_url
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_update(
+            self,
+            biz_id,
+            title,
+            start_time,
+            end_time,
+            status,
+            greeting_msg='',
+            bg_img_url=''
+    ):
+        """
+        更新识别组基础信息
+        更新人脸识别组基础信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41764
+
+        :param biz_id: 业务id
+        :param title: 识别组的标题
+        :param start_time: 开始时间
+        :param end_time: 结束时间
+        :param status: 识别组启用状态：1-已启用；2未启用；
+        :param greeting_msg: 识别成功后的问候语
+        :param bg_img_url: M2上的定制UI
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.update",
+            {
+                "biz_id": biz_id,
+                "title": title,
+                "start_time": start_time,
+                "end_time": end_time,
+                "status": status,
+                "greeting_msg": greeting_msg,
+                "bg_img_url": bg_img_url
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_enable(
+            self,
+            biz_id,
+            enable,
+            device_ids=''
+    ):
+        """
+        启用/禁用M2人脸识别
+        启用/禁用当前识别组的人脸识别功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41765
+
+        :param biz_id: 业务id
+        :param enable: true-启用识别；false-禁用识别
+        :param device_ids: 设备id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.enable",
+            {
+                "biz_id": biz_id,
+                "enable": enable,
+                "device_ids": device_ids
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_facegroup_removeall(
+            self,
+            biz_id
+    ):
+        """
+        删除人脸识别组
+        删除人脸识别组，并解绑关联数据（人员、M2绑定关系等）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41766
+
+        :param biz_id: 业务id
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.facegroup.removeall",
+            {
+                "biz_id": biz_id
+            }
+        )
+
+    def dingtalk_oapi_im_chatbot_delete(
+            self,
+            open_conversation_id,
+            chatbot_user_id
+    ):
+        """
+        删除会话内机器人实例
+        根据开放的conversationId和机器人示例userId，删除会话内机器人实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41967
+
+        :param open_conversation_id: 开放的会话conversationId
+        :param chatbot_user_id: 开放的机器人userId
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chatbot.delete",
+            {
+                "open_conversation_id": open_conversation_id,
+                "chatbot_user_id": chatbot_user_id
+            }
+        )
+
+    def dingtalk_oapi_im_chatbot_get(
+            self,
+            open_conversation_id
+    ):
+        """
+        获取会话内机器人实例列表
+        根据开放的conversationId，获取该会话内机器人实例列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41968
+
+        :param open_conversation_id: 开放的会话conversationId
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chatbot.get",
+            {
+                "open_conversation_id": open_conversation_id
+            }
+        )
+
+    def dingtalk_oapi_im_chat_cid_convert(
+            self,
+            chat_id
+    ):
+        """
+        会话chatId转conversationId
+        根据会话chatId，查询其对应的conversationId
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41969
+
+        :param chat_id: 开放的chatId
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chat.cid.convert",
+            {
+                "chat_id": chat_id
+            }
+        )
+
+    def dingtalk_oapi_im_chat_servicegroup_create(
+            self,
+            title,
+            owner_userid
+    ):
+        """
+        创建服务群
+        创建一个服务群
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42043
+
+        :param title: 群标题
+        :param owner_userid: 群主在钉钉组织内的userid
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chat.servicegroup.create",
+            {
+                "title": title,
+                "owner_userid": owner_userid
+            }
+        )
+
+    def dingtalk_oapi_im_chat_servicegroup_disband(
+            self,
+            chat_id
+    ):
+        """
+        解散一个服务群
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42044
+
+        :param chat_id: 开放的chatId
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chat.servicegroup.disband",
+            {
+                "chat_id": chat_id
+            }
+        )
+
+    def dingtalk_oapi_im_chat_servicegroup_member_query(
+            self,
+            chat_id,
+            page_size,
+            page_num,
+            include_owner='0'
+    ):
+        """
+        获取服务群成员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42045
+
+        :param chat_id: 开放的chatId
+        :param page_size: 每页大小，最大100
+        :param page_num: 页码，从1开始
+        :param include_owner: 0- 不包含群主，1-包含群主
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chat.servicegroup.member.query",
+            {
+                "chat_id": chat_id,
+                "page_size": page_size,
+                "page_num": page_num,
+                "include_owner": include_owner
+            }
+        )
+
+    def dingtalk_oapi_im_chat_servicegroup_query(
+            self,
+            chat_id
+    ):
+        """
+        获取服务群基本信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42046
+
+        :param chat_id: 开放的chatId
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chat.servicegroup.query",
+            {
+                "chat_id": chat_id
+            }
+        )
+
+    def dingtalk_oapi_im_chat_servicegroup_member_update(
+            self,
+            member_dingtalk_ids,
+            action,
+            chat_id
+    ):
+        """
+        更新群成员（移除、设为管理员）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42047
+
+        :param member_dingtalk_ids: 成员的ID列表，英文逗号分隔
+        :param action: 更新类型，REMOVE 移除、SET_ADMIN设为管理员、SET_NORMAL 设为普通成员
+        :param chat_id: 开放的chatId
+        """
+        return self._top_request(
+            "dingtalk.oapi.im.chat.servicegroup.member.update",
+            {
+                "member_dingtalk_ids": member_dingtalk_ids,
+                "action": action,
+                "chat_id": chat_id
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_bind_create(
+            self,
+            device_bind_req_vo
+    ):
+        """
+        智能硬件建立绑定关系
+        智能设备接入钉钉时，需要和组织建立绑定关系，此接口用于创建绑定关系。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42084
+
+        :param device_bind_req_vo: 设备请求信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.bind.create",
+            {
+                "device_bind_req_vo": device_bind_req_vo
+            }
+        )
+
+    def dingtalk_oapi_statistics_details(
+            self,
+            type=''
+    ):
+        """
+        大客户企业开放数据
+        对大客户开放其企业BI数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42090
+
+        :param type: 业务类型，目前有employee,group, live
+        """
+        return self._top_request(
+            "dingtalk.oapi.statistics.details",
+            {
+                "type": type
+            }
+        )
+
+    def dingtalk_oapi_chatbot_message_send(
+            self,
+            chatbot_id,
+            userid,
+            message
+    ):
+        """
+        机器人发送消息
+        通过机器人单聊会话主动给企业内员工发送消息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42230
+
+        :param chatbot_id: 企业机器人模板类型
+        :param userid: 企业员工ID
+        :param message: 消息内容,支持的消息类型详见：https://open-doc.dingtalk.com/microapp/serverapi2/qf2nxq#a-namesgw3aga%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B%E5%8F%8A%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F
+        """
+        return self._top_request(
+            "dingtalk.oapi.chatbot.message.send",
+            {
+                "chatbot_id": chatbot_id,
+                "userid": userid,
+                "message": message
+            }
+        )
+
+    def dingtalk_oapi_attendance_corp_inviteactive_open(
+            self,
+            admin_name,
+            admin_phone
+    ):
+        """
+        喔趣企业开通邀1得1活动
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42470
+
+        :param admin_name: 姓名
+        :param admin_phone: 手机号
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.corp.inviteactive.open",
+            {
+                "admin_name": admin_name,
+                "admin_phone": admin_phone
+            }
+        )
+
+
 class TbYongHu(DingTalkBaseAPI):
     """
     用户API
@@ -21048,7 +28751,7 @@ class TbZhiJianPinKong(DingTalkBaseAPI):
         :param nick: 送检者昵称
         :param qt_code: 一个质检服务唯一标识质量检验单的编号
         :param qt_name: 质检名称
-        :param item_url: 样品链接.<br/>QT_TYPE=9的时候，请填写N\A22659
+        :param item_url: 样品链接.<br/>QT_TYPE=9的时候，请填写N\A
         :param item_desc: 样品信息描述
         :param qt_type: (1L, '聚划算'),<br/>(2L, '消保'),<br/>(3L, '分销'),<br/>(4L, '抽检'),<br/>(5L, '良无限线下数据'),<br/>(6L, '入驻/续签商城'),<br/>(7L, '买家质检维权'),<br/>(8L, '实地验证'),<br/>(9L, '淘宝买家订单商品鉴定'),<br/>(10L,'假一赔三');
         :param status: 0:已提交申请<br/>1:已收到样品<br/>2:已出检测结果<br/>3.已出具报告
@@ -92972,6 +100675,12 @@ class TbHuDongXiaoYouXi(DingTalkBaseAPI):
 
 
 class TaobaoMixin(object):
+    """
+    淘宝接口集合
+    本接口未经测试，用于生产前请提前自行测试，有问题可提Issues
+    """
+
+    tbdingding = TbDingDing()
     tbyonghu = TbYongHu()
     tbleimu = TbLeiMu()
     tbshangpin = TbShangPin()

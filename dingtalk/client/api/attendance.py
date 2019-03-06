@@ -78,8 +78,7 @@ class Attendance(DingTalkBaseAPI):
                 "work_date": work_date,
                 "offset": offset,
                 "size": size
-            },
-            result_processor=lambda x: x['result']
+            }
         )
 
     def getsimplegroups(self, offset=0, size=10):
@@ -95,8 +94,7 @@ class Attendance(DingTalkBaseAPI):
             {
                 "offset": offset,
                 "size": size
-            },
-            result_processor=lambda x: x['result']
+            }
         )
 
     def getleaveapproveduration(self, userid, from_date, to_date):
@@ -120,7 +118,7 @@ class Attendance(DingTalkBaseAPI):
                 "from_date": from_date,
                 "to_date": to_date
             },
-            result_processor=lambda x: x['result']['duration_in_minutes']
+            result_processor=lambda x: x['duration_in_minutes']
         )
 
     def getusergroup(self, userid):
@@ -132,6 +130,5 @@ class Attendance(DingTalkBaseAPI):
         """
         return self._top_request(
             'dingtalk.smartwork.attends.getusergroup',
-            {"userid": userid},
-            result_processor=lambda x: x['result']
+            {"userid": userid}
         )
