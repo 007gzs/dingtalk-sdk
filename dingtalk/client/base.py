@@ -5,7 +5,7 @@ import inspect
 import json
 import logging
 import requests
-from six.moves.urllib_parse import urljoin
+from six.moves.urllib.parse import urljoin
 
 from dingtalk.client.api.base import DingTalkBaseAPI
 from dingtalk.core.exceptions import DingTalkClientException

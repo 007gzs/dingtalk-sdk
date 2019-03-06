@@ -6,6 +6,7 @@ import logging
 import time
 
 from dingtalk.client import api
+from dingtalk.client.api.taobao import TaobaoMixin
 from dingtalk.client.base import BaseClient
 from dingtalk.core.utils import DingTalkSigner, random_string
 from dingtalk.crypto import DingTalkCrypto
@@ -14,7 +15,7 @@ from dingtalk.storage.cache import DingTalkCache
 logger = logging.getLogger(__name__)
 
 
-class DingTalkClient(BaseClient):
+class DingTalkClient(BaseClient, TaobaoMixin):
 
     attendance = api.Attendance()
     bpms = api.Bpms()
