@@ -6,7 +6,7 @@ from dingtalk.client import SecretClient, AppKeyClient  # NOQA
 from dingtalk.client.isv import ISVClient  # NOQA
 from dingtalk.core.exceptions import DingTalkClientException, DingTalkException  # NOQA
 
-__version__ = '1.1.9'
+__version__ = '1.2.0'
 __author__ = '007gzs'
 
 # Set default logging handler to avoid "No handler found" warnings.
