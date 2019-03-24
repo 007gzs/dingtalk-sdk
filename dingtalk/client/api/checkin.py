@@ -74,6 +74,5 @@ class Checkin(DingTalkBaseAPI):
                 'end_time': end_time,
                 'offset': offset,
                 'size': size
-            },
-            result_processor=lambda x: x['result']
+            }
         )

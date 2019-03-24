@@ -5,7 +5,8 @@ import inspect
 import json
 import logging
 import requests
-from six.moves.urllib_parse import urljoin
+import six
+from six.moves.urllib.parse import urljoin
 
 from dingtalk.client.api.base import DingTalkBaseAPI
 from dingtalk.core.exceptions import DingTalkClientException
@@ -121,6 +122,11 @@ class BaseClient(object):
                 top_result = result[top_response_key]
                 if 'result' in top_result:
                     top_result = top_result['result']
+                    if isinstance(top_result, six.string_types):
+                        try:
+                            top_result = json_loads(top_result)
+                        except Exception:
+                            pass
             if 'success' in top_result and not top_result['success']:
                 logger.error("\n【请求地址】: %s\n【请求参数】：%s \n%s\n【错误信息】：%s",
                              url, kwargs.get('params', ''), kwargs.get('data', ''), result)

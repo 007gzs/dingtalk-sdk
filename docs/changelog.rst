@@ -1,6 +1,28 @@
 Changelog
 ================
 
+Version 1.2.2
+------------------
+
++ 增加淘宝接口
+
+Version 1.1.9
+------------------
+
++ fix callback接口的返回失败接口 使用错误
+
+
+Version 1.1.8
+------------------
+
++ ssl._create_unverified_context 增加异常判断
+
+
+Version 1.1.7
+------------------
+
++ 新增app_key app_secret 获取 access_token 的 AppKeyClient
+
 Version 1.1.5
 ------------------
 

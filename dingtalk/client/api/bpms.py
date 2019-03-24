@@ -33,8 +33,7 @@ class Bpms(DingTalkBaseAPI):
                 'biz_category_id': biz_category_id,
                 'process_name': process_name,
                 'description': description
-            },
-            result_processor=lambda x: x['result']
+            }
         )
 
     def process_sync(self, agent_id, src_process_code, target_process_code, biz_category_id=None, process_name=None):
@@ -85,7 +84,7 @@ class Bpms(DingTalkBaseAPI):
         if isinstance(approvers, (list, tuple, set)):
             approvers = ','.join(map(to_text, approvers))
         form_component_value_list = []
-        for name, value in form_component_values.item():
+        for name, value in form_component_values.items():
             data = {'name': name}
             if isinstance(value, (list, tuple)):
                 if len(value) > 1:
@@ -141,8 +140,7 @@ class Bpms(DingTalkBaseAPI):
                 'cursor': cursor,
                 'size': size,
                 'userid_list': userid_list
-            },
-            result_processor=lambda x: x['result']
+            }
         )
 
     def processinstance_get(self, process_instance_id):

@@ -9,9 +9,11 @@
 
 `DingTalkClient` 基本使用方法::
 
-   from dingtalk import SecretClient
+   from dingtalk import SecretClient, AppKeyClient
 
-   client = SecretClient('corp_id', 'secret')
+   client = SecretClient('corp_id', 'secret')  # 旧 access_token 获取方式
+   client = AppKeyClient('corp_id', 'app_key', 'app_secret')  # 新 access_token 获取方式
+
    user = client.user.get('userid')
    departments = client.department.list()
    # 以此类推，参见下面的 API 说明

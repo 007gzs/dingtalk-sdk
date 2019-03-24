@@ -6,6 +6,7 @@ import logging
 import time
 
 from dingtalk.client import api
+from dingtalk.client.api.taobao import TaobaoMixin
 from dingtalk.client.base import BaseClient
 from dingtalk.core.utils import DingTalkSigner, random_string
 from dingtalk.crypto import DingTalkCrypto
@@ -14,7 +15,7 @@ from dingtalk.storage.cache import DingTalkCache
 logger = logging.getLogger(__name__)
 
 
-class DingTalkClient(BaseClient):
+class DingTalkClient(BaseClient, TaobaoMixin):
 
     attendance = api.Attendance()
     bpms = api.Bpms()
@@ -116,4 +117,21 @@ class SecretClient(DingTalkClient):
             'GET',
             '/gettoken',
             params={'corpid': self.corp_id, 'corpsecret': self.corp_secret}
+        )
+
+
+class AppKeyClient(DingTalkClient):
+
+    def __init__(self, corp_id, app_key, app_secret, token=None, aes_key=None, storage=None, timeout=None,
+                 auto_retry=True):
+        super(AppKeyClient, self).__init__(corp_id, 'secret:' + corp_id, storage, timeout, auto_retry)
+        self.app_key = app_key
+        self.app_secret = app_secret
+        self.crypto = DingTalkCrypto(token, aes_key, corp_id)
+
+    def get_access_token(self):
+        return self._request(
+            'GET',
+            '/gettoken',
+            params={'appkey': self.app_key, 'appsecret': self.app_secret}
         )

@@ -18,8 +18,10 @@ from os import path
 import sys
 
 import ssl
-
-ssl._create_default_https_context = ssl._create_unverified_context
+try:
+    ssl._create_default_https_context = ssl._create_unverified_context
+except Exception:
+    pass
 
 here = path.abspath(path.dirname(__file__))
 
@@ -54,7 +56,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='dingtalk-sdk',
-    version='1.1.5',
+    version='1.2.2',
     keywords='dingding, ding, dtalk, dingtalk, SDK',
     description='DingTalk SDK for Python',
     long_description=long_description,

@@ -19,7 +19,7 @@ import sys
 import dingtalk
 
 
-sys.path.insert(0, os.path.abspath('./../dingtalk'))
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 

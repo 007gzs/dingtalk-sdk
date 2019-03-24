@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import json
 
 from dingtalk.core.utils import to_text
-from six.moves.urllib_parse import urlencode
+from six.moves.urllib.parse import urlencode
 
 from dingtalk.client.api.base import DingTalkBaseAPI
 from dingtalk.model.message import BodyBase
