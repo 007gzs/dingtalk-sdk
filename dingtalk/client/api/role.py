@@ -93,3 +93,58 @@ class Role(DingTalkBaseAPI):
             {'group_id': group_id},
             result_processor=lambda x: x['role_group']
         )
+
+    def getrole(self, role_id):
+        """
+        获取角色详情
+
+        :param role_id: 角色id
+        """
+        return self._top_request(
+            "dingtalk.oapi.role.getrole",
+            {
+                "roleId": role_id
+            }
+        )
+
+    def add_role(self, role_name, group_id):
+        """
+        创建角色
+
+        :param role_name: 角色名称
+        :param group_id: 角色组id
+        """
+        return self.post(
+            "/role/add_role",
+            {
+                "roleName": role_name,
+                "groupId": group_id
+            }
+        )
+
+    def update_role(self, role_name, group_id):
+        """
+        更新角色
+
+        :param role_name: 角色名称
+        :param group_id: 角色组id
+        """
+        return self.post(
+            "/role/update_role",
+            {
+                "roleName": role_name,
+                "groupId": group_id
+            }
+        )
+
+    def add_role_group(self, name):
+        """
+        创建角色组
+
+        :param name: 角色组名称
+        """
+        return self.post(
+            "/role/add_role_group",
+            {"name": name},
+            result_processor=lambda x: x['groupId']
+        )

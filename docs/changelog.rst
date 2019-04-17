@@ -1,10 +1,15 @@
 Changelog
 ================
 
+Version 1.2.4
+------------------
+
++ 增加新接口
+
 Version 1.2.3
 ------------------
 
-+ top接口成功状态判断增加 is_success
++ top接口成功状态判断增加 is_success, error_response 增加msg错误信息判断
 
 Version 1.2.2
 ------------------

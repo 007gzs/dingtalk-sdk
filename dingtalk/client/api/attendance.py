@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+import time
 import datetime
 
 from dingtalk.client.api.base import DingTalkBaseAPI
@@ -51,7 +52,7 @@ class Attendance(DingTalkBaseAPI):
             work_date_to = work_date_to.strftime(self.DATE_TIME_FORMAT)
 
         return self._post(
-            '/attendance/listRecord',
+            '/attendance/list',
             {
                 "workDateFrom": work_date_from,
                 "workDateTo": work_date_to,
@@ -73,7 +74,7 @@ class Attendance(DingTalkBaseAPI):
         if isinstance(work_date, (datetime.date, datetime.datetime)):
             work_date = work_date.strftime(self.DATE_TIME_FORMAT)
         return self._top_request(
-            'dingtalk.smartwork.attends.getsimplegroups',
+            'dingtalk.smartwork.attends.listschedule',
             {
                 "work_date": work_date,
                 "offset": offset,
@@ -119,6 +120,32 @@ class Attendance(DingTalkBaseAPI):
                 "to_date": to_date
             },
             result_processor=lambda x: x['duration_in_minutes']
+        )
+
+    def getleavestatus(self, userid_list, start_time, end_time, offset=0, size=20):
+        """
+        请假状态查询接口
+        该接口用于查询指定企业下的指定用户在指定时间段内的请假状态
+
+        :param userid_list: 待查询用户id列表，支持最多100个用户的批量查询
+        :param start_time: 开始时间 ，时间戳，支持最多180天的查询
+        :param end_time: 结束时间，时间戳，支持最多180天的查询
+        :param offset: 分页偏移，非负整数
+        :param size: 分页大小，正整数，最大20
+        """
+        if isinstance(start_time, (datetime.date, datetime.datetime)):
+            start_time = int(time.mktime(start_time.timetuple()) * 1000)
+        if isinstance(end_time, (datetime.date, datetime.datetime)):
+            end_time = int(time.mktime(end_time.timetuple()) * 1000)
+        return self._top_request(
+            "dingtalk.oapi.attendance.getleavestatus",
+            {
+                "userid_list": userid_list,
+                "start_time": start_time,
+                "end_time": end_time,
+                "offset": offset,
+                "size": size
+            }
         )
 
     def getusergroup(self, userid):

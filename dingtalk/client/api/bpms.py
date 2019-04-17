@@ -108,6 +108,36 @@ class Bpms(DingTalkBaseAPI):
             result_processor=lambda x: x['process_instance_id']
         )
 
+    def processinstance_listids(self, process_code, start_time, end_time, size='10', cursor='0', userid_list=()):
+        """
+        分页获取审批实例id列表
+        企业可以根据审批流的唯一标识，分页获取该审批流对应的审批实例id。只能取到权限范围内的相关部门的审批实例
+
+        :param process_code: 流程模板唯一标识，可在oa后台编辑审批表单部分查询
+        :param start_time: 审批实例开始时间，毫秒级
+        :param end_time: 审批实例结束时间，毫秒级，默认取当前值
+        :param size: 分页参数，每页大小，最多传10
+        :param cursor: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
+        :param userid_list: 发起人用户id列表
+        """
+        if isinstance(start_time, (datetime.date, datetime.datetime)):
+            start_time = int(time.mktime(start_time.timetuple()) * 1000)
+        if isinstance(end_time, (datetime.date, datetime.datetime)):
+            end_time = int(time.mktime(end_time.timetuple()) * 1000)
+        if isinstance(userid_list, (list, tuple)):
+            userid_list = ','.join(map(to_text, userid_list))
+        return self._top_request(
+            "dingtalk.oapi.processinstance.listids",
+            {
+                "process_code": process_code,
+                "start_time": start_time,
+                "end_time": end_time,
+                "size": size,
+                "cursor": cursor,
+                "userid_list": userid_list
+            }
+        )
+
     def processinstance_list(self, process_code, start_time, end_time=None, cursor=0, size=10, userid_list=()):
         """
         获取审批实例列表
@@ -154,6 +184,18 @@ class Bpms(DingTalkBaseAPI):
             'dingtalk.smartwork.bpms.processinstance.get',
             {'process_instance_id': process_instance_id},
             result_processor=lambda x: x['process_instance']
+        )
+
+    def dingtalk_oapi_process_gettodonum(self, userid):
+        """
+        获取待我审批数量
+        获取用户待审批数量
+
+        :param userid: 用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.gettodonum",
+            {"userid": userid}
         )
 
     def process_listbyuserid(self, userid, offset=0, size=100):
