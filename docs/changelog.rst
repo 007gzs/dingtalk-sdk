@@ -1,7 +1,7 @@
 Changelog
 ================
 
-Version 1.2.5
+Version 1.2.6
 ------------------
 
 + 增加asyncsend_v2接口

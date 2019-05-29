@@ -157,7 +157,7 @@ class Message(DingTalkBaseAPI):
         if isinstance(msg_body, BodyBase):
             msg_body = msg_body.get_dict()
         return self._top_request(
-            'dingtalk.corp.message.corpconversation.asyncsend',
+            'dingtalk.oapi.message.corpconversation.asyncsend_v2',
             {
                 "msg": msg_body,
                 'agent_id': agent_id,
