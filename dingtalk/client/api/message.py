@@ -140,6 +140,34 @@ class Message(DingTalkBaseAPI):
             result_processor=lambda x: x['task_id']
         )
 
+    def asyncsend_v2(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
+        """
+        企业会话消息异步发送
+
+        :param msg_body: BodyBase 消息体
+        :param agent_id: 微应用的id
+        :param userid_list: 接收者的用户userid列表
+        :param dept_id_list: 接收者的部门id列表
+        :param to_all_user: 是否发送给企业全部用户
+        :return: 任务id
+        """
+        userid_list = ",".join(map(to_text, userid_list))
+        dept_id_list = ",".join(map(to_text, dept_id_list))
+
+        if isinstance(msg_body, BodyBase):
+            msg_body = msg_body.get_dict()
+        return self._top_request(
+            'dingtalk.corp.message.corpconversation.asyncsend',
+            {
+                "msg": msg_body,
+                'agent_id': agent_id,
+                'userid_list': userid_list,
+                'dept_id_list': dept_id_list,
+                'to_all_user': to_all_user
+            },
+            result_processor=lambda x: x['task_id']
+        )
+
     def getsendprogress(self, agent_id, task_id):
         """
         获取异步发送企业会话消息的发送进度
