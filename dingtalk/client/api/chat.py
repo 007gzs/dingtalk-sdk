@@ -83,7 +83,7 @@ class Chat(DingTalkBaseAPI):
         :param chatid: 群会话的id
         :return: 群会话信息
         """
-        return self._post(
+        return self._get(
             '/chat/get',
             {'chatid': chatid},
             result_processor=lambda x: x['chat_info']
