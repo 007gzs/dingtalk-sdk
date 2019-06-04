@@ -60,7 +60,7 @@ class Bpms(DingTalkBaseAPI):
         )
 
     def processinstance_create(self, process_code, originator_user_id, dept_id, approvers, form_component_values,
-                               agent_id=None, cc_list=(), cc_start=False, cc_finish=False):
+                               agent_id=None, cc_list=(), cc_start=False, cc_finish=False, approvers_v2=()):
         """
         发起审批实例
 
@@ -74,6 +74,7 @@ class Bpms(DingTalkBaseAPI):
         :param cc_list: 抄送人userid列表
         :param cc_start: 开始时抄送
         :param cc_finish: 结束时抄送
+        :param approvers_v2: 审批人列表，支持会签/或签，优先级高于approvers变量
         :return:
         """
         cc_position = 'START' if cc_start else ''
@@ -94,16 +95,17 @@ class Bpms(DingTalkBaseAPI):
             form_component_value_list.append(data)
 
         return self._top_request(
-            'dingtalk.smartwork.bpms.processinstance.create',
+            "dingtalk.oapi.processinstance.create",
             {
-                'process_code': process_code,
-                'originator_user_id': originator_user_id,
-                'dept_id': dept_id,
-                'approvers': approvers,
-                'agent_id': agent_id,
-                'cc_list': cc_list,
-                'cc_position': cc_position,
-                'form_component_values': form_component_value_list
+                "process_code": process_code,
+                "originator_user_id": originator_user_id,
+                "dept_id": dept_id,
+                "form_component_values": form_component_values,
+                "agent_id": agent_id,
+                "approvers": approvers,
+                "cc_list": cc_list,
+                "cc_position": cc_position,
+                "approvers_v2": approvers_v2
             },
             result_processor=lambda x: x['process_instance_id']
         )
