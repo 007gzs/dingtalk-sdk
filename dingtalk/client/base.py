@@ -112,7 +112,7 @@ class BaseClient(object):
                              url, kwargs.get('params', ''), kwargs.get('data', ''), result)
                 raise DingTalkClientException(
                     error_response.get('code', -1),
-                    error_response.get('sub_msg', ''),
+                    error_response.get('sub_msg', error_response.get('msg', '')),
                     client=self,
                     request=res.request,
                     response=res
@@ -127,7 +127,8 @@ class BaseClient(object):
                             top_result = json_loads(top_result)
                         except Exception:
                             pass
-            if 'success' in top_result and not top_result['success']:
+            if ('success' in top_result and not top_result['success']) or (
+                    'is_success' in top_result and not top_result['is_success']):
                 logger.error("\n【请求地址】: %s\n【请求参数】：%s \n%s\n【错误信息】：%s",
                              url, kwargs.get('params', ''), kwargs.get('data', ''), result)
                 raise DingTalkClientException(

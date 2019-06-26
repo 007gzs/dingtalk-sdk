@@ -7,7 +7,8 @@ from dingtalk.model.message import BodyBase
 
 class Chat(DingTalkBaseAPI):
 
-    def create(self, name, owner, useridlist, show_history_type=False):
+    def create(self, name, owner, useridlist, show_history_type=False, searchable=0,
+               validation_type=0, mention_all_authority=0, chat_banned_type=0, management_type=0):
         """
         创建会话
 
@@ -15,6 +16,11 @@ class Chat(DingTalkBaseAPI):
         :param owner: 群主userId，员工唯一标识ID；必须为该会话useridlist的成员之一
         :param useridlist: 群成员列表，每次最多支持40人，群人数上限为1000
         :param show_history_type: 新成员是否可查看聊天历史消息（新成员入群是否可查看最近100条聊天记录）
+        :param searchable: 群可搜索，0-默认，不可搜索，1-可搜索
+        :param validation_type: 入群验证，0：不入群验证（默认） 1：入群验证
+        :param mention_all_authority: @all 权限，0-默认，所有人，1-仅群主可@all
+        :param chat_banned_type: 群禁言，0-默认，不禁言，1-全员禁言
+        :param management_type: 管理类型，0-默认，所有人可管理，1-仅群主可管理
         :return: 群会话的id
         """
         return self._post(
@@ -23,12 +29,18 @@ class Chat(DingTalkBaseAPI):
                 'name': name,
                 'owner': owner,
                 'useridlist': useridlist,
-                'showHistoryType': 1 if show_history_type else 0
+                'showHistoryType': 1 if show_history_type else 0,
+                'chatBannedType': chat_banned_type,
+                'searchable': searchable,
+                'validationType': validation_type,
+                'mentionAllAuthority': mention_all_authority,
+                'managementType': management_type
             },
             result_processor=lambda x: x['chatid']
         )
 
-    def update(self, chatid, name=None, owner=None, add_useridlist=(), del_useridlist=()):
+    def update(self, chatid, name=None, owner=None, add_useridlist=(), del_useridlist=(), icon='', chat_banned_type=0,
+               searchable=0, validation_type=0, mention_all_authority=0, show_history_type=False, management_type=0):
         """
         修改会话
 
@@ -37,6 +49,13 @@ class Chat(DingTalkBaseAPI):
         :param owner: 群主userId，员工唯一标识ID；必须为该会话成员之一；不传则不修改
         :param add_useridlist: 添加成员列表，每次最多支持40人，群人数上限为1000
         :param del_useridlist: 删除成员列表，每次最多支持40人，群人数上限为1000
+        :param icon: 群头像mediaid
+        :param chat_banned_type: 群禁言，0-默认，不禁言，1-全员禁言
+        :param searchable: 群可搜索，0-默认，不可搜索，1-可搜索
+        :param validation_type: 入群验证，0：不入群验证（默认） 1：入群验证
+        :param mention_all_authority: @all 权限，0-默认，所有人，1-仅群主可@all
+        :param show_history_type: 新成员是否可查看聊天历史消息（新成员入群是否可查看最近100条聊天记录）
+        :param management_type: 管理类型，0-默认，所有人可管理，1-仅群主可管理
         :return:
         """
         return self._post(
@@ -46,7 +65,14 @@ class Chat(DingTalkBaseAPI):
                 'name': name,
                 'owner': owner,
                 'add_useridlist': add_useridlist,
-                'del_useridlist': del_useridlist
+                'del_useridlist': del_useridlist,
+                'icon': icon,
+                'chatBannedType': chat_banned_type,
+                'searchable': searchable,
+                'validationType': validation_type,
+                'mentionAllAuthority': mention_all_authority,
+                'showHistoryType': 1 if show_history_type else 0,
+                'managementType': management_type
             }
         )
 
@@ -57,7 +83,7 @@ class Chat(DingTalkBaseAPI):
         :param chatid: 群会话的id
         :return: 群会话信息
         """
-        return self._post(
+        return self._get(
             '/chat/get',
             {'chatid': chatid},
             result_processor=lambda x: x['chat_info']

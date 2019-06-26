@@ -2324,7 +2324,8 @@ class TbDingDing(DingTalkBaseAPI):
             agent_id='',
             approvers='',
             cc_list='',
-            cc_position=''
+            cc_position='',
+            approvers_v2=None
     ):
         """
         发起审批实例
@@ -2339,6 +2340,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param approvers: 审批人userid列表
         :param cc_list: 抄送人userid列表
         :param cc_position: 抄送时间,分为（START,FINISH,START_FINISH）
+        :param approvers_v2: 审批人列表，支持会签/或签，优先级高于approvers变量
         """
         return self._top_request(
             "dingtalk.oapi.processinstance.create",
@@ -2350,7 +2352,8 @@ class TbDingDing(DingTalkBaseAPI):
                 "agent_id": agent_id,
                 "approvers": approvers,
                 "cc_list": cc_list,
-                "cc_position": cc_position
+                "cc_position": cc_position,
+                "approvers_v2": approvers_v2
             }
         )
 
@@ -2922,7 +2925,8 @@ class TbDingDing(DingTalkBaseAPI):
             validation_type='',
             mention_all_authority='',
             management_type='',
-            chat_banned_type=''
+            chat_banned_type='',
+            show_history_type=''
     ):
         """
         修改群会话
@@ -2943,6 +2947,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param mention_all_authority: @all 权限，0-默认，所有人，1-仅群主可@all
         :param management_type: 管理类型，0-默认，所有人可管理，1-仅群主可管理
         :param chat_banned_type: 群禁言，0-默认，不禁言，1-全员禁言
+        :param show_history_type: 新成员可查看聊天历史 0否 1是
         """
         return self._top_request(
             "dingtalk.oapi.chat.update",
@@ -2961,7 +2966,8 @@ class TbDingDing(DingTalkBaseAPI):
                 "validationType": validation_type,
                 "mentionAllAuthority": mention_all_authority,
                 "managementType": management_type,
-                "chatBannedType": chat_banned_type
+                "chatBannedType": chat_banned_type,
+                "showHistoryType": show_history_type
             }
         )
 
@@ -3012,7 +3018,8 @@ class TbDingDing(DingTalkBaseAPI):
             validation_type='',
             mention_all_authority='',
             management_type='',
-            chat_banned_type=''
+            chat_banned_type='',
+            icon=''
     ):
         """
         创建群会话
@@ -3030,6 +3037,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param mention_all_authority: @all 权限，0-默认，所有人，1-仅群主可@all
         :param management_type: 管理类型，0-默认，所有人可管理，1-仅群主可管理
         :param chat_banned_type: 群禁言，0-默认，不禁言，1-全员禁言
+        :param icon: 群头像资源id
         """
         return self._top_request(
             "dingtalk.oapi.chat.create",
@@ -3045,7 +3053,8 @@ class TbDingDing(DingTalkBaseAPI):
                 "validationType": validation_type,
                 "mentionAllAuthority": mention_all_authority,
                 "managementType": management_type,
-                "chatBannedType": chat_banned_type
+                "chatBannedType": chat_banned_type,
+                "icon": icon
             }
         )
 
@@ -3309,7 +3318,8 @@ class TbDingDing(DingTalkBaseAPI):
             name='',
             extattr='',
             org_email='',
-            order_in_depts=''
+            order_in_depts='',
+            hired_date=''
     ):
         """
         创建成员
@@ -3330,6 +3340,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param extattr: 扩展属性，可以设置多种属性(但手机上最多只能显示10个扩展属性，具体显示哪些属性，请到OA管理后台->设置->通讯录信息设置和OA管理后台->设置->手机端显示信息设置)
         :param org_email: 员工的企业邮箱，员工的企业邮箱已开通，才能增加此字段， 否则会报错
         :param order_in_depts: 在对应的部门中的排序, Map结构的json字符串, key是部门的Id, value是人员在这个部门的排序值
+        :param hired_date: 入职时间
         """
         return self._top_request(
             "dingtalk.oapi.user.create",
@@ -3348,7 +3359,8 @@ class TbDingDing(DingTalkBaseAPI):
                 "name": name,
                 "extattr": extattr,
                 "orgEmail": org_email,
-                "orderInDepts": order_in_depts
+                "orderInDepts": order_in_depts,
+                "hiredDate": hired_date
             }
         )
 
@@ -3387,7 +3399,8 @@ class TbDingDing(DingTalkBaseAPI):
             extattr='',
             jobnumber='',
             is_hide='',
-            lang=''
+            lang='',
+            hired_date=''
     ):
         """
         更新用户详情
@@ -3410,6 +3423,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param jobnumber: 工号
         :param is_hide: 是否号码隐藏
         :param lang: 通讯录语言(默认zh_CN另外支持en_US)
+        :param hired_date: 入职时间
         """
         return self._top_request(
             "dingtalk.oapi.user.update",
@@ -3430,7 +3444,8 @@ class TbDingDing(DingTalkBaseAPI):
                 "extattr": extattr,
                 "jobnumber": jobnumber,
                 "isHide": is_hide,
-                "lang": lang
+                "lang": lang,
+                "hiredDate": hired_date
             }
         )
 
@@ -6027,7 +6042,8 @@ class TbDingDing(DingTalkBaseAPI):
             self,
             group_owner,
             group_name,
-            chatid
+            chatid,
+            show_history_type=''
     ):
         """
         impaas群信息修改
@@ -6038,6 +6054,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param group_owner: 修改后的群主，若为空或与当前群主相同，则不会对群主进行变更操作。
         :param group_name: 修改后的群名称
         :param chatid: 群ID，由创建群接口返回
+        :param show_history_type: 新人进群是否能查看最近100条记录。0:不能；1:可以查看最近100条记录；不填默认为0
         """
         return self._top_request(
             "dingtalk.oapi.impaas.group.modify",
@@ -6045,7 +6062,8 @@ class TbDingDing(DingTalkBaseAPI):
                 "request": {
                     "group_owner": group_owner,
                     "group_name": group_name,
-                    "chatid": chatid
+                    "chatid": chatid,
+                    "show_history_type": show_history_type
                 }
             }
         )
@@ -7525,7 +7543,8 @@ class TbDingDing(DingTalkBaseAPI):
     def dingtalk_oapi_im_chat_servicegroup_create(
             self,
             title,
-            owner_userid
+            owner_userid,
+            org_inner_group='false'
     ):
         """
         创建服务群
@@ -7534,12 +7553,14 @@ class TbDingDing(DingTalkBaseAPI):
 
         :param title: 群标题
         :param owner_userid: 群主在钉钉组织内的userid
+        :param org_inner_group: 是否企业内部服务群
         """
         return self._top_request(
             "dingtalk.oapi.im.chat.servicegroup.create",
             {
                 "title": title,
-                "owner_userid": owner_userid
+                "owner_userid": owner_userid,
+                "org_inner_group": org_inner_group
             }
         )
 
@@ -8937,7 +8958,11 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         更新商品信息
-        根据传入的num_iid更新对应的商品的数据 <br/>传入的num_iid所对应的商品必须属于当前会话的用户 <br/>商品的属性和sku的属性有包含的关系，商品的价格要位于sku的价格区间之中（例如，sku价格有5元、10元两种，那么商品的价格就需要大于等于5元，小于等于10元，否则更新商品会失败） <br/>商品的类目和商品的价格、sku的价格都有一定的相关性（具体的关系要通过类目属性查询接口获得） <br/>当关键属性值更新为“其他”的时候，需要输入input_pids和input_str商品才能更新成功。该接口不支持产品属性修改。
+        根据传入的num_iid更新对应的商品的数据。
+        传入的num_iid所对应的商品必须属于当前会话的用户
+        商品的属性和sku的属性有包含的关系，商品的价格要位于sku的价格区间之中（例如，sku价格有5元、10元两种，那么商品的价格就需要大于等于5元，小于等于10元，否则更新商品会失败）
+        商品的类目和商品的价格、sku的价格都有一定的相关性（具体的关系要通过类目属性查询接口获得）
+        当关键属性值更新为“其他”的时候，需要输入input_pids和input_str商品才能更新成功。该接口不支持产品属性修改。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21
 
         :param num_iid: 商品数字ID，该参数必须
@@ -8945,9 +8970,9 @@ class TbShangPin(DingTalkBaseAPI):
         :param cpv_memo: 针对当前商品的标准属性值的补充说明，让买家更加了解商品信息减少交易纠纷
         :param sku_spec_ids: 此参数暂时不起作用
         :param sku_delivery_times: 此参数暂时不起作用
-        :param sku_hd_length: 家装建材类目，商品SKU的长度，正整数，单位为cm，部分类目必选。天猫商家专用。 数据和SKU一一对应，用,分隔，如：20,30,30
-        :param sku_hd_height: 家装建材类目，商品SKU的高度，单位为cm，部分类目必选。天猫商家专用。 可选值为：'0-15', '15-25', '25-50', '50-60', '60-80', '80-120', '120-160', '160-200'。 数据和SKU一一对应，用,分隔，如：15-25,25-50,25-50
-        :param sku_hd_lamp_quantity: 家装建材类目，商品SKU的灯头数量，正整数，大于等于3，部分类目必选。天猫商家专用。 数据和SKU一一对应，用,分隔，如：3,5,7
+        :param sku_hd_length: 家装建材类目，商品SKU的长度，正整数，单位为cm，部分类目必选。 数据和SKU一一对应，用,分隔，如：20,30,30
+        :param sku_hd_height: 家装建材类目，商品SKU的高度，单位为cm，部分类目必选。 天猫和淘宝格式不同。天猫：可选值为：'0-15', '15-25', '25-50', '50-60', '60-80', '80-120', '120-160', '160-200'。 数据和SKU一一对应，用,分隔，格式如：15-25,25-50,25-50。 淘宝：正整数，单位为cm,格式如：20,30,30
+        :param sku_hd_lamp_quantity: 家装建材类目，商品SKU的灯头数量，正整数，大于等于3，部分类目必选。 数据和SKU一一对应，用,分隔，如：3,5,7
         :param location_state: 所在地省份。如浙江
         :param location_city: 所在地城市。如杭州
         :param food_security_prd_license_no: 生产许可证号
@@ -9287,6 +9312,9 @@ class TbShangPin(DingTalkBaseAPI):
             video_id='',
             interactive_id='',
             lease_extends_info='',
+            brokerage='',
+            biz_code='',
+            image_urls='',
             locality_life_choose_logis='',
             locality_life_expirydate='',
             locality_life_network_id='',
@@ -9326,8 +9354,8 @@ class TbShangPin(DingTalkBaseAPI):
         :param cid: 叶子类目id
         :param sku_spec_ids: 此参数暂时不起作用
         :param sku_delivery_times: 此参数暂时不起作用
-        :param sku_hd_length: 家装建材类目，商品SKU的长度，正整数，单位为cm，部分类目必选。天猫商家专用。 数据和SKU一一对应，用,分隔，如：20,30,30
-        :param sku_hd_height: 家装建材类目，商品SKU的高度，单位为cm，部分类目必选。天猫商家专用。 可选值为：'0-15', '15-25', '25-50', '50-60', '60-80', '80-120', '120-160', '160-200'。 数据和SKU一一对应，用,分隔，如：15-25,25-50,25-50
+        :param sku_hd_length: 家装建材类目，商品SKU的长度，正整数，单位为cm，部分类目必选。 数据和SKU一一对应，用,分隔，如：20,30,30
+        :param sku_hd_height: 家装建材类目，商品SKU的高度，单位为cm，部分类目必选。 天猫和淘宝格式不同。天猫：可选值为：'0-15', '15-25', '25-50', '50-60', '60-80', '80-120', '120-160', '160-200'。 数据和SKU一一对应，用,分隔，格式如：15-25,25-50,25-50。 淘宝：正整数，单位为cm,格式如：20,30,30
         :param sku_hd_lamp_quantity: 家装建材类目，商品SKU的灯头数量，正整数，大于等于3，部分类目必选。天猫商家专用。 数据和SKU一一对应，用,分隔，如：3,5,7
         :param input_str: 用户自行输入的子属性名和属性值，结构:'父属性值;一级子属性名;一级子属性值;二级子属性名;自定义输入值,....',如：“耐克;耐克系列;科比系列;科比系列;2K5,Nike乔丹鞋;乔丹系列;乔丹鞋系列;乔丹鞋系列;json5”，多个自定义属性用','分割，input_str需要与input_pids一一对应，注：通常一个类目下用户可输入的关键属性不超过1个。所有属性别名加起来不能超过3999字节。此处不可以使用“其他”、“其它”和“其她”这三个词。
         :param input_pids: 用户自行输入的类目属性ID串，结构：'pid1,pid2,pid3'，如：'20000'（表示品牌） 注：通常一个类目下用户可输入的关键属性不超过1个。
@@ -9413,6 +9441,9 @@ class TbShangPin(DingTalkBaseAPI):
         :param video_id: 主图视频id
         :param interactive_id: 主图视频互动信息id，必须填写主图视频id才能有互动信息id
         :param lease_extends_info: 租赁扩展信息
+        :param brokerage: 仅淘小铺卖家需要。佣金比例(15.3对应的佣金比例为15.3%).只支持小数点后1位。多余的位数四舍五入(15.32会保存为15.3%
+        :param biz_code: 业务身份编码。淘小铺编码为'taobao-taoxiaopu'
+        :param image_urls: 商品主图，多张主图用该字段。使用该字段时。pic_path,image必须为空.
         :param locality_life_choose_logis: 发布电子凭证宝贝时候表示是否使用邮寄 0: 代表不使用邮寄； 1：代表使用邮寄；如果不设置这个值，代表不使用邮寄
         :param locality_life_expirydate: 本地生活电子交易凭证业务，目前此字段只涉及到的信息为有效期;如果有效期为起止日期类型，此值为2012-08-06,2012-08-16如果有效期为【购买成功日 至】类型则格式为2012-08-16如果有效期为天数类型则格式为15
         :param locality_life_network_id: 网点ID
@@ -9429,7 +9460,7 @@ class TbShangPin(DingTalkBaseAPI):
         :param paimai_info_valid_hour: 自定义销售周期的小时数。拍卖宝贝可以自定义销售周期，这里指定销售周期的小时数。注意，该参数只作为输入参数，不能通过taobao.item.get接口获取。
         :param paimai_info_valid_minute: 自定义销售周期的分钟数。拍卖宝贝可以自定义销售周期，这里是指定销售周期的分钟数。自定义销售周期的小时数。拍卖宝贝可以自定义销售周期，这里指定销售周期的小时数。注意，该参数只作为输入参数，不能通过taobao.item.get接口获取。
         :param global_stock_type: 全球购商品采购地（库存类型），有两种库存类型：现货和代购参数值为1时代表现货，值为2时代表代购。注意：使用时请与 全球购商品采购地（地区/国家）配合使用
-        :param global_stock_country: 全球购商品采购地（地区/国家）,默认值只在全球购商品采购地（库存类型选择情况生效），地区国家值为（美国, 香港, 日本, 英国, 新西兰, 德国, 韩国, 荷兰, 澳洲, 法国, 意大利, 台湾, 澳门, 加拿大, 瑞士, 西班牙, 泰国, 新加坡, 马来西亚, 菲律宾, 其他）
+        :param global_stock_country: 全球购商品采购地（地区/国家）,默认值只在全球购商品采购地（库存类型选择情况生效），地区国家值请填写法定的国家名称，类如（美国, 香港, 日本, 英国, 新西兰, 德国, 韩国, 荷兰, 法国, 意大利, 台湾, 澳门, 加拿大, 瑞士, 西班牙, 泰国, 新加坡, 马来西亚, 菲律宾），不要使用其他
         :param support_custom_made: 是否支持定制市场 true代表支持，false代表支持,如果为空代表与之前保持不变不会修改
         :param custom_made_type_id: 定制工具Id如果支持定制市场，这个值不填写，就用之前的定制工具Id，之前的定制工具Id没有值就默认为-1
         :param global_stock_delivery_place: 全球购商品发货地，发货地现在有两种类型：“国内”和“海外及港澳台”，参数值为1时代表“国内”，值为2时代表“海外及港澳台”，默认为国内。注意：卖家必须已经签署并启用“海外直邮”合约，才能选择发货地为“海外及港澳台”
@@ -9537,6 +9568,9 @@ class TbShangPin(DingTalkBaseAPI):
                 "video_id": video_id,
                 "interactive_id": interactive_id,
                 "lease_extends_info": lease_extends_info,
+                "brokerage": brokerage,
+                "biz_code": biz_code,
+                "image_urls": image_urls,
                 "locality_life.choose_logis": locality_life_choose_logis,
                 "locality_life.expirydate": locality_life_expirydate,
                 "locality_life.network_id": locality_life_network_id,
@@ -9723,8 +9757,7 @@ class TbShangPin(DingTalkBaseAPI):
             self,
             fields,
             sku_id,
-            num_iid='',
-            nick=''
+            num_iid=''
     ):
         """
         获取SKU
@@ -9734,15 +9767,13 @@ class TbShangPin(DingTalkBaseAPI):
         :param fields: 需返回的字段列表。可选值：Sku结构体中的所有字段；字段之间用“,”分隔。
         :param sku_id: Sku的id。可以通过taobao.item.get得到
         :param num_iid: 商品的数字IID（num_iid和nick必传一个，推荐用num_iid），传商品的数字id返回的结果里包含cspu（SKu上的产品规格信息）。
-        :param nick: 卖家nick(num_iid和nick必传一个)，只传卖家nick时候，该api返回的结果不包含cspu（SKu上的产品规格信息）。
         """
         return self._top_request(
             "taobao.item.sku.get",
             {
                 "fields": fields,
                 "sku_id": sku_id,
-                "num_iid": num_iid,
-                "nick": nick
+                "num_iid": num_iid
             },
             result_processor=lambda x: x["sku"]
         )
@@ -10388,22 +10419,22 @@ class TbShangPin(DingTalkBaseAPI):
 
     def taobao_item_anchor_get(
             self,
-            cat_id,
-            type
+            type,
+            cat_id
     ):
         """
         获取可用宝贝描述规范化模块
         根据类目id和宝贝描述规范化打标类型获取该类目可用的宝贝描述模块中的锚点
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21433
 
+        :param type: 宝贝模板类型是人工打标还是自动打标：人工打标为1，自动打标为0.人工和自动打标为-1.(最小值：-1，最大值：1)
         :param cat_id: 对应类目编号
-        :param type: 宝贝模板类型是人工打标还是自动打标：人工打标为1，自动打标为0.人工和自动打标为-1.
         """
         return self._top_request(
             "taobao.item.anchor.get",
             {
-                "cat_id": cat_id,
-                "type": type
+                "type": type,
+                "cat_id": cat_id
             }
         )
 
@@ -10466,8 +10497,8 @@ class TbShangPin(DingTalkBaseAPI):
         :param item_barcode: 商品条形码，如果不用更新，可选择不填
         :param sku_ids: 被更新SKU的ID列表，中间以英文逗号进行分隔。如果没有SKU或者不需要更新SKU的条形码，不需要设置
         :param sku_barcodes: SKU维度的条形码，和sku_ids字段一一对应，中间以英文逗号分隔
-        :param isforce: 是否强制保存商品条码。<br/>true：强制保存<br/>false ：需要执行条码库校验
-        :param src: 访问来源，这字段提供给千牛扫码枪用，<br/>其他调用方，不需要填写
+        :param isforce: 是否强制保存商品条码。true：强制保存false ：需要执行条码库校验
+        :param src: 访问来源，这字段提供给千牛扫码枪用，其他调用方，不需要填写
         """
         return self._top_request(
             "taobao.item.barcode.update",
@@ -11168,7 +11199,7 @@ class TbShangPin(DingTalkBaseAPI):
         'shipTimeType': 0, -- 删除发货时间
         'updateType': 0 --更新SKU
         },
-        按照指定SKU删除指定SKU的发货时间，如果原本是商品级发货时间，商品级发货时间也清空
+        按照指定SKU删除指定SKU的发货时间
         3.
         {
         'shipTimeType': 2,  ----相对发货时间（值为1则为绝对发货时间）
@@ -11180,7 +11211,7 @@ class TbShangPin(DingTalkBaseAPI):
         'shipTimeType': 0, -- 删除发货时间
         'updateType': 1 --更新商品
         },
-        删除商品级的发货时间，如果原本是SKU级发货时间，清空所有SKU上的发货时间
+        删除商品级的发货时间
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25393
 
         :param item_id: 商品ID
@@ -11250,25 +11281,25 @@ class TbShangPin(DingTalkBaseAPI):
 
     def taobao_item_qualification_display_get(
             self,
-            category_id='',
+            param='',
             item_id='',
-            param=''
+            category_id=''
     ):
         """
         资质采集配置异步获取接口
         根据类目，商品，属性等参与动态获得资质采集配置
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25726
 
-        :param category_id: 类目id
-        :param item_id: 商品id
         :param param: 参数列表，为key和value都是string的map的转化的json格式
+        :param item_id: 商品id
+        :param category_id: 类目id
         """
         return self._top_request(
             "taobao.item.qualification.display.get",
             {
-                "category_id": category_id,
+                "param": param,
                 "item_id": item_id,
-                "param": param
+                "category_id": category_id
             },
             result_processor=lambda x: x["display_conf"]
         )
@@ -11824,7 +11855,8 @@ class TbShangPin(DingTalkBaseAPI):
             item_ids,
             callback_url='',
             user_nick='',
-            user_id=''
+            user_id='',
+            ext_params=''
     ):
         """
         加购URL获取
@@ -11835,6 +11867,7 @@ class TbShangPin(DingTalkBaseAPI):
         :param callback_url: 回调地址，需要是EWS域名地址。可不填，默认到购物车页面
         :param user_nick: 商家Nick，优先使用user_id
         :param user_id: 商家ID
+        :param ext_params: 扩展属性，关注店铺的时候会传递下去，格式为K:V|K:V格式
         """
         return self._top_request(
             "taobao.item.carturl.get",
@@ -11842,7 +11875,8 @@ class TbShangPin(DingTalkBaseAPI):
                 "item_ids": item_ids,
                 "callback_url": callback_url,
                 "user_nick": user_nick,
-                "user_id": user_id
+                "user_id": user_id,
+                "ext_params": ext_params
             }
         )
 
@@ -13049,7 +13083,6 @@ class TbWuLiu(DingTalkBaseAPI):
     def taobao_logistics_trace_search(
             self,
             tid,
-            seller_nick,
             is_split='0',
             sub_tid=''
     ):
@@ -13059,7 +13092,6 @@ class TbWuLiu(DingTalkBaseAPI):
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10463
 
         :param tid: 淘宝交易号，请勿传非淘宝交易号
-        :param seller_nick: 卖家昵称
         :param is_split: 表明是否是拆单，默认值0，1表示拆单
         :param sub_tid: 拆单子订单列表，当is_split=1时，需要传人；对应的数据是：子订单号的列表。
         """
@@ -13067,7 +13099,6 @@ class TbWuLiu(DingTalkBaseAPI):
             "taobao.logistics.trace.search",
             {
                 "tid": tid,
-                "seller_nick": seller_nick,
                 "is_split": is_split,
                 "sub_tid": sub_tid
             }
@@ -14814,21 +14845,16 @@ class TbDianPu(DingTalkBaseAPI):
         )
 
     def taobao_sellercats_list_get(
-            self,
-            nick
+            self
     ):
         """
         获取前台展示的店铺内卖家自定义商品类目
         此API获取当前卖家店铺在淘宝前端被展示的浏览导航类目（面向买家）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=65
 
-        :param nick: 卖家昵称
         """
         return self._top_request(
             "taobao.sellercats.list.get",
-            {
-                "nick": nick
-            },
             result_processor=lambda x: x["seller_cats"]
         )
 
@@ -17321,7 +17347,7 @@ class TbWangWang(DingTalkBaseAPI):
             charset=''
     ):
         """
-        模糊聊天记录查询
+        聊天记录查询
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21804
 
         :param to_id: 买家id，有cntaobao前缀
@@ -18129,9 +18155,9 @@ class TbTaoBaoKe(DingTalkBaseAPI):
         :param page_size: 页大小，默认20，1~100
         :param page_no: 第几页，默认：1
         :param material_id: 官方的物料Id(详细物料id见：https://tbk.bbs.taobao.com/detail.html?appId=45301&postId=8576096)
-        :param device_value: 智能匹配-设备号加密后的值
+        :param device_value: 智能匹配-设备号加密后的值（MD5加密需32位小写）
         :param device_encrypt: 智能匹配-设备号加密类型：MD5
-        :param device_type: 智能匹配-设备号类型：IMEI，或者IDFA，或者UTDID
+        :param device_type: 智能匹配-设备号类型：IMEI，或者IDFA，或者UTDID（UTDID不支持MD5加密）
         :param content_id: 内容专用-内容详情ID
         :param content_source: 内容专用-内容渠道信息
         :param item_id: 商品ID，用于相似商品推荐
@@ -18149,8 +18175,7 @@ class TbTaoBaoKe(DingTalkBaseAPI):
                 "content_id": content_id,
                 "content_source": content_source,
                 "item_id": item_id
-            },
-            result_processor=lambda x: x["result_list"]
+            }
         )
 
     def taobao_tbk_dg_material_optional(
@@ -18216,8 +18241,8 @@ class TbTaoBaoKe(DingTalkBaseAPI):
         :param end_ka_tk_rate: 商品筛选-KA媒体淘客佣金比率上限。如：1234表示12.34%
         :param start_ka_tk_rate: 商品筛选-KA媒体淘客佣金比率下限。如：1234表示12.34%
         :param device_encrypt: 智能匹配-设备号加密类型：MD5
-        :param device_value: 智能匹配-设备号加密后的值
-        :param device_type: 智能匹配-设备号类型：IMEI，或者IDFA，或者UTDID
+        :param device_value: 智能匹配-设备号加密后的值（MD5加密需32位小写）
+        :param device_type: 智能匹配-设备号类型：IMEI，或者IDFA，或者UTDID（UTDID不支持MD5加密）
         """
         return self._top_request(
             "taobao.tbk.dg.material.optional",
@@ -18346,9 +18371,9 @@ class TbTaoBaoKe(DingTalkBaseAPI):
         :param page_size: 页大小，默认20，1~100
         :param page_no: 第几页，默认：1
         :param material_id: 官方的物料Id(详细物料id见：https://tbk.bbs.taobao.com/detail.html?appId=45301&postId=8576096)
-        :param device_type: 智能匹配-设备号加密后的值
+        :param device_type: 智能匹配-设备号类型：IMEI，或者IDFA，或者UTDID（UTDID不支持MD5加密）
         :param device_encrypt: 智能匹配-设备号加密类型：MD5
-        :param device_value: 智能匹配-设备号类型：IMEI，或者IDFA，或者UTDID
+        :param device_value: 智能匹配-设备号加密后的值（MD5加密需32位小写）
         :param content_id: 内容专用-内容详情ID
         :param content_source: 内容专用-内容渠道信息
         :param item_id: 商品ID，用于相似商品推荐
@@ -18367,8 +18392,7 @@ class TbTaoBaoKe(DingTalkBaseAPI):
                 "content_id": content_id,
                 "content_source": content_source,
                 "item_id": item_id
-            },
-            result_processor=lambda x: x["result_list"]
+            }
         )
 
     def taobao_tbk_activitylink_get(
@@ -18382,7 +18406,7 @@ class TbTaoBaoKe(DingTalkBaseAPI):
     ):
         """
         淘宝联盟官方活动推广API-媒体
-        淘宝联盟官方活动推广API-媒体，从官方活动列表页取出活动页面链接，支持二方、三方
+        淘宝联盟官方活动推广API-媒体，从官方活动列表页取出“官方活动ID”，支持二方、三方
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41918
 
         :param adzone_id: 推广位id，mm_xx_xx_xx pid三段式中的第三段。adzone_id需属于appKey拥有者
@@ -18415,7 +18439,7 @@ class TbTaoBaoKe(DingTalkBaseAPI):
     ):
         """
         淘宝联盟官方活动推广API-工具
-        淘宝联盟官方活动推广API-工具，从官方活动列表页取出活动页面链接，支持二方、三方
+        淘宝联盟官方活动推广API-工具，从官方活动列表页取出“官方活动ID”进行转链，支持二方、三方
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41921
 
         :param adzone_id: 推广位id，mm_xx_xx_xx pid三段式中的第三段
@@ -20332,7 +20356,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
             self,
             campaign_id,
             item_id,
-            nick=''
+            nick='',
+            product_id='101001005'
     ):
         """
         商品是否推广
@@ -20342,13 +20367,15 @@ class TbZhiTongChe(DingTalkBaseAPI):
         :param campaign_id: 推广计划Id
         :param item_id: 商品Id
         :param nick: 主人昵称
+        :param product_id: 产品类型 101001005 代表普通推广，101001014代表销量明星
         """
         return self._top_request(
             "taobao.simba.adgroups.item.exist",
             {
                 "campaign_id": campaign_id,
                 "item_id": item_id,
-                "nick": nick
+                "nick": nick,
+                "product_id": product_id
             },
             result_processor=lambda x: x["exist"]
         )
@@ -20733,7 +20760,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
 
     def taobao_simba_campaigns_get(
             self,
-            nick=''
+            nick='',
+            type='0'
     ):
         """
         取得一组推广计划
@@ -20741,11 +20769,13 @@ class TbZhiTongChe(DingTalkBaseAPI):
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10557
 
         :param nick: 主人昵称
+        :param type: 计划类型0位标准计划，16位销量明星计划
         """
         return self._top_request(
             "taobao.simba.campaigns.get",
             {
-                "nick": nick
+                "nick": nick,
+                "type": type
             },
             result_processor=lambda x: x["campaigns"]
         )
@@ -20753,7 +20783,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
     def taobao_simba_campaign_add(
             self,
             title,
-            nick=''
+            nick='',
+            type='0'
     ):
         """
         创建一个推广计划
@@ -20761,12 +20792,14 @@ class TbZhiTongChe(DingTalkBaseAPI):
 
         :param title: 推广计划名称，不能多余20个汉字，不能和客户其他推广计划同名。
         :param nick: 主人昵称
+        :param type: 计划类型，当前仅支持两种标准推广0，销量明星16，默认为0
         """
         return self._top_request(
             "taobao.simba.campaign.add",
             {
                 "title": title,
-                "nick": nick
+                "nick": nick,
+                "type": type
             },
             result_processor=lambda x: x["campaign"]
         )
@@ -21682,7 +21715,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
             order_field='',
             order_by='',
             page_size='',
-            page_no=''
+            page_no='',
+            product_id='101001005'
     ):
         """
         获取用户上架在线销售的全部宝贝
@@ -21693,6 +21727,7 @@ class TbZhiTongChe(DingTalkBaseAPI):
         :param order_by: 排序，true:降序， false:升序
         :param page_size: 页尺寸，最大200
         :param page_no: 页码，从1开始,最大50。最大只能获取1W个宝贝
+        :param product_id: 推广单元类型 101001005代表标准推广，101001014代表销量明星推广
         """
         return self._top_request(
             "taobao.simba.adgroup.onlineitemsvon.get",
@@ -21701,7 +21736,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
                 "order_field": order_field,
                 "order_by": order_by,
                 "page_size": page_size,
-                "page_no": page_no
+                "page_no": page_no,
+                "product_id": product_id
             },
             result_processor=lambda x: x["page_item"]
         )
@@ -28954,7 +28990,8 @@ class TbTianMaoFuWuShangPin(DingTalkBaseAPI):
             service_center_manager_phone='',
             service_center_manager_name='',
             service_center_address='',
-            work_card_install_detail_list=None
+            work_card_install_detail_list=None,
+            service_fee_detail=''
     ):
         """
         服务商反馈服务的执行情况
@@ -28989,6 +29026,7 @@ class TbTianMaoFuWuShangPin(DingTalkBaseAPI):
         :param service_center_manager_name: 网点负责人
         :param service_center_address: 网点地址
         :param work_card_install_detail_list: 一个工单可能包含多件商品，比如空调可能有两台，录入每天机器的安装情况
+        :param service_fee_detail: json string。费用单位为分
         """
         return self._top_request(
             "tmall.servicecenter.workcard.status.update",
@@ -29020,7 +29058,8 @@ class TbTianMaoFuWuShangPin(DingTalkBaseAPI):
                 "service_center_manager_phone": service_center_manager_phone,
                 "service_center_manager_name": service_center_manager_name,
                 "service_center_address": service_center_address,
-                "work_card_install_detail_list": work_card_install_detail_list
+                "work_card_install_detail_list": work_card_install_detail_list,
+                "service_fee_detail": service_fee_detail
             }
         )
 
@@ -32693,7 +32732,7 @@ class TbXiaoXiFuWu(DingTalkBaseAPI):
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21986
 
         :param group_name: 用户分组名称，不传表示消费默认分组，如果应用没有设置用户分组，传入分组名称将会返回错误
-        :param quantity: 每次批量消费消息的条数
+        :param quantity: 每次批量消费消息的条数，最小值：10；最大值：200
         """
         return self._top_request(
             "taobao.tmc.messages.consume",
@@ -36674,7 +36713,8 @@ class TbHuoChePiao(DingTalkBaseAPI):
             from_station_name='',
             to_station_name='',
             boarding_gates='',
-            expect_delivery_time=''
+            expect_delivery_time='',
+            extend_params=''
     ):
         """
         火车票代理商接口——确认出票是否成功v2--增加鉴权校验
@@ -36699,6 +36739,7 @@ class TbHuoChePiao(DingTalkBaseAPI):
         :param to_station_name: 到达站
         :param boarding_gates: 检票口
         :param expect_delivery_time: 送票上门预计派送时间
+        :param extend_params: 扩展字段
         """
         return self._top_request(
             "taobao.train.agent.bookticket.confirm.vtwo",
@@ -36720,7 +36761,8 @@ class TbHuoChePiao(DingTalkBaseAPI):
                 "from_station_name": from_station_name,
                 "to_station_name": to_station_name,
                 "boarding_gates": boarding_gates,
-                "expect_delivery_time": expect_delivery_time
+                "expect_delivery_time": expect_delivery_time,
+                "extend_params": extend_params
             },
             result_processor=lambda x: x["is_success"]
         )
@@ -51680,30 +51722,30 @@ class TbZhiNengSheBei(DingTalkBaseAPI):
 
     def taobao_ailab_aicloud_top_device_control_playbyid(
             self,
-            param0=None,
-            param1='',
-            param2='',
-            param3='',
-            param4=''
+            param1,
+            param2,
+            param3,
+            param4,
+            param0=None
     ):
         """
         通过id播放歌曲
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34710
 
-        :param param0: 用户信息
         :param param1: 设备id
         :param param2: 音频id
         :param param3: 音频来源
-        :param param4: 音频类型
+        :param param4: 音频类型，如果没有音频类型默认填children_song
+        :param param0: 用户信息
         """
         return self._top_request(
             "taobao.ailab.aicloud.top.device.control.playbyid",
             {
-                "param0": param0,
                 "param1": param1,
                 "param2": param2,
                 "param3": param3,
-                "param4": param4
+                "param4": param4,
+                "param0": param0
             }
         )
 
@@ -55785,8 +55827,7 @@ class TbMiaoJie(DingTalkBaseAPI):
             "alibaba.mj.oc.pay",
             {
                 "pos_order": pos_order
-            },
-            result_processor=lambda x: x["out_trade_no"]
+            }
         )
 
     def alibaba_mj_oc_confpickupgoods(
@@ -60571,8 +60612,7 @@ class TbWuDaoKou(DingTalkBaseAPI):
     def alibaba_wdk_marketing_expire_promotion_query(
             self,
             shop_id,
-            sku_code,
-            merchant_code
+            sku_code
     ):
         """
         短保优惠查询
@@ -60580,14 +60620,12 @@ class TbWuDaoKou(DingTalkBaseAPI):
 
         :param shop_id: 店铺id
         :param sku_code: 商品skucode
-        :param merchant_code: 商家code
         """
         return self._top_request(
             "alibaba.wdk.marketing.expire.promotion.query",
             {
                 "shop_id": shop_id,
-                "sku_code": sku_code,
-                "merchant_code": merchant_code
+                "sku_code": sku_code
             }
         )
 
@@ -62348,7 +62386,7 @@ class TbMenPiaoShangPinGuanLi(DingTalkBaseAPI):
         :param update_out_product_id: 可选，商家想要更新映射关系的时候，用于更新商户自定义收费项目编码。
         :param out_product_name: 商户收费项目名称
         :param inventory_type: 新发布门票商品时必填。门票商品 库存类型。1、日历库存， 2、非日历库存
-        :param need_enter_date: inventory_type=2时选填，指定该收费项目在购买时是否需要买家指定入园日期。1、需要，2-不需要
+        :param need_enter_date: inventory_type=2时必填，指定该收费项目在购买时是否需要买家指定入园日期。1、需要，2-不需要
         :param expire_date: 新发布门票商品时必填。门票有效期：指定入园日期后 多少天内有效。当为数字时，表示多少天内有效；当为日期时，表示到某日期有效，日期格式：yyyy-MM-dd。发布时不填则默认设置30天内有效
         :param reserve_limit_type: 新发布门票商品时必填。门票 预定时间限制。1、表示无限制 购买后可立即入园，2、有限制，此时预定时间限制规则必填。
         :param reserve_limit_rule: 特殊选填，门票 预定时间限制规则。格式：1_18_00_3 或者 1_18_00_3_30，含义：必须提前1天拍下，且在18点00分前支付成功，订单才生效。当为提前0天时（即当日票），最后两个数字才生效，指当日票需要在出票后3小时30分钟后方可入园。
@@ -65901,7 +65939,8 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
             sub_stock='',
             traveller_template_id='',
             item_custom_tag='',
-            high_lights=None
+            high_lights=None,
+            business_license=''
     ):
         """
         境外一日游/多日游 产品维护接口
@@ -65938,6 +65977,7 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param traveller_template_id: 可选，出行人模板id。模板id需要商家以店铺账号身份登录飞猪商家工作台，从卖家工具->出行人管理中获取。注意：如果传0则代表设置为不需要出行人模板或使用飞猪平台默认的类目模板。
         :param item_custom_tag: 可选，商家自定义标签（最多4个字，超长则自动截断，会进行违禁词校验）
         :param high_lights: 一日游 产品亮点
+        :param business_license: 必填，营业执照图片路径。图片链接支持外链图片（即商家系统中图片链接，必须外网可访问，且格式为jpg或jpeg，大小在3M以内），或者用户淘宝空间内的图片链接。对于外链图片，将自动下载并上传用户淘宝图片空间。
         """
         return self._top_request(
             "alitrip.daytours.product.upload",
@@ -65968,7 +66008,8 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
                 "sub_stock": sub_stock,
                 "traveller_template_id": traveller_template_id,
                 "item_custom_tag": item_custom_tag,
-                "high_lights": high_lights
+                "high_lights": high_lights,
+                "business_license": business_license
             },
             result_processor=lambda x: x["first_result"]
         )
@@ -66400,14 +66441,15 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
             is_overseas_tour='',
             pure_play='',
             refund_regulations_json='',
-            package_operation='0'
+            package_operation='0',
+            group_tour_type=''
     ):
         """
         新版跟团游商品维护接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33601
 
         :param go_traffic_type: 新发布商品时必填。去程交通。1-飞机，2-火车，3-汽，4-船，100-其他
-        :param trip_day: 新发布商品时必填。旅游天数
+        :param trip_day: 新发布商品时必填。旅游天数。已废弃，以套餐维度行程天数为准。
         :param wap_desc: 可选，手机端详情描述，xml格式，格式详见示例。
         :param sub_stock: 可选，减库存方式。0-拍下减库存。1-付款减库存。不传默认为0
         :param back_traffic_type: 新发布商品时必填。回程交通。1-飞机，2-火车，3-汽，4-船，100-其他
@@ -66419,7 +66461,7 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param confirm_type: 可选，资源确认类型。1-即时确认，2-二次确认。不传默认1
         :param item_custom_tag: 可选，商家自定义标签（最多4个字，超长则自动截断，会进行违禁词校验）
         :param out_product_id: 必填，商家自定义商品编码。注：商品基本信息维护、价格库存维护，商品查询都以该编码为主键。
-        :param trip_night: 可选，旅游晚数，不传默认旅游天数-1
+        :param trip_night: 可选，旅游晚数，不传默认旅游天数-1。已废弃，以套餐维度行程晚数为准。
         :param to_locations: 新发布商品时必填。目的地，多个目的地用英文逗号分隔。地址可以使用飞猪标准地址名称，也可以使用商家系统中目的地地址（支持商家目的地id和商家目的地名称）。如果需要使用商家目的地地址，必须在目的地关联页（https://sell.alitrip.com/icenter/main.htm#/widgets/api-adaptor?_k=n61ii0）配置映射关系（一次性批量上传建立映射关系，之后度假所有类目、API接口共用该映射关系）。 商家目的地地址使用示例1：东京,大阪。示例2：123,124。说明：商家目的地id（123,124）会根据映射关系自动转换成飞猪标准地址
         :param pic_urls: 新发布商品时必填。商品图片路径。最多支持5张，第一张为主图，必填，其余四张可选填。图片链接支持外链图片（即商家系统中图片链接，必须外网可访问，且格式为jpg或jpeg，大小在500k以内），或者用户淘宝空间内的图片链接。对于外链图片，将自动下载并上传用户淘宝图片空间，上传失败的外链图片将自动忽略不计。。注：在SDK中数组多个元素间以英文逗号分隔
         :param reserve_limit: 可选，该商品提前预定时间限制。格式：1_18_00，含义：该商品必须提前1天预定，且在18:00之前完成预定
@@ -66433,6 +66475,7 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param pure_play: 是否纯玩团。0-纯玩团，1-含购物团。新发布商品时不传默认为“含购物团”
         :param refund_regulations_json: 特殊可选，退款规则（json数组格式）。自定义退改时需填写（与refund_regulations字段二选一）。示例中一共包含4条规则（3条平日规则，1条节假日规则），按照顺序每条规则含义如下：出行前5日及以上，买家违约收取总费用的50，卖家违约收取总费用的20；出行前4日至1日，买家违约收取总费用的80，卖家违约收取总费用的50；行程开始当天，买家违约收取总费用的100，卖家违约收取总费用的70；如果行程日期包含节假日，则节假日条款为买家违约收取总费用的100，卖家违约收取总费用的90
         :param package_operation: 0：使用上传的套餐信息（group_tour_package_info）覆盖商品上原有的套餐信息（此时group_tour_package_info中设置的packageOperation无效）；1：根据套餐信息（group_tour_package_info）中的packageOperation和outProductId增加，修改，删除指定套餐，====默认值为0===
+        :param group_tour_type: 必填，线路的“细分类型”属性：1-普通跟团游、2-半自由行、3-私家团；不填默认值设置为'1-普通跟团游'。
         """
         return self._top_request(
             "alitrip.grouptour.product.upload",
@@ -66463,7 +66506,8 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
                 "is_overseas_tour": is_overseas_tour,
                 "pure_play": pure_play,
                 "refund_regulations_json": refund_regulations_json,
-                "package_operation": package_operation
+                "package_operation": package_operation,
+                "group_tour_type": group_tour_type
             },
             result_processor=lambda x: x["first_result"]
         )
@@ -66655,7 +66699,8 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
             self,
             hid='',
             outer_id='',
-            vendor=''
+            vendor='',
+            need_sale_info='false'
     ):
         """
         酒店查询接口
@@ -66664,13 +66709,15 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
         :param hid: 废弃，请使用outer_id
         :param outer_id: 卖家系统中的酒店ID。
         :param vendor: 系统商，一般不用填写，使用须申请
+        :param need_sale_info: 是否需要在售状态(默认false不需要)
         """
         return self._top_request(
             "taobao.xhotel.get",
             {
                 "hid": hid,
                 "outer_id": outer_id,
-                "vendor": vendor
+                "vendor": vendor,
+                "need_sale_info": need_sale_info
             },
             result_processor=lambda x: x["xhotel"]
         )
@@ -67353,8 +67400,8 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
         :param payment_type: 支付类型，只支持：1：预付5：现付6: 信用住7:在线预约8:在线预约信用住。其中5,6,7,8三种类型需要申请权限
         :param rp_type: rp类型，1为小时房。目前只支持小时房。如果不是小时房rateplan,则不要填写。如果想要清空该字段可以传入none
         :param hourage: 小时房入住时间跨度。小时房特有字段。比如4小时的小时房，那么值为4
-        :param can_checkin_end: 最早可选入住时间，小时房特有字段。格式为HH:mm
-        :param can_checkin_start: 最晚可选入住时间，小时房特有字段。格式为HH:mm
+        :param can_checkin_end: 最晚可选入住时间，小时房特有字段。格式为HH:mm
+        :param can_checkin_start: 最早可选入住时间，小时房特有字段。格式为HH:mm
         :param is_student: 学生价，1：是；0：否
         :param hid: 酒店id
         :param rid: 房型id
@@ -68489,7 +68536,7 @@ class TbJiuDianZaiXianYuDing(DingTalkBaseAPI):
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23026
 
         :param tid: 订单号
-        :param opt_type: 操作的类型：1.确认无房（取消预订，710发送短信提醒买家申请退款）,2.确认预订
+        :param opt_type: 操作的类型：1.确认无房（取消预订，710发送短信提醒买家申请退款）2.确认预订 3.入住 4.离店 5.noshow 6.关单
         """
         return self._top_request(
             "taobao.xhotel.order.update",
@@ -73720,7 +73767,9 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
             apply_id='',
             out_shop_name='',
             invoice_kind='0',
-            red_notice_no=''
+            red_notice_no='',
+            request_role='',
+            distribution_tid=''
     ):
         """
         ERP开票请求接口
@@ -73759,6 +73808,8 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
         :param out_shop_name: 外部平台店铺名称，需要在阿里发票平台配置，只有当platform_code不为TB和TM时，这个字段才生效。注意：后台配置的店铺平台必须和入参platform_code一致
         :param invoice_kind: 发票种类，0=电子发票,1=纸质发票,2=专票。注意：未订购纸票服务的税号无法开具纸票
         :param red_notice_no: 红字通知单号，专票冲红时需要，商家跟税局申请
+        :param request_role: 开票角色，supplier=供应商，只有platform_code=TB|TM时生效，供应商开票时允许使用A店铺开具B店铺的订单号
+        :param distribution_tid: 分销订单号，request_role=supplier供应商开票时必填，分销订单号必须属于platform_tid，同时分销订单号的供应商必须和开票的授权账号一致
         """
         return self._top_request(
             "alibaba.einvoice.createreq",
@@ -73794,7 +73845,9 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
                 "apply_id": apply_id,
                 "out_shop_name": out_shop_name,
                 "invoice_kind": invoice_kind,
-                "red_notice_no": red_notice_no
+                "red_notice_no": red_notice_no,
+                "request_role": request_role,
+                "distribution_tid": distribution_tid
             },
             result_processor=lambda x: x["is_success"]
         )
@@ -75568,7 +75621,9 @@ class TbTiJianJiGou(DingTalkBaseAPI):
             cert_number='',
             company='',
             department='',
-            address=''
+            address='',
+            add_items=None,
+            add_packs=None
     ):
         """
         体检机构对接_体检套餐预定确认
@@ -75590,6 +75645,8 @@ class TbTiJianJiGou(DingTalkBaseAPI):
         :param company: 所属公司
         :param department: 所属部门
         :param address: 报告邮寄地址
+        :param add_items: 加项列表
+        :param add_packs: 加项包列表
         """
         return self._top_request(
             "alibaba.alihealth.examination.reserve.confirm",
@@ -75608,7 +75665,9 @@ class TbTiJianJiGou(DingTalkBaseAPI):
                 "cert_number": cert_number,
                 "company": company,
                 "department": department,
-                "address": address
+                "address": address,
+                "add_items": add_items,
+                "add_packs": add_packs
             }
         )
 
@@ -75921,7 +75980,9 @@ class TbTiJianJiGou(DingTalkBaseAPI):
             group_id,
             group_name,
             type,
-            package_list=None
+            package_list=None,
+            goods_desc='',
+            target_group=''
     ):
         """
         体检机构对接_商品发布／更新
@@ -75931,6 +75992,8 @@ class TbTiJianJiGou(DingTalkBaseAPI):
         :param group_name: 商品名称
         :param type: 操作类型: publish=发布，update=更新
         :param package_list: 套餐列表
+        :param goods_desc: 最多200个字，界面对应商品详情页描述
+        :param target_group: 最多256个字，界面对应列表文字
         """
         return self._top_request(
             "alibaba.alihealth.examination.goods.publish",
@@ -75938,7 +76001,9 @@ class TbTiJianJiGou(DingTalkBaseAPI):
                 "group_id": group_id,
                 "group_name": group_name,
                 "type": type,
-                "package_list": package_list
+                "package_list": package_list,
+                "goods_desc": goods_desc,
+                "target_group": target_group
             }
         )
 
@@ -79032,7 +79097,9 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
             seller_id='',
             device_code_list='',
             device_uuid_list='',
-            item_id=''
+            item_id='',
+            min_price='',
+            all_device=''
     ):
         """
         贩卖机价格修改白名单
@@ -79045,6 +79112,8 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
         :param device_code_list: 设备编码 device_code_list, device_uuid_list 二选一必填
         :param device_uuid_list: 外部设备编码   device_code_list, device_uuid_list 二选一必填
         :param item_id: 商品ID
+        :param min_price: 允许修改的最低价
+        :param all_device: 是否生效到所有设备
         """
         return self._top_request(
             "alibaba.retail.vending.price.whitelist.add",
@@ -79055,7 +79124,9 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
                 "seller_id": seller_id,
                 "device_code_list": device_code_list,
                 "device_uuid_list": device_uuid_list,
-                "item_id": item_id
+                "item_id": item_id,
+                "min_price": min_price,
+                "all_device": all_device
             }
         )
 
@@ -79065,7 +79136,8 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
             seller_id='',
             device_code_list='',
             device_uuid_list='',
-            item_id=''
+            item_id='',
+            all_device=''
     ):
         """
         价格管控白名单去除
@@ -79077,6 +79149,7 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
         :param device_code_list: 设备编码 device_code_list, device_uuid_list 二选一必填
         :param device_uuid_list: 外部设备编码 device_code_list, device_uuid_list 二选一必填
         :param item_id: 如果该参数传入，条码以商品条码为准
+        :param all_device: 是否生效到所有设备
         """
         return self._top_request(
             "alibaba.retail.vending.price.whitelist.remove",
@@ -79085,7 +79158,8 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
                 "seller_id": seller_id,
                 "device_code_list": device_code_list,
                 "device_uuid_list": device_uuid_list,
-                "item_id": item_id
+                "item_id": item_id,
+                "all_device": all_device
             }
         )
 
@@ -81625,7 +81699,7 @@ class TbZhiHuiMenDian(DingTalkBaseAPI):
         :param device_name: 设备名称
         :param store_id: 门店ID
         :param os_type: 操作系统类型：WINDOWS('WINDOWS', 'WINDOWS'),     ANDROID('ANDROID', 'ANDROID'),     IOS('IOS', 'IOS'),     LINUX('LINUX', 'LINUX'),     OTHER('OTHER', 'OTHER');
-        :param device_type: 设备类型：     CAMERA('CAMERA', '客流摄像头'),     SHELF('SHELF', '云货架'),     MAKEUP_MIRROR('MAKEUP_MIRROR', '试妆镜'),     FITTING_MIRROR('FITTING_MIRROR', '试衣镜'),     VENDOR('VENDOR', '售货机'),     WIFI('WIFI','WIFI探针'),     SAMPLE_MACHINE('SAMPLE_MACHINE','派样机'),     DOLL_MACHINE('DOLL_MACHINE', '娃娃机'),     INTERACTIVE_PHOTO('INTERACTIVE_PHOTO', '互动拍照'),     INTERACTIVE_GAME('INTERACTIVE_GAME', '互动游戏'),     USHER_SCREEN('USHER_SCREEN', '智慧迎宾屏'),     DRESSING('DRESSING', '闪电换装'),     MAGIC_MIRROR('MAGIC_MIRROR', '百搭魔镜'),     SHOES_FITTING_MIRROR('SHOES_FITTING_MIRROR', '试鞋镜'),     SKIN_DETECTION('SKIN_DETECTION', '肌肤测试仪'),     FOOT_DETECTION('FOOT_DETECTION', '测脚仪'),     RFID_SENSOR('RFID_SENSOR', 'RFID'),touch_machine('touch_machine','导购一体屏')
+        :param device_type: 设备类型：     CAMERA('CAMERA', '客流摄像头'),     SHELF('SHELF', '云货架'),     MAKEUP_MIRROR('MAKEUP_MIRROR', '试妆镜'),     FITTING_MIRROR('FITTING_MIRROR', '试衣镜'),     VENDOR('VENDOR', '售货机'),     SAMPLE_MACHINE('SAMPLE_MACHINE','派样机'),     DOLL_MACHINE('DOLL_MACHINE', '娃娃机'),     INTERACTIVE_PHOTO('INTERACTIVE_PHOTO', '互动拍照'),     INTERACTIVE_GAME('INTERACTIVE_GAME', '互动游戏'),     USHER_SCREEN('USHER_SCREEN', '智慧迎宾屏'),     DRESSING('DRESSING', '闪电换装'),     MAGIC_MIRROR('MAGIC_MIRROR', '百搭魔镜'),     SHOES_FITTING_MIRROR('SHOES_FITTING_MIRROR', '试鞋镜'),     SKIN_DETECTION('SKIN_DETECTION', '肌肤测试仪'),     FOOT_DETECTION('FOOT_DETECTION', '测脚仪'),     RFID_SENSOR('RFID_SENSOR', 'RFID'),touch_machine('touch_machine','导购一体屏')
         :param outer_code: 商家自定义设备编码
         :param mac: mac地址
         :param indoor_position: 设备在店内的位置，以文字描述
@@ -81688,7 +81762,7 @@ class TbZhiHuiMenDian(DingTalkBaseAPI):
         :param indoor_position: 设备在店内的位置，以文字描述
         :param device_name: 设备名称
         :param store_id: 门店ID
-        :param device_type: 设备类型： CAMERA('CAMERA', '客流摄像头'), SHELF('SHELF', '云货架'), MAKEUP_MIRROR('MAKEUP_MIRROR', '试妆镜'), FITTING_MIRROR('FITTING_MIRROR', '试衣镜'), VENDOR('VENDOR', '售货机'), WIFI('WIFI','WIFI探针'), SAMPLE_MACHINE('SAMPLE_MACHINE','派样机'), DOLL_MACHINE('DOLL_MACHINE', '娃娃机'), INTERACTIVE_PHOTO('INTERACTIVE_PHOTO', '互动拍照'), INTERACTIVE_GAME('INTERACTIVE_GAME', '互动游戏'), USHER_SCREEN('USHER_SCREEN', '智慧迎宾屏'), DRESSING('DRESSING', '闪电换装'), MAGIC_MIRROR('MAGIC_MIRROR', '百搭魔镜'), SHOES_FITTING_MIRROR('SHOES_FITTING_MIRROR', '试鞋镜'), SKIN_DETECTION('SKIN_DETECTION', '肌肤测试仪'), FOOT_DETECTION('FOOT_DETECTION', '测脚仪'), RFID_SENSOR('RFID_SENSOR', 'RFID')
+        :param device_type: 设备类型： CAMERA('CAMERA', '客流摄像头'), SHELF('SHELF', '云货架'), MAKEUP_MIRROR('MAKEUP_MIRROR', '试妆镜'), FITTING_MIRROR('FITTING_MIRROR', '试衣镜'), VENDOR('VENDOR', '售货机'),  SAMPLE_MACHINE('SAMPLE_MACHINE','派样机'), DOLL_MACHINE('DOLL_MACHINE', '娃娃机'), INTERACTIVE_PHOTO('INTERACTIVE_PHOTO', '互动拍照'), INTERACTIVE_GAME('INTERACTIVE_GAME', '互动游戏'), USHER_SCREEN('USHER_SCREEN', '智慧迎宾屏'), DRESSING('DRESSING', '闪电换装'), MAGIC_MIRROR('MAGIC_MIRROR', '百搭魔镜'), SHOES_FITTING_MIRROR('SHOES_FITTING_MIRROR', '试鞋镜'), SKIN_DETECTION('SKIN_DETECTION', '肌肤测试仪'), FOOT_DETECTION('FOOT_DETECTION', '测脚仪'), RFID_SENSOR('RFID_SENSOR', 'RFID')
         :param os_type: 操作系统类型：WINDOWS('WINDOWS', 'WINDOWS'),     ANDROID('ANDROID', 'ANDROID'),     IOS('IOS', 'IOS'),     LINUX('LINUX', 'LINUX'),     OTHER('OTHER', 'OTHER');
         :param outer_code: 商家自定义设备编码
         """
@@ -84352,8 +84426,8 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         根据企业主键查看企业详细信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41080
 
-        :param ref_ent_id: 企业唯一标识
-        :param ent_id: 企业ID
+        :param ref_ent_id: 接口调用企业的唯一标识（接口调用者）
+        :param ent_id: 准备要查询的企业ID（返回该企业ID的详细信息）
         """
         return self._top_request(
             "alibaba.alihealth.drug.kyt.getbyentid",
@@ -84372,8 +84446,8 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         根据企业唯一标识查看企业详细信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41081
 
-        :param ref_ent_id: 企业ID
-        :param dest_ref_ent_id: 企业唯一标识
+        :param ref_ent_id: 接口调用企业的唯一标识（接口调用者）
+        :param dest_ref_ent_id: 准备要查询的企业唯一标识（返回该唯一标识企业的详细信息）
         """
         return self._top_request(
             "alibaba.alihealth.drug.kyt.getbyrefentid",
@@ -84658,8 +84732,9 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
             drug_id=''
     ):
         """
-        零售企业上传出入库信息
-        零售企业上传出入库信息，包括采购入库（102），退货入库（103），退货出库（202），销毁出库（205），抽检出库（206），不包括对个人的零售出库，疫苗接种，领药出库。
+        企业上传出入库信息
+        零售企业上传出入库信息，包括采购入库（102），退货入库（103），供应入库（107）,销售出库（201）,退货出库（202），销毁出库（205），抽检出库（206）， 供应出库（209）,
+        不包括对个人的零售出库，疫苗接种，领药出库。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41215
 
         :param bill_code: 单据编码
@@ -84669,7 +84744,7 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         :param ref_user_id: 上传企业的单位编码
         :param from_user_id: 发货企业entId
         :param to_user_id: 收货企业entId
-        :param oper_ic_code: 单据提交者（key编号）
+        :param oper_ic_code: 单据提交者（appkey编号）
         :param oper_ic_name: 单据提交者姓名
         :param client_type: 客户端类型[必须填2]
         :param trace_codes: 追溯码[多个时用逗号分开]
@@ -84684,7 +84759,7 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         :param superviser_name: 监督人姓名【销毁出库时填写】
         :param superviser_code: 监督人证件号【销毁出库时填写】
         :param warehouse_id: 仓号
-        :param drug_id: 药品ID
+        :param drug_id: 药品ID[企业自已系统的药品ID]
         """
         return self._top_request(
             "alibaba.alihealth.drug.kyt.uploadinoutbill",
@@ -84747,8 +84822,8 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41218
 
         :param code: 追溯码
-        :param ref_ent_id: 权限控制
-        :param des_ref_ent_id: 企业ID
+        :param ref_ent_id: 接口调用企业的唯一标识（接口调用者）
+        :param des_ref_ent_id: 目标企业唯一标识（为哪个企业查询，一般与入参ref_ent_id一样）
         """
         return self._top_request(
             "alibaba.alihealth.drug.kyt.singlerelation",
@@ -85368,8 +85443,8 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
             drug_id=''
     ):
         """
-        采购入库扫码回传接口
-        连锁总部采购入库流程中，收货时扫码数据回传到平台
+        仓库批量扫码回传接口
+        连锁总部仓库在采购入库或者销售出库环节，批量采集追溯码之后回传到码上放心平台。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41653
 
         :param bill_code: 单据编号（小于20位字符串，唯一）
@@ -85553,6 +85628,7 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
             ent_name
     ):
         """
+        根据企业名称查询企业唯一标（ref_ent_id）和企业ID(ent_id)
         根据企业名称查询ID
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41800
 
@@ -85735,13 +85811,13 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         :param bill_code: 单据编号（唯一）
         :param bill_time: 单据生成时间（一般写当前时间）
         :param bill_type: 单据类型[321,零售出库][322,疫苗接种]
-        :param ref_user_id: 码上放心平台企业编码（门店或医疗机构）
+        :param ref_user_id: 码上放心平台企业唯一编码（门店或医疗机构）
         :param trace_codes: 20位追溯码（多个时用半角逗号分隔）
         :param physic_type: 药品类型[2,特药，3,普药]
         :param from_user_id: 发货企业(可为空)
         :param oper_ic_code: 单据提交者(appkey编号)
         :param oper_ic_name: 单据提交者姓名(可为空)
-        :param customer_id_type: 购买人证件类型
+        :param customer_id_type: 购买人证件类型【1身份证2护照3 军官证4 医保卡5接种卡6学生证9其它】
         :param customer_id: 购买人证件编号
         """
         return self._top_request(
@@ -85783,8 +85859,8 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
 
     def alibaba_alihealth_drug_kyt_query_code_relation_from_billcode(
             self,
-            bill_code='',
-            ref_ent_id=''
+            bill_code,
+            ref_ent_id
     ):
         """
         根据单据号码查询码单据详情和码信息
@@ -86432,7 +86508,6 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
             is_public,
             grade,
             category,
-            unify_code,
             city_code,
             hos_name,
             company_name,
@@ -86450,7 +86525,8 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
             description_url='',
             is_insurance='',
             short_name='',
-            pid=''
+            pid='',
+            unify_code=''
     ):
         """
         互联网医院批量导入接口
@@ -86465,7 +86541,6 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
         :param is_public: 是否公立医院（Y／N）
         :param grade: 医院等级
         :param category: 综合(general)、专科（special）
-        :param unify_code: 机构编码
         :param city_code: 所在城市code
         :param hos_name: 营业执照上的医院全称
         :param company_name: 公司名称
@@ -86484,6 +86559,7 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
         :param is_insurance: 是否支持医保（Y/N）
         :param short_name: 医院简称
         :param pid: 医院pid
+        :param unify_code: 机构编码
         """
         return self._top_request(
             "alibaba.alihealth.medicalbase.hospital.sync",
@@ -86496,7 +86572,6 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
                 "is_public": is_public,
                 "grade": grade,
                 "category": category,
-                "unify_code": unify_code,
                 "city_code": city_code,
                 "hos_name": hos_name,
                 "company_name": company_name,
@@ -86514,7 +86589,8 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
                 "description_url": description_url,
                 "is_insurance": is_insurance,
                 "short_name": short_name,
-                "pid": pid
+                "pid": pid,
+                "unify_code": unify_code
             }
         )
 
@@ -91104,7 +91180,12 @@ class TbLingShouZhongDuan(DingTalkBaseAPI):
             biz_code,
             device_uuid,
             device_model,
-            device_sn=''
+            device_sn='',
+            scene='',
+            site_name='',
+            floor='',
+            layer='',
+            location=''
     ):
         """
         贩卖机设备注册
@@ -91117,6 +91198,11 @@ class TbLingShouZhongDuan(DingTalkBaseAPI):
         :param device_uuid: 外部设备编号
         :param device_model: 设备类型
         :param device_sn: 对接过阿里atm传入
+        :param scene: COMMUNITY：小区,SCHOOL：学校,OFFICE：写字楼,SHOPPING_MALL：商场,AIRPORT：机场,SUBWAY：地铁,HOSPITAL：医院,PLAYGROUNDS：游乐场所,FACTORY：工厂,VIEWPOINT：旅游景点,OTHERS：其他
+        :param site_name: 场地名称，根据场地类型来，如：学校名称，商场名称。如果不传系统会根据address传入计算，为确保准确性请传入并确保address完整
+        :param floor: 楼栋信息。如果不传系统会根据address传入计算，为确保准确性请传入并确保address完整
+        :param layer: 层。如果不传系统会根据address传入计算，为确保准确性请传入并确保address完整
+        :param location: 室内地址描述。如果不传系统会根据address传入计算，为确保准确性请传入并确保address完整
         """
         return self._top_request(
             "alibaba.retail.device.vending.register",
@@ -91126,7 +91212,12 @@ class TbLingShouZhongDuan(DingTalkBaseAPI):
                 "biz_code": biz_code,
                 "device_uuid": device_uuid,
                 "device_model": device_model,
-                "device_sn": device_sn
+                "device_sn": device_sn,
+                "scene": scene,
+                "site_name": site_name,
+                "floor": floor,
+                "layer": layer,
+                "location": location
             }
         )
 
@@ -93137,7 +93228,10 @@ class TbQuDaoZhongXin(DingTalkBaseAPI):
             main_purchase_order_no='',
             distributor_nick='',
             channel='',
-            trade_type=''
+            trade_type='',
+            order_status='',
+            create_time_start='',
+            create_time_end=''
     ):
         """
         分页查询采购单
@@ -93153,6 +93247,9 @@ class TbQuDaoZhongXin(DingTalkBaseAPI):
         :param distributor_nick: 分销商Nick
         :param channel: 渠道编码
         :param trade_type: 1-代销；2-经销
+        :param order_status: 1. 待付款 2.已付款待发货 3.已发货待收货 4.交易完成 5.交易关闭
+        :param create_time_start: 创建时间从
+        :param create_time_end: 创建时间到
         """
         return self._top_request(
             "tmall.channel.trade.order.gets",
@@ -93166,7 +93263,10 @@ class TbQuDaoZhongXin(DingTalkBaseAPI):
                 "main_purchase_order_no": main_purchase_order_no,
                 "distributor_nick": distributor_nick,
                 "channel": channel,
-                "trade_type": trade_type
+                "trade_type": trade_type,
+                "order_status": order_status,
+                "create_time_start": create_time_start,
+                "create_time_end": create_time_end
             }
         )
 
@@ -93998,8 +94098,8 @@ class TbAEGongYingLian(DingTalkBaseAPI):
     def aliexpress_supplychain_inventory_flashsiteinventory_im(
             self,
             operate_time,
-            item_inventory_report_dtos,
-            time_zone
+            time_zone,
+            item_inventory_report_dtos
     ):
         """
         英迈AE库存同步
@@ -94007,15 +94107,15 @@ class TbAEGongYingLian(DingTalkBaseAPI):
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=34876
 
         :param operate_time: flash time yyyy-MM-ddHH:mm:ss
-        :param item_inventory_report_dtos: 系统自动生成
         :param time_zone: time zone
+        :param item_inventory_report_dtos: item stock data array
         """
         return self._top_request(
             "aliexpress.supplychain.inventory.flashsiteinventory.im",
             {
                 "operate_time": operate_time,
-                "item_inventory_report_dtos": item_inventory_report_dtos,
-                "time_zone": time_zone
+                "time_zone": time_zone,
+                "item_inventory_report_dtos": item_inventory_report_dtos
             }
         )
 
@@ -95038,7 +95138,9 @@ class TbOttZhiFu(DingTalkBaseAPI):
             order_no='',
             price='',
             callback_url='',
-            extra=''
+            extra='',
+            order_type='0',
+            real_price=''
     ):
         """
         创建订单
@@ -95052,6 +95154,8 @@ class TbOttZhiFu(DingTalkBaseAPI):
         :param price: 价格， 单位：分
         :param callback_url: 回调接口
         :param extra: 订单无关的其他参数,如埋点统计的utdid, mac地址等
+        :param order_type: 订单类型，1为连续包月类型
+        :param real_price: 连续包月实际参数
         """
         return self._top_request(
             "youku.ott.pay.order.createorder",
@@ -95062,7 +95166,9 @@ class TbOttZhiFu(DingTalkBaseAPI):
                 "order_no": order_no,
                 "price": price,
                 "callback_url": callback_url,
-                "extra": extra
+                "extra": extra,
+                "order_type": order_type,
+                "real_price": real_price
             },
             result_processor=lambda x: x["data"]
         )
@@ -99229,8 +99335,7 @@ class TbAEOverseaSolution(DingTalkBaseAPI):
             "aliexpress.solution.sku.attribute.query",
             {
                 "query_sku_attribute_info_request": query_sku_attribute_info_request
-            },
-            result_processor=lambda x: x["supporting_sku_attribute_list"]
+            }
         )
 
     def aliexpress_solution_product_edit(
@@ -99559,22 +99664,25 @@ class TbRenGongZhiNengShiYanShiKaiFangPingTai(DingTalkBaseAPI):
 
     def alibaba_ailab_user_token_get(
             self,
-            merchant_user_id,
-            schema_key
+            merchant_user_id='',
+            schema_key='',
+            call_back_url=''
     ):
         """
         三方账号获取 token
         inside 设备的三方 app，通过 extId、schema 生成 token
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40929
 
-        :param merchant_user_id: 商户的用户的唯一ID
+        :param merchant_user_id: 三方用户的唯一ID
         :param schema_key: 开放平台申请的schema
+        :param call_back_url: 用户点击同意授权，则会有授权结果：success/fail，此结果通过 callBackUrl 回调给三方 如果授权账号重复授权给已授权的淘宝账号，幂等返回成功 url 的调用是 表单 post 的方式， request body success example: merchantUserId=xxx&result=success request body fail example: merchantUserId=xxx&result=fail
         """
         return self._top_request(
             "alibaba.ailab.user.token.get",
             {
                 "merchant_user_id": merchant_user_id,
-                "schema_key": schema_key
+                "schema_key": schema_key,
+                "call_back_url": call_back_url
             }
         )
 
