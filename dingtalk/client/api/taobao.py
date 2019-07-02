@@ -174,7 +174,7 @@ class TbDingDing(DingTalkBaseAPI):
         :param contact: 外部联系人信息
         """
         return self._top_request(
-            "dingtalk.corp.ext.update",
+            "dingtalk.corp.extcontact.update",
             {
                 "contact": contact
             }
