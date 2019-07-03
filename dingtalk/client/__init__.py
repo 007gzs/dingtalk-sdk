@@ -25,9 +25,11 @@ class DingTalkClient(BaseClient, TaobaoMixin):
     cspace = api.Cspace()
     department = api.Department()
     ext = api.Ext()
+    extcontact = api.ExtContact()
     employeerm = api.Employeerm()
     message = api.Message()
     microapp = api.MicroApp()
+    report = api.Report()
     role = api.Role()
     user = api.User()
 

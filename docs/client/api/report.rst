@@ -1,9 +1,9 @@
-外部联系人接口(废弃)
+日志接口
 ===================
 
 .. module:: dingtalk.client.api
 
-.. autoclass:: Ext
+.. autoclass:: Report
    :members:
    :inherited-members:
 
