@@ -6018,7 +6018,7 @@ class TbDingDing(DingTalkBaseAPI):
     ):
         """
         修改群成员
-        支持通过IMPaaS创建的群的成员添加、删除操作。
+        修改群成员列表，支持成员增删。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38860
 
         :param modify_type: 该参数表示本次请求的操作类型，“1”表示添加成员，“2”表示删除成员。
@@ -6047,8 +6047,7 @@ class TbDingDing(DingTalkBaseAPI):
     ):
         """
         impaas群信息修改
-        修改通过IMPaaS创建的群的群信息
-        当前支持修改群主，修改群名称两种类型的操作
+        修改群信息：群名称、群主等；
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38861
 
         :param group_owner: 修改后的群主，若为空或与当前群主相同，则不会对群主进行变更操作。
@@ -6224,7 +6223,9 @@ class TbDingDing(DingTalkBaseAPI):
             create_time,
             title,
             url,
-            form_item_list
+            form_item_list,
+            originator_user_id='',
+            source_name=''
     ):
         """
         新增待办事项
@@ -6235,6 +6236,8 @@ class TbDingDing(DingTalkBaseAPI):
         :param title: 标题
         :param url: 待办跳转url
         :param form_item_list: 表单列表
+        :param originator_user_id: manager7078
+        :param source_name: 待办来源名称
         """
         return self._top_request(
             "dingtalk.oapi.workrecord.add",
@@ -6243,7 +6246,9 @@ class TbDingDing(DingTalkBaseAPI):
                 "create_time": create_time,
                 "title": title,
                 "url": url,
-                "formItemList": form_item_list
+                "formItemList": form_item_list,
+                "originator_user_id": originator_user_id,
+                "source_name": source_name
             }
         )
 
@@ -6906,7 +6911,7 @@ class TbDingDing(DingTalkBaseAPI):
     ):
         """
         查询班级下家长列表
-        查询班级下家长列表信息，通过班级id查询家长的nick（如：小A的爸爸），非真实姓名，关系类别（妈妈、爸爸、其他亲属），学生userid
+        查询班级下家长列表信息，通过orgid，班级id查询家长的nick（如：小A的爸爸），非真实姓名，关系类别（妈妈、爸爸、其他亲属），学生staffid
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41051
 
         :param class_id: 班级ID
@@ -7727,6 +7732,1585 @@ class TbDingDing(DingTalkBaseAPI):
             }
         )
 
+    def dingtalk_oapi_live_grouplive_statistics(
+            self,
+            live_uuid,
+            cid='',
+            open_id=''
+    ):
+        """
+        查询内部群某一场直播的数据统计
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42136
+
+        :param live_uuid: 直播uuid
+        :param cid: 群id
+        :param open_id: 用户id
+        """
+        return self._top_request(
+            "dingtalk.oapi.live.grouplive.statistics",
+            {
+                "live_uuid": live_uuid,
+                "cid": cid,
+                "open_id": open_id
+            }
+        )
+
+    def dingtalk_oapi_live_grouplive_list(
+            self,
+            cid,
+            open_id='',
+            to_time='',
+            from_time=''
+    ):
+        """
+        查询内部群直播的列表
+        查询内部群的直播列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42137
+
+        :param cid: 群id
+        :param open_id: 用户id
+        :param to_time: 开始时间ms
+        :param from_time: 截止时间ms
+        """
+        return self._top_request(
+            "dingtalk.oapi.live.grouplive.list",
+            {
+                "cid": cid,
+                "open_id": open_id,
+                "to_time": to_time,
+                "from_time": from_time
+            }
+        )
+
+    def dingtalk_oapi_process_form_get(
+            self,
+            process_code
+    ):
+        """
+        获取表单schema
+        ISV通过这个接口获取流程的表单schema信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42472
+
+        :param process_code: 流程模板code
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.form.get",
+            {
+                "process_code": process_code
+            }
+        )
+
+    def dingtalk_oapi_process_template_save(
+            self,
+            process_code,
+            vm,
+            font
+    ):
+        """
+        自定义打印模板保存
+        自定义打印模板文件保存
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42473
+
+        :param process_code: 流程编码
+        :param vm: vm文件
+        :param font: 字体
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.template.save",
+            {
+                "process_code": process_code,
+                "vm": vm,
+                "font": font
+            }
+        )
+
+    def dingtalk_oapi_calendar_list(
+            self,
+            user_id,
+            calendar_folder_id='',
+            time_min=None,
+            i_cal_uid='',
+            single_events='',
+            page_token='',
+            max_results='',
+            time_max=None
+    ):
+        """
+        日程查询
+        该api是提供给企业和isv用的，查询企业内员工的日程数据。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42527
+
+        :param user_id: 员工ID
+        :param calendar_folder_id: 钉钉日历文件夹的对外id，默认是自己的默认文件夹
+        :param time_min: 查询时间下限
+        :param i_cal_uid: 日程跨域唯一id，用于唯一标识一组关联日程事件
+        :param single_events: 是否需要展开循环日程
+        :param page_token: 查询对应页，值有上一次请求返回的结果里对应nextPageToken
+        :param max_results: 结果返回的最多数量，默认250，最多返回2500
+        :param time_max: 查询时间上限
+        """
+        return self._top_request(
+            "dingtalk.oapi.calendar.list",
+            {
+                "user_id": user_id,
+                "calendar_folder_id": calendar_folder_id,
+                "time_min": time_min,
+                "i_cal_uid": i_cal_uid,
+                "single_events": single_events,
+                "page_token": page_token,
+                "max_results": max_results,
+                "time_max": time_max
+            }
+        )
+
+    def dingtalk_oapi_live_playback(
+            self,
+            start_time='',
+            page_size='',
+            offset='',
+            end_time=''
+    ):
+        """
+        直播回放查询能力开放
+        提供ISV开放回访获取能力：ISV通过该接口调用，根据直播的开始和结束时间，分页获取到所有的直播回放信息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42652
+
+        :param start_time: 直播开始时间
+        :param page_size: 直播结束时间
+        :param offset: 页面大小
+        :param end_time: 偏移量
+        """
+        return self._top_request(
+            "dingtalk.oapi.live.playback",
+            {
+                "request": {
+                    "start_time": start_time,
+                    "page_size": page_size,
+                    "offset": offset,
+                    "end_time": end_time
+                }
+            }
+        )
+
+    def dingtalk_oapi_live_create(
+            self,
+            userid,
+            title,
+            user_nick='',
+            intro='',
+            shared='',
+            cover_url='',
+            land_scape='',
+            appt_begin_time='',
+            appt_end_time='',
+            pre_video_play_url=''
+    ):
+        """
+        直播创建能力开放
+        提供ISV开放直播创建能力：ISV通过该接口调用，提供直播的基本信息，在钉钉创建直播，并获取到直播的推流地址。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42653
+
+        :param userid: 主播ID,必填
+        :param title: 标题,必填
+        :param user_nick: 别名,选填
+        :param intro: 简介,选填
+        :param shared: 直播可观看类型类型,必填: false 受限制的直播, true 公开的直播(默认)
+        :param cover_url: 封面图,选填: 如果不填写, 则采用默认
+        :param land_scape: 横竖屏,选填: false 竖屏, true 横屏(默认)
+        :param appt_begin_time: 直播计划开始时间,选填: 如果不填写, 则取当前时间
+        :param appt_end_time: 直播计划结束时间,选填
+        :param pre_video_play_url: 预告视频Url,选填
+        """
+        return self._top_request(
+            "dingtalk.oapi.live.create",
+            {
+                "request": {
+                    "userid": userid,
+                    "title": title,
+                    "user_nick": user_nick,
+                    "intro": intro,
+                    "shared": shared,
+                    "cover_url": cover_url,
+                    "land_scape": land_scape,
+                    "appt_begin_time": appt_begin_time,
+                    "appt_end_time": appt_end_time,
+                    "pre_video_play_url": pre_video_play_url
+                }
+            }
+        )
+
+    def dingtalk_oapi_live_query(
+            self,
+            uuid
+    ):
+        """
+        直播查询能力开放
+        提供ISV开放直播查询能力：ISV通过该接口调用，根据直播uuid获取直播的详细信息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42654
+
+        :param uuid: 直播UUID,必填
+        """
+        return self._top_request(
+            "dingtalk.oapi.live.query",
+            {
+                "request": {
+                    "uuid": uuid
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_baseinfo_list(
+            self,
+            process_codes=''
+    ):
+        """
+        查询模板基础信息列表
+        查询企业下的模板基础信息，包括名称，图片，管理员等
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42744
+
+        :param process_codes: 模板code列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.baseinfo.list",
+            {
+                "process_codes": process_codes
+            }
+        )
+
+    def dingtalk_oapi_process_template_upgradeinfo_query(
+            self,
+            process_codes
+    ):
+        """
+        获取模板升级信息
+        获取模板升级信息,模板是否可升级
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42785
+
+        :param process_codes: 流程编码List<String>类型
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.template.upgradeinfo.query",
+            {
+                "process_codes": process_codes
+            }
+        )
+
+    def dingtalk_oapi_process_template_upgrade(
+            self,
+            process_code,
+            form_component_id,
+            userid,
+            detail_component_id=''
+    ):
+        """
+        审批模板升级
+        升级企业审批模板中的金额类组件到新的支付套件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42786
+
+        :param process_code: 流程code
+        :param form_component_id: 数组或金额类组件id
+        :param userid: 其实是staffId
+        :param detail_component_id: 明细组件id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.template.upgrade",
+            {
+                "process_code": process_code,
+                "form_component_id": form_component_id,
+                "userid": userid,
+                "detail_component_id": detail_component_id
+            }
+        )
+
+    def dingtalk_oapi_dingpay_order_terminate(
+            self,
+            order_nos,
+            operator,
+            reason,
+            extension=''
+    ):
+        """
+        中止订单支付
+        中止dingpay订单的支付
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42787
+
+        :param order_nos: dingpay单号列表
+        :param operator: 操作者员工号
+        :param reason: 中止原因
+        :param extension: 扩展信息
+        """
+        return self._top_request(
+            "dingtalk.oapi.dingpay.order.terminate",
+            {
+                "order_nos": order_nos,
+                "operator": operator,
+                "reason": reason,
+                "extension": extension
+            }
+        )
+
+    def dingtalk_oapi_customize_conversation_update(
+            self,
+            userid,
+            chat_id,
+            extension_key,
+            extension_value
+    ):
+        """
+        定制化服务会话标配置
+        对会话进行打标，打标之后，根据另外的配置，可以让客户端使用weex展示会话，而不是native展示
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42906
+
+        :param userid: 员工账号
+        :param chat_id: 会话id
+        :param extension_key: extensionKey
+        :param extension_value: extensionValue
+        """
+        return self._top_request(
+            "dingtalk.oapi.customize.conversation.update",
+            {
+                "userid": userid,
+                "chat_id": chat_id,
+                "extension_key": extension_key,
+                "extension_value": extension_value
+            }
+        )
+
+    def dingtalk_oapi_smartwork_hrm_employee_unionexport(
+            self,
+            param
+    ):
+        """
+        智能人事联合导出
+        智能人事联合导出，ISV提供业务excel并制定需要填补的数据，由智能人事填补后，直接对用户提供下载服务。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42924
+
+        :param param: 导出请求对象
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartwork.hrm.employee.unionexport",
+            {
+                "param": param
+            }
+        )
+
+    def dingtalk_oapi_callback_failrecord_confirm(
+            self,
+            id_list
+    ):
+        """
+        确认开放平台回调失败记录
+        查询开放平台回调失败记录，提供此接口用于确认消费
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42935
+
+        :param id_list: 失败记录id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.callback.failrecord.confirm",
+            {
+                "id_list": id_list
+            }
+        )
+
+    def dingtalk_oapi_callback_failrecord_list(
+            self,
+            req
+    ):
+        """
+        查询回调失败记录
+        提供给isv用于查询http回调失败记录，做补偿
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42936
+
+        :param req: 请求参数
+        """
+        return self._top_request(
+            "dingtalk.oapi.callback.failrecord.list",
+            {
+                "req": req
+            }
+        )
+
+    def dingtalk_oapi_report_statistics(
+            self,
+            report_id
+    ):
+        """
+        获取日志统计数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43020
+
+        :param report_id: 日志id
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.statistics",
+            {
+                "report_id": report_id
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_record_list(
+            self,
+            op_userid,
+            leave_code,
+            userids,
+            offset,
+            size
+    ):
+        """
+        查询假期消费记录
+        根据企业或员工分页获取假期消费记录信息 每次返回50条数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43049
+
+        :param op_userid: 操作者ID
+        :param leave_code: 假期类型唯一标识
+        :param userids: 待查询员工ID列表
+        :param offset: 分页偏移(从0开始非负整数)
+        :param size: 分页偏移(正整数 最大50)
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.record.list",
+            {
+                "op_userid": op_userid,
+                "leave_code": leave_code,
+                "userids": userids,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_quota_list(
+            self,
+            leave_code,
+            op_userid,
+            userids,
+            offset,
+            size
+    ):
+        """
+        查询假期余额
+        根据企业或员工分页获取假期余额信息 每次返回50条数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43050
+
+        :param leave_code: 假期类型唯一标识
+        :param op_userid: 操作者ID
+        :param userids: 待查询的员工ID列表
+        :param offset: 分页偏移(从0开始非负整数)
+        :param size: 分页偏移(正整数 最大50)
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.quota.list",
+            {
+                "leave_code": leave_code,
+                "op_userid": op_userid,
+                "userids": userids,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_appstore_internal_order_get(
+            self,
+            biz_order_id
+    ):
+        """
+        获取内购订单信息
+        应用内购流程中，通过该接口查询内购订单信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43055
+
+        :param biz_order_id: 内购商品订单号
+        """
+        return self._top_request(
+            "dingtalk.oapi.appstore.internal.order.get",
+            {
+                "biz_order_id": biz_order_id
+            }
+        )
+
+    def dingtalk_oapi_appstore_internal_skupage_get(
+            self,
+            goods_code,
+            item_code='',
+            callback_page='',
+            extend_param=''
+    ):
+        """
+        获取内购商品SKU详情页面地址
+        应用内购流程中，通过该接口获取内购商品SKU页面地址
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43056
+
+        :param goods_code: 内购商品码
+        :param item_code: 内购商品规格码，如果设置了规格码，页面会默认选中该规格码
+        :param callback_page: 回调页面(进行URLEncode处理)，微应用为页面URL，E应用为页面路径地址
+        :param extend_param: 与callbackPage配合使用。当用户从SKU页面下单并支付成功后，会跳转回ISV页面，此时将此参数原样回传。主要用于用户页面引导等操作，不能作为权益开通凭证。
+        """
+        return self._top_request(
+            "dingtalk.oapi.appstore.internal.skupage.get",
+            {
+                "goods_code": goods_code,
+                "item_code": item_code,
+                "callback_page": callback_page,
+                "extend_param": extend_param
+            }
+        )
+
+    def dingtalk_oapi_appstore_internal_unfinishedorder_list(
+            self,
+            page,
+            page_size,
+            item_code=''
+    ):
+        """
+        获取ISV未完成处理订单
+        应用内购流程中，通过该接口获取ISV未处理完成的内购订单列表。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43057
+
+        :param page: 分页查询页码，其实页码为1
+        :param page_size: 分页查询每页大小，最大限制100
+        :param item_code: 商品规格码
+        """
+        return self._top_request(
+            "dingtalk.oapi.appstore.internal.unfinishedorder.list",
+            {
+                "page": page,
+                "page_size": page_size,
+                "item_code": item_code
+            }
+        )
+
+    def dingtalk_oapi_appstore_internal_order_finish(
+            self,
+            biz_order_id
+    ):
+        """
+        内购商品订单处理完成
+        应用内购流程中，通过该接口回传ISV完成订单处理的状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43058
+
+        :param biz_order_id: 内购订单号
+        """
+        return self._top_request(
+            "dingtalk.oapi.appstore.internal.order.finish",
+            {
+                "biz_order_id": biz_order_id
+            }
+        )
+
+    def dingtalk_oapi_appstore_internal_order_consume(
+            self,
+            biz_order_id,
+            request_id,
+            quantity,
+            userid
+    ):
+        """
+        应用内购商品核销
+        应用内购流程中，通过该接口对内购订单进行核销
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43059
+
+        :param biz_order_id: 内购商品订单号
+        :param request_id: 核销请求Id，由ISV生成，用于请求幂等
+        :param quantity: 订购商品核销数量
+        :param userid: 员工在当前企业内的唯一标识，也称staffId
+        """
+        return self._top_request(
+            "dingtalk.oapi.appstore.internal.order.consume",
+            {
+                "biz_order_id": biz_order_id,
+                "request_id": request_id,
+                "quantity": quantity,
+                "userid": userid
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_quota_update(
+            self,
+            leave_quotas,
+            op_userid
+    ):
+        """
+        批量更新假期余额
+        企业批量更新假期余额信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43085
+
+        :param leave_quotas: 待更新的假期余额记录
+        :param op_userid: 操作者ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.quota.update",
+            {
+                "leave_quotas": leave_quotas,
+                "op_userid": op_userid
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_quota_init(
+            self,
+            op_userid,
+            leave_quotas
+    ):
+        """
+        初始化假期余额
+        批量初始化假期余额 清空指定假期类型 指定员工所有假期余额 消费记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43086
+
+        :param op_userid: 操作者ID
+        :param leave_quotas: 待初始化的假期余额记录
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.quota.init",
+            {
+                "op_userid": op_userid,
+                "leave_quotas": leave_quotas
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_type_update(
+            self,
+            op_userid,
+            leave_code,
+            leave_name='',
+            leave_view_unit='',
+            biz_type='',
+            natural_day_leave='',
+            hours_in_per_day='',
+            extras=''
+    ):
+        """
+        假期类型更新
+        该接口用于更新指定企业下的指定假期类型的相关规则
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43092
+
+        :param op_userid: 操作者ID
+        :param leave_code: 假期类型唯一标识
+        :param leave_name: 假期名称
+        :param leave_view_unit: 请假单位，可以按照天半天或者小时请假。(day、halfday、hour其中一种)
+        :param biz_type: 假期类型，普通假期或者加班转调休假期。(general_leave、lieu_leave其中一种)
+        :param natural_day_leave: 是否按照自然日统计请假时长，当为false的时候，用户发起请假时候会根据用户在请假时间段内的排班情况来计算请假时长。
+        :param hours_in_per_day: 每天折算的工作时长(百分之一 例如1天=10小时=1000)
+        :param extras: 调休假有效期规则(validity_type:有效类型 absolute_time(绝对时间)、relative_time(相对时间)其中一种 validity_value:延长日期(当validity_type为absolute_time该值该值不为空且满足yy-mm格式 validity_type为relative_time该值为大于1的整数))
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.type.update",
+            {
+                "op_userid": op_userid,
+                "leave_code": leave_code,
+                "leave_name": leave_name,
+                "leave_view_unit": leave_view_unit,
+                "biz_type": biz_type,
+                "natural_day_leave": natural_day_leave,
+                "hours_in_per_day": hours_in_per_day,
+                "extras": extras
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_type_list(
+            self,
+            op_userid
+    ):
+        """
+        假期类型查询
+        查询假期类型
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43093
+
+        :param op_userid: 操作员ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.type.list",
+            {
+                "op_userid": op_userid
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_type_delete(
+            self,
+            leave_code,
+            op_userid
+    ):
+        """
+        假期类型删除接口
+        删除指定的假期类型
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43094
+
+        :param leave_code: 假期类型唯一标识
+        :param op_userid: 操作员ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.type.delete",
+            {
+                "leave_code": leave_code,
+                "op_userid": op_userid
+            }
+        )
+
+    def dingtalk_oapi_attendance_vacation_type_create(
+            self,
+            leave_name,
+            leave_view_unit,
+            biz_type,
+            natural_day_leave,
+            op_userid,
+            hours_in_per_day,
+            extras=''
+    ):
+        """
+        假期类型添加
+        添加假期类型
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43095
+
+        :param leave_name: 假期名称
+        :param leave_view_unit: 请假单位，可以按照天半天或者小时请假。(day、halfday、hour其中一种)
+        :param biz_type: 假期类型，普通假期或者加班转调休假期。(general_leave、lieu_leave其中一种)
+        :param natural_day_leave: 是否按照自然日统计请假时长，当为false的时候，用户发起请假时候会根据用户在请假时间段内的排班情况来计算请假时长
+        :param op_userid: 操作者ID
+        :param hours_in_per_day: 每天折算的工作时长(百分之一 例如1天=10小时=1000)
+        :param extras: 调休假有效期规则(validity_type:有效类型 absolute_time(绝对时间)、relative_time(相对时间)其中一种 validity_value:延长日期(当validity_type为absolute_time该值该值不为空且满足yy-mm格式 validity_type为relative_time该值为大于1的整数))
+        """
+        return self._top_request(
+            "dingtalk.oapi.attendance.vacation.type.create",
+            {
+                "leave_name": leave_name,
+                "leave_view_unit": leave_view_unit,
+                "biz_type": biz_type,
+                "natural_day_leave": natural_day_leave,
+                "op_userid": op_userid,
+                "hours_in_per_day": hours_in_per_day,
+                "extras": extras
+            }
+        )
+
+    def dingtalk_oapi_calendar_delete(
+            self,
+            userid='',
+            calendar_id=''
+    ):
+        """
+        日程删除
+        删除一个指定的日程
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43141
+
+        :param userid: 员工id
+        :param calendar_id: 日程id
+        """
+        return self._top_request(
+            "dingtalk.oapi.calendar.delete",
+            {
+                "userid": userid,
+                "calendar_id": calendar_id
+            }
+        )
+
+    def dingtalk_oapi_message_send_to_single_conversation(
+            self,
+            sender_userid,
+            receiver_userid,
+            msg
+    ):
+        """
+        企业内个人之间发送单聊消息接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43230
+
+        :param sender_userid: 发送者userId
+        :param receiver_userid: 接收者userId
+        :param msg: 推送消息内容
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.send_to_single_conversation",
+            {
+                "sender_userid": sender_userid,
+                "receiver_userid": receiver_userid,
+                "msg": msg
+            }
+        )
+
+    def dingtalk_oapi_workbench_shortcut_delete(
+            self,
+            app_id,
+            biz_no
+    ):
+        """
+        删除企业已添加的三方快捷方式
+        提供给ISV使用的用于删除已经添加到企业的应用快捷方式
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43265
+
+        :param app_id: 应用ID
+        :param biz_no: 系统交互唯一流水号(ISV维度下不可重复)
+        """
+        return self._top_request(
+            "dingtalk.oapi.workbench.shortcut.delete",
+            {
+                "app_id": app_id,
+                "biz_no": biz_no
+            }
+        )
+
+    def dingtalk_oapi_workbench_shortcut_getguideuri(
+            self,
+            app_id
+    ):
+        """
+        获取快捷方式添加到工作台引导页地址
+        ISV将应用快捷方式添加到企业后会引导用户将该快捷方式添加到工作台,需要获取到工作台快捷方式引导页地址
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43266
+
+        :param app_id: ISV微应用ID
+        """
+        return self._top_request(
+            "dingtalk.oapi.workbench.shortcut.getguideuri",
+            {
+                "app_id": app_id
+            }
+        )
+
+    def dingtalk_oapi_workbench_shortcut_list(
+            self,
+            app_id,
+            page_size='',
+            page_index=''
+    ):
+        """
+        获取企业对指定应用已安装的快捷方式
+        根据企业 + 应用信息等(分页)获取企业下对应该应用已经开通的快捷方式列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43267
+
+        :param app_id: ISV微应用id
+        :param page_size: 每页记录数
+        :param page_index: 当前页码
+        """
+        return self._top_request(
+            "dingtalk.oapi.workbench.shortcut.list",
+            {
+                "app_id": app_id,
+                "page_size": page_size,
+                "page_index": page_index
+            }
+        )
+
+    def dingtalk_oapi_workbench_shortcut_add(
+            self,
+            shortcut_uri,
+            icon,
+            app_id,
+            name,
+            biz_no,
+            pc_shortcut_uri=''
+    ):
+        """
+        给开通应用企业添加快捷方式
+        ISV给开通其应用的企业添加快捷方式
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43268
+
+        :param shortcut_uri: 移动端快捷方式跳转地址(默认地址)
+        :param icon: 图标Url
+        :param app_id: 微应用ID
+        :param name: 快捷方式名称
+        :param biz_no: 系统交互唯一业务号,ISV企业下唯一
+        :param pc_shortcut_uri: PC端快捷方式跳转地址
+        """
+        return self._top_request(
+            "dingtalk.oapi.workbench.shortcut.add",
+            {
+                "shortcut_uri": shortcut_uri,
+                "icon": icon,
+                "app_id": app_id,
+                "name": name,
+                "biz_no": biz_no,
+                "pc_shortcut_uri": pc_shortcut_uri
+            }
+        )
+
+    def dingtalk_oapi_workbench_shortcut_update(
+            self,
+            app_id,
+            biz_no,
+            shortcut_uri='',
+            icon='',
+            name='',
+            pc_shortcut_uri=''
+    ):
+        """
+        更新企业已添加的快捷方式
+        ISV对已经添加其应用快捷方式的企业做快捷方式做更新
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43269
+
+        :param app_id: 应用ID
+        :param biz_no: 系统交互唯一业务单号
+        :param shortcut_uri: 快捷方式跳转地址(移动端地址-默认地址)
+        :param icon: 图标Url
+        :param name: 快捷方式名称
+        :param pc_shortcut_uri: PC端快捷方式跳转地址
+        """
+        return self._top_request(
+            "dingtalk.oapi.workbench.shortcut.update",
+            {
+                "app_id": app_id,
+                "biz_no": biz_no,
+                "shortcut_uri": shortcut_uri,
+                "icon": icon,
+                "name": name,
+                "pc_shortcut_uri": pc_shortcut_uri
+            }
+        )
+
+    def dingtalk_oapi_report_comment_list(
+            self,
+            report_id,
+            offset='0',
+            size='20'
+    ):
+        """
+        获取日志评论详情
+        分页获取评论详情，包括评论人userid、评论内容、评论时间
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43545
+
+        :param report_id: 日志id
+        :param offset: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值，默认值为0
+        :param size: 分页参数，每页大小，最多传20，默认值为20
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.comment.list",
+            {
+                "report_id": report_id,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_report_receiver_list(
+            self,
+            report_id,
+            offset='0',
+            size='100'
+    ):
+        """
+        获取日志分享人员列表
+        获取日志的分享人员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43546
+
+        :param report_id: 日志id
+        :param offset: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值，默认值为0
+        :param size: 分页参数，每页大小，最多传100，默认值为100
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.receiver.list",
+            {
+                "report_id": report_id,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_report_statistics_listbytype(
+            self,
+            report_id,
+            type,
+            offset='0',
+            size='100'
+    ):
+        """
+        根据类型获取日志相关人员列表
+        分页获取日志相关人员列表，包括已读人员列表、评论人员列表、点赞人员列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43547
+
+        :param report_id: 日志id
+        :param type: 查询类型 0:已读人员列表 1:评论人员列表 2:点赞人员列表
+        :param offset: 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值，默认值为0
+        :param size: 分页参数，每页大小，最多传100，默认值为100
+        """
+        return self._top_request(
+            "dingtalk.oapi.report.statistics.listbytype",
+            {
+                "report_id": report_id,
+                "type": type,
+                "offset": offset,
+                "size": size
+            }
+        )
+
+    def dingtalk_oapi_message_corpconversation_recall(
+            self,
+            agent_id,
+            msg_task_id
+    ):
+        """
+        撤回工作通知消息
+        根据发送工作通知消息的taskId进行消息撤回操作
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43694
+
+        :param agent_id: 发送工作通知的微应用agentId
+        :param msg_task_id: 发送工作通知返回的taskId
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.recall",
+            {
+                "agent_id": agent_id,
+                "msg_task_id": msg_task_id
+            }
+        )
+
+    def dingtalk_oapi_processinstance_cspace_info(
+            self,
+            user_id,
+            agent_id=''
+    ):
+        """
+        查询审批钉盘空间信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43803
+
+        :param user_id: 用户id
+        :param agent_id: 企业应用标识(ISV调用必须设置)
+        """
+        return self._top_request(
+            "dingtalk.oapi.processinstance.cspace.info",
+            {
+                "user_id": user_id,
+                "agent_id": agent_id
+            }
+        )
+
+    def dingtalk_oapi_process_save(
+            self,
+            save_process_request=None
+    ):
+        """
+        保存审批模板
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43900
+
+        :param save_process_request: 入参
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.save",
+            {
+                "saveProcessRequest": save_process_request
+            }
+        )
+
+    def dingtalk_oapi_process_form_condition_list(
+            self,
+            process_code,
+            agentid=''
+    ):
+        """
+        查询已设置为条件的表单组件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43904
+
+        :param process_code: 审批模板id
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.form.condition.list",
+            {
+                "request": {
+                    "process_code": process_code,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def dingtalk_oapi_robot_message_getpushid(
+            self
+    ):
+        """
+        ISV获取机器人消息批量推送Id
+        颁发给isv机器人消息批量推送id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44051
+
+        """
+        return self._top_request(
+            "dingtalk.oapi.robot.message.getpushid"
+        )
+
+    def dingtalk_oapi_robot_message_statistics_listbypushid(
+            self,
+            page_size,
+            page,
+            push_id,
+            conversation_ids
+    ):
+        """
+        pushid维度的机器人消息批量推送统计数据获取接口
+        ISV通过该接口可以获取pushid维度的机器人消息批量推送统计数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44078
+
+        :param page_size: 分页大小
+        :param page: 当前页码
+        :param push_id: 机器人消息推送Id
+        :param conversation_ids: 群Id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.robot.message.statistics.listbypushid",
+            {
+                "page_size": page_size,
+                "page": page,
+                "push_id": push_id,
+                "conversation_ids": conversation_ids
+            }
+        )
+
+    def dingtalk_oapi_robot_message_statistics_list(
+            self,
+            page_size,
+            page,
+            push_ids
+    ):
+        """
+        获取机器人消息批量推送统计数据
+        ISV通过该接口可以获取机器人消息批量推送统计数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44079
+
+        :param page_size: 分页大小
+        :param page: 当前页码
+        :param push_ids: 机器人消息推送Id列表
+        """
+        return self._top_request(
+            "dingtalk.oapi.robot.message.statistics.list",
+            {
+                "page_size": page_size,
+                "page": page,
+                "push_ids": push_ids
+            }
+        )
+
+    def dingtalk_oapi_robot_message_statistics_listbyconversationid(
+            self,
+            push_id,
+            conversation_ids,
+            page_size,
+            page,
+            read_status=''
+    ):
+        """
+        conversionid维度的机器人消息批量推送统计数据获取接口
+        ISV通过该接口可以获取conversationid维度的机器人消息批量推送统计数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44094
+
+        :param push_id: 机器人消息推送Id
+        :param conversation_ids: 群Id列表
+        :param page_size: 分页大小
+        :param page: 当前页码
+        :param read_status: 已读状态
+        """
+        return self._top_request(
+            "dingtalk.oapi.robot.message.statistics.listbyconversationid",
+            {
+                "push_id": push_id,
+                "conversation_ids": conversation_ids,
+                "page_size": page_size,
+                "page": page,
+                "read_status": read_status
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_atmachine_get_by_deptid(
+            self,
+            param
+    ):
+        """
+        查询部门智能考勤机列表
+        查询考勤机设备列表，可选择查询部门已关联的考勤机设备列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44096
+
+        :param param: 查询智能考勤机列表参数模型
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.atmachine.get_by_deptid",
+            {
+                "param": param
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_atmachine_get_by_userid(
+            self,
+            param=None
+    ):
+        """
+        查询员工智能考勤机列表
+        允许isv查询员工智能考勤机列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44097
+
+        :param param: 查询智能考勤机列表参数模型
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.atmachine.get_by_userid",
+            {
+                "param": param
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_atmachine_user_update(
+            self,
+            param=None
+    ):
+        """
+        变更智能考勤机员工
+        提供变更智能考勤机员工功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44098
+
+        :param param: 变更智能考勤机员工参数模型
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.atmachine.user.update",
+            {
+                "param": param
+            }
+        )
+
+    def dingtalk_oapi_relation_remark_modify(
+            self,
+            markers,
+            markees
+    ):
+        """
+        修改备注名
+        给指定企业，批量修改备注名。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44214
+
+        :param markers: 修改者的userid
+        :param markees: 系统自动生成
+        """
+        return self._top_request(
+            "dingtalk.oapi.relation.remark.modify",
+            {
+                "markers": markers,
+                "markees": markees
+            }
+        )
+
+    def dingtalk_oapi_process_workrecord_create(
+            self,
+            process_code,
+            originator_user_id,
+            form_component_values,
+            url,
+            agentid='',
+            title=''
+    ):
+        """
+        发起不带流程的审批实例
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44261
+
+        :param process_code: 审批模板唯一码
+        :param originator_user_id: 审批发起人
+        :param form_component_values: 表单参数列表
+        :param url: 实例跳转链接
+        :param agentid: 应用id
+        :param title: 实例标题
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.create",
+            {
+                "request": {
+                    "process_code": process_code,
+                    "originator_user_id": originator_user_id,
+                    "form_component_values": form_component_values,
+                    "url": url,
+                    "agentid": agentid,
+                    "title": title
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_workrecord_update(
+            self,
+            process_instance_id,
+            status,
+            result,
+            agentid=''
+    ):
+        """
+        同步待办实例状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44262
+
+        :param process_instance_id: 实例id
+        :param status: 实例状态，分为COMPLETED, TERMINATED
+        :param result: 实例结果, 如果实例状态是COMPLETED，需要设置result，分为agree和refuse
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.update",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "status": status,
+                    "result": result,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_workrecord_task_create(
+            self,
+            process_instance_id,
+            tasks,
+            agentid='',
+            activity_id=''
+    ):
+        """
+        创建待办任务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44263
+
+        :param process_instance_id: 实例id
+        :param tasks: 任务列表
+        :param agentid: 应用id
+        :param activity_id: 节点id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.task.create",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "tasks": tasks,
+                    "agentid": agentid,
+                    "activity_id": activity_id
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_workrecord_task_update(
+            self,
+            process_instance_id,
+            tasks,
+            agentid=''
+    ):
+        """
+        更新待办任务状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44264
+
+        :param process_instance_id: 实例id
+        :param tasks: 任务列表
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.task.update",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "tasks": tasks,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_workrecord_forward_create(
+            self,
+            process_instance_id,
+            userid_list,
+            agentid=''
+    ):
+        """
+        创建实例抄送人
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44265
+
+        :param process_instance_id: 实例id
+        :param userid_list: 抄送人id列表
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.forward.create",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "userid_list": userid_list,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_workrecord_taskgroup_cancel(
+            self,
+            process_instance_id,
+            activity_id,
+            agentid=''
+    ):
+        """
+        批量取消任务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44317
+
+        :param process_instance_id: 实例id
+        :param activity_id: 任务组id
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.taskgroup.cancel",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "activity_id": activity_id,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def dingtalk_oapi_process_delete(
+            self,
+            process_code,
+            agentid=''
+    ):
+        """
+        删除模板
+        删除创建的审批模板
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44349
+
+        :param process_code: 流程code
+        :param agentid: 微应用agentId，ISV必填
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.delete",
+            {
+                "request": {
+                    "process_code": process_code,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def dingtalk_oapi_smartdevice_applyoutid(
+            self,
+            dev_serv_id,
+            sn
+    ):
+        """
+        向钉钉申请智能硬件设备外部ID
+        给硬件设备分配设备id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44397
+
+        :param dev_serv_id: 设备类型id
+        :param sn: 设备序列号
+        """
+        return self._top_request(
+            "dingtalk.oapi.smartdevice.applyoutid",
+            {
+                "dev_serv_id": dev_serv_id,
+                "sn": sn
+            }
+        )
+
+    def dingtalk_oapi_material_article_list(
+            self,
+            unionid,
+            page_size,
+            page_start
+    ):
+        """
+        查询文章列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44535
+
+        :param unionid: 服务号的unionid
+        :param page_size: 每页条数
+        :param page_start: 页码
+        """
+        return self._top_request(
+            "dingtalk.oapi.material.article.list",
+            {
+                "unionid": unionid,
+                "page_size": page_size,
+                "page_start": page_start
+            }
+        )
+
+    def dingtalk_oapi_material_article_delete(
+            self,
+            unionid,
+            article_id
+    ):
+        """
+        删除文章
+        服务窗删除文章（使得文章页不可访问）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44541
+
+        :param unionid: 服务号的unionid
+        :param article_id: 文章id
+        """
+        return self._top_request(
+            "dingtalk.oapi.material.article.delete",
+            {
+                "unionid": unionid,
+                "article_id": article_id
+            }
+        )
+
+    def dingtalk_oapi_material_article_publish(
+            self,
+            unionid,
+            article_id
+    ):
+        """
+        文章发布接口
+        服务窗发布文章成页面
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44542
+
+        :param unionid: 服务号的unionid
+        :param article_id: 文章id
+        """
+        return self._top_request(
+            "dingtalk.oapi.material.article.publish",
+            {
+                "unionid": unionid,
+                "article_id": article_id
+            }
+        )
+
+    def dingtalk_oapi_material_article_get(
+            self,
+            unionid,
+            article_id
+    ):
+        """
+        获取文章
+        获取单篇文章信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44543
+
+        :param unionid: 服务号的unionid
+        :param article_id: 文章id
+        """
+        return self._top_request(
+            "dingtalk.oapi.material.article.get",
+            {
+                "unionid": unionid,
+                "article_id": article_id
+            }
+        )
+
+    def dingtalk_oapi_material_article_update(
+            self,
+            article,
+            unionid
+    ):
+        """
+        保存文章详情
+        服务窗用于修改文章详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44544
+
+        :param article: 文章对象
+        :param unionid: 服务号的unionid
+        """
+        return self._top_request(
+            "dingtalk.oapi.material.article.update",
+            {
+                "article": article,
+                "unionid": unionid
+            }
+        )
+
+    def dingtalk_oapi_material_article_add(
+            self,
+            article,
+            unionid
+    ):
+        """
+        新增文章
+        服务窗新建文章使用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44545
+
+        :param article: 文章参数对象
+        :param unionid: 服务号的unionid
+        """
+        return self._top_request(
+            "dingtalk.oapi.material.article.add",
+            {
+                "article": article,
+                "unionid": unionid
+            }
+        )
+
 
 class TbYongHu(DingTalkBaseAPI):
     """
@@ -8000,6 +9584,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         发送短信验证码
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25596
 
         :param send_ver_code_request: 发送验证码请求
@@ -8017,6 +9603,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         验证短信验证码
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25597
 
         :param check_ver_code_request: 验证验证码
@@ -8034,6 +9622,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         发送短信
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25598
 
         :param send_message_request: 发送短信请求
@@ -8071,6 +9661,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         删除延迟消息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25966
 
         :param param_remove_delay_message_request: 删除延迟消息
@@ -8088,6 +9680,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         第三方wifi设备商上传数据
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         阿里巴巴和第三方WIFI 数据提供商之间的数据交换
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25969
 
@@ -8126,6 +9720,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         批量发送短信
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26027
 
         :param params: 参数列表
@@ -8193,6 +9789,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         kindle人群信息返回
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据接口得到的当前用户信息，返回由算法计算得出的当前用户对应的人群信息（人群信息以1~6的数字标返回）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31237
 
@@ -8318,6 +9916,8 @@ class TbYongHu(DingTalkBaseAPI):
     ):
         """
         盒马小程序测试服务端api01
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         盒马小程序服务端测试api01
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40389
 
@@ -8341,6 +9941,27 @@ class TbYongHu(DingTalkBaseAPI):
         """
         return self._top_request(
             "taobao.miniapp.userInfo.get"
+        )
+
+    def taobao_mixnick_change(
+            self,
+            src_mix_nick,
+            src_appkey
+    ):
+        """
+        新旧mixnick互转
+        如果采用老的Appkey获取MixNick A’， 发现DB里 new MixNick为null，则使用新的Appkey调API来换取A’’；如果采用新的Appkey获取A’’，发现DB里不存在当前A’’ 的记录时，先用老Appkey调API得到A’ 查询是否存在A用户的记录，如果已经存在，则关联，否则新增一条MixNick为null的新用户记录。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24410
+
+        :param src_mix_nick: 输入的混淆nick
+        :param src_appkey: 输入的appkey
+        """
+        return self._top_request(
+            "taobao.mixnick.change",
+            {
+                "src_mix_nick": src_mix_nick,
+                "src_appkey": src_appkey
+            }
         )
 
 
@@ -8982,7 +10603,7 @@ class TbShangPin(DingTalkBaseAPI):
         :param food_security_contact: 厂家联系方式
         :param food_security_mix: 配料表
         :param food_security_plan_storage: 储藏方法
-        :param food_security_period: 保质期
+        :param food_security_period: 保质期，默认有单位，传入数字
         :param food_security_food_additive: 食品添加剂
         :param food_security_supplier: 供货商
         :param food_security_product_date_start: 生产开始日期，格式必须为yyyy-MM-dd
@@ -9046,13 +10667,13 @@ class TbShangPin(DingTalkBaseAPI):
         :param qualification: 商品资质信息
         :param o2o_bind_service: 汽车O2O绑定线下服务标记，如不为空，表示关联服务，否则，不关联服务。
         :param ignorewarning: 忽略警告提示.
-        :param features: 宝贝特征值，格式为：【key1:value1;key2:value2;key3:value3;】，key和value用【:】分隔，key&value之间用【;】分隔，只有在Top支持的特征值才能保存到宝贝上，目前支持的Key列表为：mysize_tp
+        :param features: 宝贝特征值，格式为：【key1:value1;key2:value2;key3:value3;】，key和value用【:】分隔，key&value之间用【;】分隔，只有在Top支持的特征值才能保存到宝贝上，目前支持的Key列表为：mysize_tp,是指尺码库对应的key
         :param after_sale_id: 售后说明模板id
-        :param change_prop: 基础色数据
-        :param desc_modules: 商品描述模块化，模块列表，由List转化成jsonArray存入，后端逻辑验证通过，拼装成模块内容+锚点导航后存入desc中。数据结构具体参见Item_Desc_Module
+        :param change_prop: 基础色数据，淘宝不使用
+        :param desc_modules: 已废弃
         :param is_offline: 是否是线下商品。1：线上商品（默认值）；2：线上或线下商品；3：线下商品。
         :param wireless_desc: 无线的宝贝描述
-        :param spu_confirm: 手机类目spu 确认信息字段
+        :param spu_confirm: 手机类目spu 产品信息确认声明
         :param input_pids: 用户自行输入的类目属性ID串，结构：'pid1,pid2,pid3'，如：'20000'（表示品牌） 注：通常一个类目下用户可输入的关键属性不超过1个。
         :param sku_quantities: 更新的Sku的数量串，结构如：num1,num2,num3 如:2,3,4
         :param sku_prices: 更新的Sku的价格串，结构如：10.00,5.00,… 精确到2位小数;单位:元。如:200.07，表示:200元7分
@@ -9380,7 +11001,7 @@ class TbShangPin(DingTalkBaseAPI):
         :param food_security_contact: 厂家联系方式
         :param food_security_mix: 配料表
         :param food_security_plan_storage: 储藏方法
-        :param food_security_period: 保质期
+        :param food_security_period: 保质期，默认有单位，传入数字
         :param food_security_food_additive: 食品添加剂
         :param food_security_supplier: 供货商
         :param food_security_product_date_start: 生产开始日期，格式必须为yyyy-MM-dd
@@ -9433,8 +11054,8 @@ class TbShangPin(DingTalkBaseAPI):
         :param features: 宝贝特征值，格式为：【key1:value1;key2:value2;key3:value3;】，key和value用【:】分隔，key&value之间用【;】分隔，只有在Top支持的特征值才能保存到宝贝上，目前支持的Key列表为：mysize_tp
         :param ignorewarning: 忽略警告提示.
         :param after_sale_id: 售后说明模板id
-        :param change_prop: 基础色数据
-        :param desc_modules: 商品描述模块化，模块列表，由List转化成jsonArray存入，后端逻辑验证通过，拼装成模块内容+锚点导航后存入desc中。数据结构具体参见Item_Desc_Module
+        :param change_prop: 基础色数据，淘宝不使用
+        :param desc_modules: 已废弃
         :param is_offline: 是否是线下商品。1：线上商品（默认值）；2：线上或线下商品；3：线下商品。
         :param wireless_desc: 无线的宝贝描述
         :param spu_confirm: 手机类目spu 优化，信息确认字段
@@ -10466,6 +12087,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         商品发布规则信息获取接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         在新的发布模式下，isv需要先获取一份发布规则，然后根据规则传入数据。该接口提供规则查询功能
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22651
 
@@ -10701,6 +12324,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         基于xml格式的商品发布api
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         isv将宝贝信息，组装成特定格式的xml数据作为参数，进行发布商品
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23267
 
@@ -10725,6 +12350,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         新模式下的商品编辑接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新模式下的商品编辑接口，在调用该接口的时候，需要先调用taobao.item.update.rules.get接口获取编辑规则和数据集。然后按照约定的参数传入规则，调用该接口进行编辑商品
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23268
 
@@ -11415,6 +13042,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         知足鞋品数据上传接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫尺码拍照导购需要提供给北京知足公司上传测鞋数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27340
 
@@ -11559,6 +13188,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         教育联盟商家上传课程大纲api
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31082
 
         :param item_id: 宝贝Id
@@ -11582,6 +13213,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         查询单个门店商品
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31480
 
         :param store_code: 门店编码
@@ -11611,6 +13244,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         门店商品搜索接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31498
 
         :param param0: 门店编码
@@ -11786,6 +13421,8 @@ class TbShangPin(DingTalkBaseAPI):
     ):
         """
         新零售线下售货机POS数据回流
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新零售行业线下售货机商品数据回流，提供给相关线下售卖机终端ISV，将商品的POS信息回流，包括但不限于事件、用户昵称、商品信息、购买量、消费金额等。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39455
 
@@ -11899,7 +13536,8 @@ class TbJiaoYi(DingTalkBaseAPI):
             tag='',
             page_no='1',
             page_size='40',
-            use_has_next='false'
+            use_has_next='false',
+            buyer_open_id=''
     ):
         """
         查询卖家已卖出的交易数据（根据创建时间）
@@ -11918,6 +13556,7 @@ class TbJiaoYi(DingTalkBaseAPI):
         :param page_no: 页码。取值范围:大于零的整数; 默认值:1
         :param page_size: 每页条数。取值范围:大于零的整数; 默认值:40;最大值:100
         :param use_has_next: 是否启用has_next的分页方式，如果指定true,则返回的结果中不包含总记录数，但是会新增一个是否存在下一页的的字段，通过此种方式获取增量交易，接口调用成功率在原有的基础上有所提升。
+        :param buyer_open_id: 买家的openId
         """
         return self._top_request(
             "taobao.trades.sold.get",
@@ -11933,7 +13572,8 @@ class TbJiaoYi(DingTalkBaseAPI):
                 "tag": tag,
                 "page_no": page_no,
                 "page_size": page_size,
-                "use_has_next": use_has_next
+                "use_has_next": use_has_next,
+                "buyer_open_id": buyer_open_id
             }
         )
 
@@ -12467,6 +14107,8 @@ class TbJiaoYi(DingTalkBaseAPI):
     ):
         """
         获取单笔交易业务定制的详细信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取单笔交易的详细信息
         <br/>1. 只有在交易成功的状态下才能取到交易佣金，其它状态下取到的都是零或空值
         <br/>2. 只有单笔订单的情况下Trade数据结构中才包含商品相关的信息
@@ -12673,6 +14315,85 @@ class TbJiaoYi(DingTalkBaseAPI):
                 "request_time": request_time,
                 "pos_no": pos_no,
                 "order_id": order_id
+            }
+        )
+
+    def taobao_trade_voucher_upload(
+            self,
+            file_name,
+            file_data,
+            seller_nick='',
+            buyer_nick=''
+    ):
+        """
+        淘宝交易凭证上传
+        定制化交易流程中，涉及到 买家自定义 图片、声音、视频 等多富媒体文件，且该商品或服务的附属sku，通过此接口上传作为交易凭证。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26451
+
+        :param file_name: 上传文件的名称
+        :param file_data: 文件
+        :param seller_nick: 该笔订单的卖家Nick
+        :param buyer_nick: 该笔订单的买家Nick（混淆nick）
+        """
+        return self._top_request(
+            "taobao.trade.voucher.upload",
+            {
+                "file_name": file_name,
+                "file_data": file_data,
+                "seller_nick": seller_nick,
+                "buyer_nick": buyer_nick
+            },
+            result_processor=lambda x: x["file"]
+        )
+
+    def cainiao_refund_refundactions_display(
+            self,
+            param0=None
+    ):
+        """
+        退货退款操作的展示信息(展现给买家)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43911
+
+        :param param0: 请求入参
+        """
+        return self._top_request(
+            "cainiao.refund.refundactions.display",
+            {
+                "param0": param0
+            }
+        )
+
+    def cainiao_refund_refundactions_get(
+            self,
+            order_id
+    ):
+        """
+        判断该订单能执行的逆向操作集合列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43912
+
+        :param order_id: 子订单ID
+        """
+        return self._top_request(
+            "cainiao.refund.refundactions.get",
+            {
+                "order_id": order_id
+            }
+        )
+
+    def cainiao_refund_refundactions_judgement(
+            self,
+            param0=None
+    ):
+        """
+        判断当前用户是否能对订单执行一些逆向操作，比如退货操作
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43913
+
+        :param param0: 操作请求
+        """
+        return self._top_request(
+            "cainiao.refund.refundactions.judgement",
+            {
+                "param0": param0
             }
         )
 
@@ -14770,6 +16491,8 @@ class TbWuLiu(DingTalkBaseAPI):
     ):
         """
         蜂鸟商户解约接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         通过调用此接口，商家及商家下的所有门店解除蜂鸟物流服务
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41494
 
@@ -14921,6 +16644,8 @@ class TbDianPu(DingTalkBaseAPI):
     ):
         """
         获取卖家店铺的基本信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=68
 
         :param fields: 需返回的字段列表。可选值：Shop 结构中的所有字段；多个字段之间用逗号(,)分隔
@@ -14967,6 +16692,8 @@ class TbDianPu(DingTalkBaseAPI):
     ):
         """
         根据店铺名称获取店铺信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24852
 
         :param title: 店铺名称，必须严格匹配（不支持模糊查询）
@@ -15115,6 +16842,25 @@ class TbDianPu(DingTalkBaseAPI):
                 "user_id": user_id
             },
             result_processor=lambda x: x["url"]
+        )
+
+    def taobao_shop_seller_get(
+            self,
+            fields
+    ):
+        """
+        卖家店铺基础信息查询
+        获取卖家店铺的基本信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42908
+
+        :param fields: 需返回的字段列表。可选值：Shop 结构中的所有字段；多个字段之间用逗号(,)分隔
+        """
+        return self._top_request(
+            "taobao.shop.seller.get",
+            {
+                "fields": fields
+            },
+            result_processor=lambda x: x["shop"]
         )
 
 
@@ -15510,6 +17256,8 @@ class TbFenXiao(DingTalkBaseAPI):
     ):
         """
         更新合作关系等级
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         供应商更新合作的分销商等级
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10568
 
@@ -16486,6 +18234,8 @@ class TbFenXiao(DingTalkBaseAPI):
     ):
         """
         追加授权产品线
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21618
 
         :param cooperate_id: 合作关系id
@@ -16512,6 +18262,8 @@ class TbFenXiao(DingTalkBaseAPI):
     ):
         """
         合作授权审批
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21619
 
         :param requisition_id: 合作申请Id
@@ -16540,6 +18292,8 @@ class TbFenXiao(DingTalkBaseAPI):
     ):
         """
         终止合作
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         终止与分销商的合作关系
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21620
 
@@ -16586,6 +18340,8 @@ class TbFenXiao(DingTalkBaseAPI):
     ):
         """
         新建等级
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=21624
 
         :param name: 等级名称，等级名称不可重复
@@ -18479,6 +20235,135 @@ class TbTaoBaoKe(DingTalkBaseAPI):
             }
         )
 
+    def taobao_tbk_content_get(
+            self,
+            adzone_id,
+            type='',
+            before_timestamp='',
+            count='10',
+            cid='',
+            image_width='300',
+            image_height='300',
+            content_set=''
+    ):
+        """
+        淘客媒体内容输出
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31137
+
+        :param adzone_id: 推广位
+        :param type: 内容类型，1:图文、2: 图集、3: 短视频
+        :param before_timestamp: 表示取这个时间点以前的数据，以毫秒为单位（出参中的last_timestamp是指本次返回的内容中最早一条的数据，下一次作为before_timestamp传过来，即可实现翻页）
+        :param count: 表示期望获取条数
+        :param cid: 类目
+        :param image_width: 图片宽度
+        :param image_height: 图片高度
+        :param content_set: 默认可不传,内容库类型:1 优质内容
+        """
+        return self._top_request(
+            "taobao.tbk.content.get",
+            {
+                "adzone_id": adzone_id,
+                "type": type,
+                "before_timestamp": before_timestamp,
+                "count": count,
+                "cid": cid,
+                "image_width": image_width,
+                "image_height": image_height,
+                "content_set": content_set
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def taobao_tbk_content_effect_get(
+            self,
+            option=None
+    ):
+        """
+        淘客媒体内容效果输出
+        淘客媒体内容维度的效果输出。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37130
+
+        :param option: 入参
+        """
+        return self._top_request(
+            "taobao.tbk.content.effect.get",
+            {
+                "option": option
+            }
+        )
+
+    def taobao_tbk_dg_vegas_tlj_create(
+            self,
+            adzone_id,
+            item_id,
+            total_num,
+            name,
+            user_total_win_num_limit,
+            security_switch,
+            per_face,
+            send_start_time,
+            campaign_type='MKT',
+            send_end_time='',
+            use_end_time='',
+            use_end_time_mode='',
+            use_start_time=''
+    ):
+        """
+        淘礼金创建
+        创建淘礼金
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40173
+
+        :param adzone_id: 妈妈广告位Id
+        :param item_id: 宝贝id
+        :param total_num: 淘礼金总个数
+        :param name: 淘礼金名称，最大10个字符
+        :param user_total_win_num_limit: 单用户累计中奖次数上限
+        :param security_switch: 安全开关
+        :param per_face: 单个淘礼金面额，支持两位小数，单位元
+        :param send_start_time: 发放开始时间
+        :param campaign_type: CPS佣金计划类型
+        :param send_end_time: 发放截止时间
+        :param use_end_time: 使用结束日期。如果是结束时间模式为相对时间，时间格式为1-7直接的整数, 例如，1（相对领取时间1天）； 如果是绝对时间，格式为yyyy-MM-dd，例如，2019-01-29，表示到2019-01-29 23:59:59结束
+        :param use_end_time_mode: 结束日期的模式,1:相对时间，2:绝对时间
+        :param use_start_time: 使用开始日期。相对时间，无需填写，以用户领取时间作为使用开始时间。绝对时间，格式 yyyy-MM-dd，例如，2019-01-29，表示从2019-01-29 00:00:00 开始
+        """
+        return self._top_request(
+            "taobao.tbk.dg.vegas.tlj.create",
+            {
+                "adzone_id": adzone_id,
+                "item_id": item_id,
+                "total_num": total_num,
+                "name": name,
+                "user_total_win_num_limit": user_total_win_num_limit,
+                "security_switch": security_switch,
+                "per_face": per_face,
+                "send_start_time": send_start_time,
+                "campaign_type": campaign_type,
+                "send_end_time": send_end_time,
+                "use_end_time": use_end_time,
+                "use_end_time_mode": use_end_time_mode,
+                "use_start_time": use_start_time
+            }
+        )
+
+    def taobao_tbk_dg_vegas_tlj_instance_report(
+            self,
+            rights_id
+    ):
+        """
+        导购淘礼金实例维度报表
+        淘礼金实例维度相关报表数据查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43317
+
+        :param rights_id: 实例ID
+        """
+        return self._top_request(
+            "taobao.tbk.dg.vegas.tlj.instance.report",
+            {
+                "rights_id": rights_id
+            }
+        )
+
 
 class TbGongJu(DingTalkBaseAPI):
     """
@@ -18548,6 +20433,8 @@ class TbGongJu(DingTalkBaseAPI):
     ):
         """
         取消已经创建的异步任务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         可用于取消已经创建的异步任务。</br><br/>条件限制：</br><br/>1)一次只可以取消一个任务</br><br/>2）只能取消自己创建的任务
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=11069
 
@@ -19191,6 +21078,33 @@ class TbGongJu(DingTalkBaseAPI):
                 "gmt_create_end": gmt_create_end,
                 "gmt_create_start": gmt_create_start,
                 "page_index": page_index
+            }
+        )
+
+    def alibaba_interact_supplier_award_resource_get_cuntao(
+            self,
+            user_nick,
+            activity_key,
+            lng='',
+            lat=''
+    ):
+        """
+        权益池信息查询
+        农村淘宝营销互动权益池信息查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42702
+
+        :param user_nick: 用户昵称
+        :param activity_key: 活动code
+        :param lng: 经度
+        :param lat: 纬度
+        """
+        return self._top_request(
+            "alibaba.interact.supplier.award.resource.get.cuntao",
+            {
+                "user_nick": user_nick,
+                "activity_key": activity_key,
+                "lng": lng,
+                "lat": lat
             }
         )
 
@@ -19933,6 +21847,8 @@ class TbWuLiuBao(DingTalkBaseAPI):
     ):
         """
         库存明细查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询库存明细
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22175
 
@@ -20090,6 +22006,8 @@ class TbWuLiuBao(DingTalkBaseAPI):
     ):
         """
         损益单回传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24621
 
         :param content: 损益单回传信息
@@ -20139,6 +22057,24 @@ class TbWuLiuBao(DingTalkBaseAPI):
             "taobao.uop.tob.order.create",
             {
                 "delivery_order": delivery_order
+            }
+        )
+
+    def cainiao_bms_order_consign_confirm(
+            self,
+            content=None
+    ):
+        """
+        BMS出库通知
+        BMS出库后，通知ISV
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28394
+
+        :param content: 通知消息主体
+        """
+        return self._top_request(
+            "cainiao.bms.order.consign.confirm",
+            {
+                "content": content
             }
         )
 
@@ -20253,6 +22189,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
     ):
         """
         批量得到创意修改记录
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据一个创意Id列表取得创意对应的修改记录
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10531
 
@@ -20528,6 +22466,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
     ):
         """
         取得推广计划的可设置投放频道列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         取得推广计划的可设置投放频道列表--接口已经废弃
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10544
 
@@ -20948,6 +22888,8 @@ class TbZhiTongChe(DingTalkBaseAPI):
     ):
         """
         获取修改的创意ID
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10802
 
         :param start_time: 得到此时间点之后的数据，不能大于一个月
@@ -22618,6 +24560,365 @@ class TbZhiTongChe(DingTalkBaseAPI):
             "taobao.simba.customers.sid.get"
         )
 
+    def taobao_simba_keyword_findbyids(
+            self,
+            bidword_ids=''
+    ):
+        """
+        （新）根据一堆关键词ids获取关键词
+        根据一个关键词Id列表取得一组关键词
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43330
+
+        :param bidword_ids: 关键词ids
+        """
+        return self._top_request(
+            "taobao.simba.keyword.findbyids",
+            {
+                "bidword_ids": bidword_ids
+            }
+        )
+
+    def taobao_simba_keyword_add(
+            self,
+            bidwords,
+            adgroup_id=''
+    ):
+        """
+        （新）关键词新增接口
+        （新）关键词更新相关接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43342
+
+        :param bidwords: 关键词相关信息
+        :param adgroup_id: 推广单元id
+        """
+        return self._top_request(
+            "taobao.simba.keyword.add",
+            {
+                "bidwords": bidwords,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_simba_keyword_update(
+            self,
+            bidwords
+    ):
+        """
+        （新）关键词更新相关接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43343
+
+        :param bidwords: 关键词相关信息
+        """
+        return self._top_request(
+            "taobao.simba.keyword.update",
+            {
+                "bidwords": bidwords
+            }
+        )
+
+    def taobao_simba_keyword_findbyadgroupid(
+            self,
+            adgroup_id=''
+    ):
+        """
+        根据推广单元id获取关键词
+        根据一个关键词Id列表取得一组关键词
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43344
+
+        :param adgroup_id: 推广单元id
+        """
+        return self._top_request(
+            "taobao.simba.keyword.findbyadgroupid",
+            {
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_simba_salestar_campaign_budget_update(
+            self,
+            campaign_id,
+            budget=''
+    ):
+        """
+        销量明星跟新预算相关接口
+        更新一个推广计划的日限额
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43351
+
+        :param campaign_id: 推广计划Id
+        :param budget: 如果为空则取消限额；否则必须为整数，单位是元，不得小于30；
+        """
+        return self._top_request(
+            "taobao.simba.salestar.campaign.budget.update",
+            {
+                "campaign_id": campaign_id,
+                "budget": budget
+            },
+            result_processor=lambda x: x["campaign_budget"]
+        )
+
+    def taobao_simba_salestar_adgroup_update(
+            self,
+            adgroup_id,
+            online_status=''
+    ):
+        """
+        销量明星更新一个推广组的信息
+        更新一个推广组的信息，可以设置 是否上线
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43354
+
+        :param adgroup_id: 推广组Id
+        :param online_status: 用户设置的上下线状态 offline-下线(暂停竞价)； online-上线；默认为online
+        """
+        return self._top_request(
+            "taobao.simba.salestar.adgroup.update",
+            {
+                "adgroup_id": adgroup_id,
+                "online_status": online_status
+            },
+            result_processor=lambda x: x["adgroup"]
+        )
+
+    def taobao_simba_salestar_keywords_qscore_split_get(
+            self,
+            ad_group_id,
+            bidword_ids,
+            nick=''
+    ):
+        """
+        (新)销量明星质量分相关接口
+        获取关键词新的质量分
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43356
+
+        :param ad_group_id: 推广组id
+        :param bidword_ids: 词id数组（最多批量获取20个）
+        :param nick: 账号昵称
+        """
+        return self._top_request(
+            "taobao.simba.salestar.keywords.qscore.split.get",
+            {
+                "ad_group_id": ad_group_id,
+                "bidword_ids": bidword_ids,
+                "nick": nick
+            }
+        )
+
+    def taobao_simba_salestar_adgroup_delete(
+            self,
+            adgroup_id,
+            nick=''
+    ):
+        """
+        (新)销量明星删除推广单元接口
+        删除一个推广组
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43357
+
+        :param adgroup_id: 推广组Id
+        :param nick: 主人昵称
+        """
+        return self._top_request(
+            "taobao.simba.salestar.adgroup.delete",
+            {
+                "adgroup_id": adgroup_id,
+                "nick": nick
+            }
+        )
+
+    def taobao_simba_salestar_adgroup_findbycampid(
+            self,
+            page_size,
+            page_no,
+            campaign_id=''
+    ):
+        """
+        (销量明星)批量获取推广计划下的推广组信息
+        批量得到推广计划下的推广组
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43358
+
+        :param page_size: 页尺寸，最大200，如果入参adgroup_ids有传入值，则page_size和page_no值不起作用。如果adgrpup_ids为空而campaign_id有值，此时page_size和page_no值才是返回的页数据大小和页码
+        :param page_no: 页码，从1开始
+        :param campaign_id: 推广计划Id
+        """
+        return self._top_request(
+            "taobao.simba.salestar.adgroup.findbycampid",
+            {
+                "page_size": page_size,
+                "page_no": page_no,
+                "campaign_id": campaign_id
+            },
+            result_processor=lambda x: x["adgroups"]
+        )
+
+    def taobao_simba_salestar_creatives_get(
+            self,
+            nick='',
+            creative_ids='',
+            adgroup_id=''
+    ):
+        """
+        （新）批量获取创意
+        取得一个推广组的所有创意或者根据一个创意Id列表取得一组创意；<br/>如果同时提供了推广组Id和创意id列表，则优先使用推广组Id；
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43359
+
+        :param nick: 主人昵称
+        :param creative_ids: 创意Id数组，最多200个
+        :param adgroup_id: 推广组Id
+        """
+        return self._top_request(
+            "taobao.simba.salestar.creatives.get",
+            {
+                "nick": nick,
+                "creative_ids": creative_ids,
+                "adgroup_id": adgroup_id
+            },
+            result_processor=lambda x: x["creatives"]
+        )
+
+    def taobao_simba_salestar_creative_add(
+            self,
+            adgroup_id,
+            title,
+            img_url,
+            nick=''
+    ):
+        """
+        （新）新建创意
+        创建一个创意
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43360
+
+        :param adgroup_id: 推广组Id
+        :param title: 创意标题，最多20个汉字
+        :param img_url: 创意图片地址，必须是推广组对应商品的图片之一
+        :param nick: 主人昵称
+        """
+        return self._top_request(
+            "taobao.simba.salestar.creative.add",
+            {
+                "adgroup_id": adgroup_id,
+                "title": title,
+                "img_url": img_url,
+                "nick": nick
+            },
+            result_processor=lambda x: x["creative"]
+        )
+
+    def taobao_simba_salestar_creative_update(
+            self,
+            adgroup_id,
+            creative_id,
+            title,
+            img_url,
+            picture_id=''
+    ):
+        """
+        销量明星更新创意相关接口
+        更新一个创意的信息，可以设置创意标题、创意图片
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43361
+
+        :param adgroup_id: 推广组Id
+        :param creative_id: 创意Id
+        :param title: 创意标题，最多20个汉字
+        :param img_url: 创意图片地址，必须是推广组对应商品的图片之一
+        :param picture_id: 如果用户开通了创意本地上传图片功能的，可以使用该用户图片空间的图片来修改创意，pictureId为图片空间中图片的pictureId，img_url为图片空间中图片链接地址，如果是使用的主图或副图修改创意，则pictureId必须为空
+        """
+        return self._top_request(
+            "taobao.simba.salestar.creative.update",
+            {
+                "adgroup_id": adgroup_id,
+                "creative_id": creative_id,
+                "title": title,
+                "img_url": img_url,
+                "picture_id": picture_id
+            },
+            result_processor=lambda x: x["creativerecord"]
+        )
+
+    def taobao_simba_salestar_creative_delete(
+            self,
+            creative_id
+    ):
+        """
+        (新)销量明星删除创意相关接口
+        删除一个创意
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43363
+
+        :param creative_id: 创意Id
+        """
+        return self._top_request(
+            "taobao.simba.salestar.creative.delete",
+            {
+                "creative_id": creative_id
+            },
+            result_processor=lambda x: x["creative"]
+        )
+
+    def taobao_simba_salestar_adgroup_add(
+            self,
+            campaign_id,
+            item_id,
+            title,
+            img_url
+    ):
+        """
+        (新)创建一个推广组
+        创建一个推广组
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43366
+
+        :param campaign_id: 推广计划Id
+        :param item_id: 商品Id
+        :param title: 创意标题，最多20个汉字
+        :param img_url: 创意图片地址，必须是商品的图片之一
+        """
+        return self._top_request(
+            "taobao.simba.salestar.adgroup.add",
+            {
+                "campaign_id": campaign_id,
+                "item_id": item_id,
+                "title": title,
+                "img_url": img_url
+            },
+            result_processor=lambda x: x["adgroup"]
+        )
+
+    def taobao_simba_salestar_keywords_delete(
+            self,
+            bidword_ids=''
+    ):
+        """
+        销量明星关键词删除
+        （新）关键词删除相关接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43394
+
+        :param bidword_ids: 关键词ids
+        """
+        return self._top_request(
+            "taobao.simba.salestar.keywords.delete",
+            {
+                "bidword_ids": bidword_ids
+            }
+        )
+
+    def taobao_simba_salestar_keywords_recommend_get(
+            self,
+            adgroup_id,
+            product_id='101001005'
+    ):
+        """
+        销量明星api相关接口
+        取得一个推广组的推荐关键词列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43400
+
+        :param adgroup_id: 推广组ID
+        :param product_id: 产品类型101001005代表标准推广，101001014代表销量明星
+        """
+        return self._top_request(
+            "taobao.simba.salestar.keywords.recommend.get",
+            {
+                "adgroup_id": adgroup_id,
+                "product_id": product_id
+            },
+            result_processor=lambda x: x["recommend_words"]
+        )
+
 
 class TbJiPiao(DingTalkBaseAPI):
     """
@@ -23130,6 +25431,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         删除工具
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         删除营销工具。当工具正在被使用的时候，是不能被删除的。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=10715
 
@@ -24262,6 +26565,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫特价宝删除活动接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫特价宝删除活动接口。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25073
 
@@ -24282,6 +26587,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫特价宝删除活动商品
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫特价宝删除活动商品。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25074
 
@@ -24303,6 +26610,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫特价宝批量添加商品
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25075
 
         :param item_proms: 商品优惠参数
@@ -24321,6 +26630,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫特价宝修改商品优惠
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫特价宝修改商品优惠。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25078
 
@@ -24340,6 +26651,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫营销修改活动
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫营销活动修改接口。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25079
 
@@ -24378,6 +26691,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫特价宝批量修改商品优惠
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫特价宝批量修改商品优惠。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25081
 
@@ -24419,6 +26734,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         天猫特价宝查询某个活动下面的单品优惠信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫特价宝，根据活动ID，查询某个活动下面的单品优惠信息，需要进行分页查询
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25093
 
@@ -24759,6 +27076,8 @@ class TbYingXiao(DingTalkBaseAPI):
     ):
         """
         查询通用单品优惠详情
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询通用单品优惠详情。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25848
 
@@ -25399,6 +27718,97 @@ class TbYingXiao(DingTalkBaseAPI):
                 "model_ids": model_ids,
                 "time": time,
                 "extend": extend
+            }
+        )
+
+    def tmall_seiya_unline_failover_launch(
+            self,
+            show_id,
+            terminal_id,
+            longitude,
+            latitude,
+            labels=''
+    ):
+        """
+        seiya线下投放容灾接口
+        seiya线下第三方合作终端货品投放接口(带容灾能力)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42598
+
+        :param show_id: 投放展示id
+        :param terminal_id: 下线终端id
+        :param longitude: 经度
+        :param latitude: 纬度
+        :param labels: 标签
+        """
+        return self._top_request(
+            "tmall.seiya.unline.failover.launch",
+            {
+                "show_id": show_id,
+                "terminal_id": terminal_id,
+                "longitude": longitude,
+                "latitude": latitude,
+                "labels": labels
+            },
+            result_processor=lambda x: x["result_list"]
+        )
+
+    def tmall_seiya_underline_upload(
+            self,
+            asset_code,
+            exposur_count,
+            pick_count,
+            date
+    ):
+        """
+        seiya线下三方合作商上报数据接口
+        seiya线下三方合作商上报数据接口，比如曝光数、取件数等等，只写接口，无读取数据。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42984
+
+        :param asset_code: 机柜编码
+        :param exposur_count: 曝光次数
+        :param pick_count: 取件次数
+        :param date: 日期（YYYYMMDD）
+        """
+        return self._top_request(
+            "tmall.seiya.underline.upload",
+            {
+                "asset_code": asset_code,
+                "exposur_count": exposur_count,
+                "pick_count": pick_count,
+                "date": date
+            }
+        )
+
+    def tmall_seiya_click_report(
+            self,
+            task_id,
+            asset_code,
+            screen_count,
+            model_id,
+            model_type,
+            click_time
+    ):
+        """
+        天猫来店业务三方广告公司点击上报接口
+        天猫来店业务三方广告公司线下点位用户互动点击上报接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43340
+
+        :param task_id: 广告所属投放任务id(广告体taskId属性)
+        :param asset_code: 机柜id
+        :param screen_count: 第几屏点击
+        :param model_id: 广告id（itemid）
+        :param model_type: 广告类型
+        :param click_time: 终端发生点击时间戳(单位毫秒)
+        """
+        return self._top_request(
+            "tmall.seiya.click.report",
+            {
+                "task_id": task_id,
+                "asset_code": asset_code,
+                "screen_count": screen_count,
+                "model_id": model_id,
+                "model_type": model_type,
+                "click_time": click_time
             }
         )
 
@@ -26495,6 +28905,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         点点送配送员位置POI回传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24874
 
         :param deliverer_name: 配送员姓名
@@ -26521,6 +28933,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         点点送配送员妥投
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24876
 
         :param delivery_order_no: 物流订单号
@@ -26545,6 +28959,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         点点送配送员取件
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         点点送配送员取件接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24877
 
@@ -26574,6 +28990,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         淘点点订单确认接单接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         淘点点订单通知后，配送商确认接单接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25277
 
@@ -26605,6 +29023,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         淘点点订单消息通知回执
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         配送商收到点点送订单通知消息后，调用该回执接口，通知点点送表示已收到消息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25321
 
@@ -26630,6 +29050,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         更新配送员信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         配送商系统向点点送更新配送员信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25407
 
@@ -26661,6 +29083,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         点点卖家自动接单并选择配送商送
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         淘点点卖家自动接单并选择配送商送，卖家通过该接口只能操作自己店铺的订单。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25432
 
@@ -26681,6 +29105,8 @@ class TbTaoDianDianWaiMai(DingTalkBaseAPI):
     ):
         """
         点点送运单失败
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         点点送外卖运单失败接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27532
 
@@ -28061,6 +30487,8 @@ class TbFuWuPingTai(DingTalkBaseAPI):
     ):
         """
         更新试驾预约单信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         天猫汽车嘉年华预约试驾，需要和大搜车进行对接，大搜车和支付宝对接之后更新预约
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31461
 
@@ -28205,6 +30633,48 @@ class TbFuWuPingTai(DingTalkBaseAPI):
                 "biz_type": biz_type,
                 "code": code
             }
+        )
+
+    def tmall_car_lease_freedownpayment_put(
+            self,
+            pre_end_time,
+            pre_start_time,
+            item_id,
+            time_range_list,
+            ref_activity_id=''
+    ):
+        """
+        同步直租车免首付商品活动信息
+        汽车行业直租车免首付需求中，用与对商品打标，活动范围设置，在消费者端商品详情页、订单等环节透出，表示该商品为直租免首付商品。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43845
+
+        :param pre_end_time: 活动预热结束时间:格式：yyyy.MM.dd HH:mm:ss
+        :param pre_start_time: 活动预热开始时间:格式：yyyy.MM.dd HH:mm:ss
+        :param item_id: 商品ID
+        :param time_range_list: 活动时间范围节点(json格式字符串)：<br/> 开始时间(startTime),格式：yyyy.MM.dd HH:mm:ss <br/>  结束时间(endTime),格式：yyyy.MM.dd HH:mm:ss <br/>  名额(amount)
+        :param ref_activity_id: 外部活动ID
+        """
+        return self._top_request(
+            "tmall.car.lease.freedownpayment.put",
+            {
+                "pre_end_time": pre_end_time,
+                "pre_start_time": pre_start_time,
+                "item_id": item_id,
+                "time_range_list": time_range_list,
+                "ref_activity_id": ref_activity_id
+            }
+        )
+
+    def tmall_car_lease_item_activity_get(
+            self
+    ):
+        """
+        查询汽车租赁活动信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43876
+
+        """
+        return self._top_request(
+            "tmall.car.lease.item.activity.get"
         )
 
 
@@ -29674,6 +32144,258 @@ class TbTianMaoFuWuShangPin(DingTalkBaseAPI):
                 "source": source,
                 "biz_order_ids": biz_order_ids,
                 "seqs": seqs
+            }
+        )
+
+    def tmall_servicecenter_workcard_reassign(
+            self,
+            reassign_store_request=None
+    ):
+        """
+        工单改派门店
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42625
+
+        :param reassign_store_request: 请求入参
+        """
+        return self._top_request(
+            "tmall.servicecenter.workcard.reassign",
+            {
+                "reassign_store_request": reassign_store_request
+            }
+        )
+
+    def tmall_servicecenter_workcard_verifycode_resend(
+            self,
+            workcard_id='',
+            service_store_id=''
+    ):
+        """
+        重发核销码
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42626
+
+        :param workcard_id: 工单id
+        :param service_store_id: 门店/网点id
+        """
+        return self._top_request(
+            "tmall.servicecenter.workcard.verifycode.resend",
+            {
+                "workcard_id": workcard_id,
+                "service_store_id": service_store_id
+            }
+        )
+
+    def tmall_servicecenter_servicestore_update(
+            self,
+            param_service_store_d_t_o=None
+    ):
+        """
+        修改门店信息
+        用于修改门店/网点信息。多个业务共用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42627
+
+        :param param_service_store_d_t_o: 网点/门店
+        """
+        return self._top_request(
+            "tmall.servicecenter.servicestore.update",
+            {
+                "param_service_store_d_t_o": param_service_store_d_t_o
+            }
+        )
+
+    def tmall_servicecenter_workcard_query(
+            self,
+            service_store_id='',
+            identify_code='',
+            id='',
+            gmt_create_start='',
+            gmt_create_end='',
+            biz_order_id='',
+            current_page='1',
+            page_size='50'
+    ):
+        """
+        工单查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42632
+
+        :param service_store_id: 门店/网点id
+        :param identify_code: 核销码
+        :param id: 工单id
+        :param gmt_create_start: 工单创建开始时间
+        :param gmt_create_end: 工单创建结束时间，必须与工单创建开始时间一起传入，且间隔不超过15分钟
+        :param biz_order_id: 淘宝交易订单号。主订单或子订单均可
+        :param current_page: 当前页数
+        :param page_size: 每页大小
+        """
+        return self._top_request(
+            "tmall.servicecenter.workcard.query",
+            {
+                "service_store_id": service_store_id,
+                "identify_code": identify_code,
+                "id": id,
+                "gmt_create_start": gmt_create_start,
+                "gmt_create_end": gmt_create_end,
+                "biz_order_id": biz_order_id,
+                "current_page": current_page,
+                "page_size": page_size
+            }
+        )
+
+    def tmall_servicecenter_servicestore_create(
+            self,
+            service_store=None
+    ):
+        """
+        创建门店
+        用于创建门店/网点。多个业务共用
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42633
+
+        :param service_store: 网点/门店
+        """
+        return self._top_request(
+            "tmall.servicecenter.servicestore.create",
+            {
+                "service_store": service_store
+            }
+        )
+
+    def tmall_servicecenter_servicestore_updatestatus(
+            self,
+            id,
+            biz_type,
+            status=''
+    ):
+        """
+        网点/门店状态修改
+        修改网点/门店状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42634
+
+        :param id: 门店id
+        :param biz_type: 业务类型。不同业务传不同的值
+        :param status: 状态。1 营业，0歇业，-1彻底关店
+        """
+        return self._top_request(
+            "tmall.servicecenter.servicestore.updatestatus",
+            {
+                "id": id,
+                "biz_type": biz_type,
+                "status": status
+            }
+        )
+
+    def tmall_mallitemcenter_supplier_ability_update(
+            self,
+            param0
+    ):
+        """
+        门店服务能力授权接口
+        门店服务能力授权
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42734
+
+        :param param0: 入参
+        """
+        return self._top_request(
+            "tmall.mallitemcenter.supplier.ability.update",
+            {
+                "param0": param0
+            }
+        )
+
+    def tmall_mallitemcenter_supplier_price_upload(
+            self,
+            provider_price_list,
+            service_code=''
+    ):
+        """
+        天猫服务商服务报价上传
+        天猫服务商上传服务价格
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42735
+
+        :param provider_price_list: 服务商门店价格列表
+        :param service_code: 服务code
+        """
+        return self._top_request(
+            "tmall.mallitemcenter.supplier.price.upload",
+            {
+                "provider_price_list": provider_price_list,
+                "service_code": service_code
+            }
+        )
+
+    def tmall_mallitemcenter_serviceproduct_query(
+            self,
+            id='',
+            status='',
+            service_code='',
+            service_product_type=''
+    ):
+        """
+        天猫服务商服务产品查询
+        查询天猫服务的服务商发布的服务产品
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42736
+
+        :param id: 服务产品id
+        :param status: 产品状态
+        :param service_code: 服务名称
+        :param service_product_type: 产品类型
+        """
+        return self._top_request(
+            "tmall.mallitemcenter.serviceproduct.query",
+            {
+                "id": id,
+                "status": status,
+                "service_code": service_code,
+                "service_product_type": service_product_type
+            }
+        )
+
+    def tmall_mallitemcenter_subscribe_query(
+            self,
+            query=None
+    ):
+        """
+        天猫服务订购信息查询接口
+        查询商家服务订购信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42770
+
+        :param query: 入参query
+        """
+        return self._top_request(
+            "tmall.mallitemcenter.subscribe.query",
+            {
+                "query": query
+            }
+        )
+
+    def tmall_servicecenter_workcard_reserve(
+            self,
+            workcard_id='',
+            reserve_time_start='',
+            reserve_time_end='',
+            worker_mobile='',
+            reserve_remark='',
+            worker_name=''
+    ):
+        """
+        工单预约
+        服务工单更新通用接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43637
+
+        :param workcard_id: 工单id
+        :param reserve_time_start: 服务开始时间
+        :param reserve_time_end: 服务结束时间
+        :param worker_mobile: 工人手机号
+        :param reserve_remark: 预约备注信息
+        :param worker_name: 工人姓名
+        """
+        return self._top_request(
+            "tmall.servicecenter.workcard.reserve",
+            {
+                "workcard_id": workcard_id,
+                "reserve_time_start": reserve_time_start,
+                "reserve_time_end": reserve_time_end,
+                "worker_mobile": worker_mobile,
+                "reserve_remark": reserve_remark,
+                "worker_name": worker_name
             }
         )
 
@@ -31818,6 +34540,8 @@ class TbPaiMai(DingTalkBaseAPI):
     ):
         """
         第三方检测机构上传检测报告文本
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供第三方汽车检测机构上传检测报告文本
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28045
 
@@ -31841,6 +34565,8 @@ class TbPaiMai(DingTalkBaseAPI):
     ):
         """
         提供第三方汽车检测机构发布检测报告文本
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供第三方汽车检测机构上传检测报告文本
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28057
 
@@ -33118,6 +35844,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         删除OCS实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24700
 
         :param instance_id: 实例ID(全局唯一);16位字符串
@@ -33144,6 +35872,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         查询实例列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24701
 
         :param instance_ids: 实例ID， 若多个实例ID使用英文半角”, ”分隔，置空时默认为所有实例ID<br/>(全局唯一);16位字符串
@@ -33179,6 +35909,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         修改实例属性
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24707
 
         :param instance_id: (全局唯一);16位字符串
@@ -33201,6 +35933,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         清空实例缓存
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24708
 
         :param instance_id: 实例ID(全局唯一);16位字符串
@@ -33220,6 +35954,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         修改实例访问白名单
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24711
 
         :param instance_id: 实例ID(全局唯一);16位字符串
@@ -33240,6 +35976,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         查看实例的访问白名单
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24712
 
         :param instance_id: 实例ID(全局唯一);16位字符串
@@ -33272,6 +36010,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         查询实例的历史监控信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         对于指定实例，根据输入时间范围和时间间隔查询对应的历史监控信息。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24721
 
@@ -33297,6 +36037,8 @@ class TbALiYunOcs(DingTalkBaseAPI):
     ):
         """
         修改实例规格
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24726
 
         :param instance_id: (全局唯一);16位字符串
@@ -33323,6 +36065,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         新增用户卡片数据
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24457
 
         :param card_model: 卡片数据
@@ -33340,6 +36084,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         令牌生成服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         此接口可以生成token，用以结构化数据、非结构化数据鉴权使用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25536
 
@@ -33381,6 +36127,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         消息推送功能接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         执行消息推送
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26080
 
@@ -33426,6 +36174,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         消息推送功能接口-沙箱环境
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         对厂商提供消息推送功能
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26122
 
@@ -33462,6 +36212,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         触发router对开发者的设备动作接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         为开发者提供调用设备动作的接口，接受来自开发者的http post请求，其中包含设备信息，只返回成功失败信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26161
 
@@ -33519,6 +36271,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         IDC沙箱环境食材增量更新
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26317
 
         :param appkey: 下发给调用方的appKey
@@ -33590,6 +36344,8 @@ class TbYunOS(DingTalkBaseAPI):
     ):
         """
         同步调度管道 沙箱环境
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         YunOS YoC 同步调度管道 对外用户接口 沙箱环境
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27689
 
@@ -33673,6 +36429,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建数据库
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22308
 
         :param dbinstance_id: 实例名
@@ -33703,6 +36461,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询数据库列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22312
 
         :param dbinstance_id: 实例名
@@ -33730,6 +36490,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建帐号
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22330
 
         :param dbinstance_id: 实例名
@@ -33760,6 +36522,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查找账户列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查找指定实例、指定DB的帐户列表信息或某个指定帐号的信息。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22372
 
@@ -33824,6 +36588,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除后端服务器
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         删除后端服务器，从SLB实例中删除一组后端服务器，返回SLB实例中的后端服务器列表。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22378
 
@@ -33842,6 +36608,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         添加后端服务器
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         添加后端服务器，为SLB实例添加一组后端服务器（ECS实例），返回这个SLB实例的后端服务器列表。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22379
 
@@ -33861,6 +36629,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询TCP Listener信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22380
 
         :param load_balancer_id: slb id
@@ -33881,6 +36651,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询HTTP Listener信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22381
 
         :param load_balancer_id: slb id
@@ -33931,6 +36703,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建TCP Listener
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22386
 
         :param load_balancer_id: slb id
@@ -33966,6 +36740,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询可用数据中心信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22388
 
         """
@@ -33979,6 +36755,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询LoadBalancer信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22389
 
         """
@@ -33992,6 +36770,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         slb列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询用户创建的所有LoadBalancer列表。如果传入ServerId参数，则返回包含此BackendServer的所有LoadBalancer列表。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22390
 
@@ -34012,6 +36792,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         设置slb状态
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         配置LoadBalancer状态。当配置SLB实例：Active LoadBalancer，将SLB实例中所有Listener的配置下发到系统中，使之生效；当配置SLB实例：Inactive LoadBalancer，删除SLB实例中所有的Listener配置，使之失效。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22392
 
@@ -34034,6 +36816,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         加入安全组
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22428
 
         :param instance_id: 实例名
@@ -34056,6 +36840,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         重置实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         重置指定实例的系统盘或数据盘，可以用于重置操作系统为初始状态或更换操作系统、以及重置数据盘状态。<br/>？	只有状态为Stopped的实例才可以进行此操作。<br/>？	重置系统盘有两种选择：1）将实例重置为当前实例使用的Image系统配置；2）传入新的镜像ID实现更换操作系统，更换操作系统不限制前后的系统类型及系统盘大小。重置后系统盘的大小就是对应的镜像大小。<br/>？	重置数据盘将恢复数据盘初始创建时的状态。如果此数据盘是基于快照创建的，则恢复为初始快照状态；否则，清空所有数据。<br/><br/>升级:<br/>增加写boss流程.
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22429
 
@@ -34079,6 +36865,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询Zone信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询指定Region下的Zone列表。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22430
 
@@ -34096,6 +36884,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询可用数据中心
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询可用的Region列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22431
 
@@ -34111,6 +36901,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除安全组
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用于删除一个指定的安全组。<br/>	只有组内不存在实例，或者没有被其他组的安全规则引用时才可以删除。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22432
 
@@ -34134,6 +36926,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询安全组列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         分页查询用户定义的所有安全组基本信息。每页的数量默认为10条，数据按照安全组ID降序排列。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22433
 
@@ -34158,6 +36952,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询安全组规则
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询安全组详情，包括安全权限控制。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22434
 
@@ -34182,6 +36978,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建安全组
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新建一个安全组，通过安全组防火墙规则配置实现对一组实例的防火墙配置。一个安全组可包含多个实例，但一个实例只能属于一个安全组。<br/>？	新建的安全组，默认只打开组内实例之间的访问权限，其他访问权限全部关闭。若用户允许其他组的机器或来自互联网的访问，则可通过授权安全组权限接口来对安全组防火墙策略进行修改。<br/>？	防火墙规则区分内网和公网。<br/>？	每个用户最多可创建100个安全组
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22435
 
@@ -34204,6 +37002,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         释放公网IP地址
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         释放已经分配给实例的公网IP地址。<br/>？	实例的状态必须为Stopped状态，才可执行此操作。<br/>？	实例重启后此操作才能生效。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22436
 
@@ -34227,6 +37027,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询可用镜像
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询用户可以使用的镜像列表。显示出的镜像资源列表包括用户自己私有的镜像资源和其他公共的镜像资源，此接口支持分页查询，查询结果包括可使用的镜像资源的总数和当前页的镜像资源。每页的数量默认为10条。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22437
 
@@ -34253,6 +37055,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例磁盘列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         列举实例的磁盘设备ID和类型。<br/>？	执行此操作时，实例的状态不能为Starting或Deleted。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22439
 
@@ -34274,6 +37078,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例状态
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         批量获取当前用户所有实例的状态信息，也可用于获取实例列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22440
 
@@ -34299,6 +37105,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         重启实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         重启指定的实例。<br/>？	只有状态为Running的实例才可以进行此操作。<br/>？	接口调用成功后实例进入Starting状态。<br/>？	支持强制重启，强制重启等同于传统服务器的冷启动。<br/>？	重启后，不自动卸载ISO设备，但会自动卸载挂载的快照设备。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22441
 
@@ -34321,6 +37129,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         停止实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         停止一个指定的实例。<br/>？	只有状态为Running的实例才可以进行此操作。<br/>？	接口调用成功后实例进入Stopped状态。<br/>？	实例支持强制停止，强制停止等同于断电处理。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22442
 
@@ -34342,6 +37152,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         启动实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         启动一个指定的实例。<br/>接口调用成功后实例进入Starting状态。<br/>实例状态必须为Stopped，才可以调用该接口。<br/><br/>新增:业务欠费停机,不允许启动.
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22443
 
@@ -34362,6 +37174,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询快照详情
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询指定快照的详细信息。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22444
 
@@ -34383,6 +37197,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询磁盘设备的快照列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询针对云服务器的某个磁盘设备所有的快照列表。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22445
 
@@ -34402,6 +37218,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例资源规格列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询ECS所提供的实例资源规格列表。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22446
 
@@ -34416,6 +37234,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         分配公网IP地址
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         给一个特定实例分配一个可用公网IP地址。<br/>？	实例的状态必须为Running或Stopped状态，才可以调用此接口。<br/>？	分配的IP必须在实例启动或重启后才能生效。<br/>？	分配的时候只能是IP，不能是IP段。<br/>？	目前，一个实例只能分配一个IP。当调用此接口时，如果实例已经拥有一个公网IP，将直接返回原IP地址。如果需要重新分配新地址，请先调用释放公网IP地址接口，再重新分配公网IP地址即可。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22447
 
@@ -34435,6 +37255,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除自定义镜像
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         删除指定的用户自定义镜像。镜像删除之后将不能再用于创建、重置ECS实例。<br/>	如果指定的镜像不存在，则请求将被忽略。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22448
 
@@ -34460,6 +37282,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建自定义镜像
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         通过快照创建自定义镜像，创建后的镜像可以用于新建ECS实例。<br/>	只有系统盘的快照可以用于创建自定义镜像。<br/>	只有达到完成状态（进度为100）的快照可以用于创建自定义镜像。<br/><br/>升级,去掉boss逻辑
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22449
 
@@ -34488,6 +37312,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除快照
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         删除指定实例、指定磁盘设备的快照。如果需要取消创建中的快照（即快照进度尚未达到100%），也可以调用该进口将快照删除（即取消快照创建）。<br/>？	实例仅在Stopped或Running状态下才能删除快照。<br/>？	如果指定ID的快照不存在，请求将被忽略。<br/>？	如果快照已经被用于创建自定义镜像，则这个快照不能被删除。需要先删除相应的自定义镜像，快照才能被删除的。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22450
 
@@ -34514,6 +37340,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建快照
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         对指定的磁盘存储设备创建快照。<br/>？	云服务器仅在Stopped或Running状态下才能创建快照。（但刚创建完成从未启动过的实例不能创建快照）<br/>？	新增加一块磁盘后，如果实例尚未启动过，新增的这块磁盘不能用于创建快照。<br/>？	如果快照创建没有完成（即进度没有达到100%），那么这个快照无法用于创建自定义镜像。<br/>？	现阶段一块磁盘最多只能创建2个快照。<br/><br/>升级:<br/>去掉写订单逻辑.
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22451
 
@@ -34539,6 +37367,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除磁盘
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         当某个磁盘设备不再使用时，可以删除磁盘。实例挂载的所有磁盘设备可以通过查询实例磁盘列表获接口获得。<br/>？	删除磁盘时实例状态只能为Running或Stopped中的一种<br/>？	若实例为Running状态，只有重启后操作方可生效。<br/>？	如果指定ID的磁盘不存在，请求将被忽略。<br/>？	磁盘被删除时，从该磁盘创建的快照会自动被删除。<br/><br/>升级:<br/>增加boss订单逻辑.
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22452
 
@@ -34563,6 +37393,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         为实例增加磁盘设备
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         为指定实例增加一个磁盘设备。可创建一个全新磁盘，或是基于一个快照创建新磁盘。<br/>？	实例状态必须为Running或Stopped状态中的一种。<br/>？	基于快照创建磁盘时，无需设置磁盘大小，磁盘大小与快照对应的磁盘大小一致。<br/>？	当实例处于Running状态时，挂载磁盘无需重启，即时生效。<br/>？	单个实例最多允许挂载5个磁盘设备，总容量不能超过5TB。<br/><br/>升级:<br/>修改写订单逻辑.
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22453
 
@@ -34587,6 +37419,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据传入实例的名称来释放实例资源。释放后实例所使用的物理资源都被回收，相关数据全部丢失且永久不可恢复。<br/>？	实例状态必须为Starting或Stopped，才可以进行删除操作。删除后，实例的状态为Deleted，表示资源已释放，删除完成；对已处于Deleted状态的实例调用此操作，请求将被忽略。<br/>？	实例被删除时，挂载在实例上的磁盘会相应被删除。<br/>？	实例被删除后，相关数据全部丢失且永久不可恢复。<br/><br/>升级:增加ChargeType判断.
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22454
 
@@ -34606,6 +37440,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询指定实例的详细信息。<br/><br/>升级:增加InternetChargeType.<br/>升级：增加SecurityControl
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22455
 
@@ -34648,6 +37484,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据传入参数创建弹性计算实例。<br/>	在创建实例时，必须要选择镜像，用来确定新生产实例的系统盘配置。镜像即一块母盘，包含操作系统以及应用软件配置，基于镜像创建实例后，实例的系统盘即为此镜像的完全克隆（系统配置及大小）。<br/>	一个实例属于且只能属于一个安全组。安全组需要预先创建，可通过创建安全组接口创建，可以在新创建实例时指定，也可通过修改实例属性的接口来完成实例所属安全组变更。在同一个安全组内的实例内网可以相互访问，但不同安全组之间默认有防火墙隔离，不可相互访问，但可通过安全组授权（通过授权安全组权限接口实现）来设置此安全组的防火墙权限。创建实例时必须要指定其所位于的安全组。同一个安全组内的实例数量不能超过1000个，若组内实例数量超出限制，创建实例时若指定该安全组，会提示失败。同一个安全组规则不能超过100条。<br/>	可设置公网入出带宽最大值。<br/>	实例创建时，系统会自己根据所指定的镜像为系统分配一个相应大小的系统盘。如果需要为实例添加更多数据磁盘，请调用为实例增加磁盘设备接口。<br/><br/>升级:增加参数,修改boss订单逻辑<br/>升级：增加NodeControlId；公网出带宽从200M改为1K
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22457
 
@@ -34713,6 +37551,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查看云服务器监控信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         分页查询本用户的所有云服务器相关的监控信息。 <br/>只能查询到状态非Deleted或者非刚刚创建完成尚处于Stopped状态的云服务器的<br/>监控信息。 <br/>可返回的监控内容包括：云服务器的CPU使用率、云服务器分配到的内存数、云<br/>服务器接收道德数据流量、云服务器发送的数据流量、云服务器网络流量、云服务<br/>器平均带宽。有可能返回的监控内容中会缺少部分内部，这可能是由于系统没有获<br/>得到相应的信息，比如当时实例处于Stopped状态。 <br/>可查询最近7天的监控数据。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22458
 
@@ -34734,6 +37574,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         撤销安全组规则
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         取消Group对外提供的访问权限。支持两种取消授权方式：一是取消本Region内其他<br/>Group采用指定协议通过指定端口访问访问该Group；二是取消IP地址范围采用指定协议通<br/>过指定端口访问该Group，只有调用授权接口授权的权限条目才可以删除（参数值跟授权时<br/>的参数相同）。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22459
 
@@ -34774,6 +37616,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         授权安全组权限
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         设定安全组对外提供的访问权限，支持两种授权方式：  1、开放同一region内其他Group对其的访问权限；2、开放指定某IP 地址范围（CIDR格式）对其的访问权限。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22460
 
@@ -34811,6 +37655,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         修改实例属性
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         修改实例密码、主机名、安全组等属性信息。 <br/>？  此操作只修改参数中显式指定了的属性，没有指定的属性将不会发生改变。 <br/>？  重置实例的密码，状态为Deleted或Starting的实例不可以进行此操作。重置密码<br/>需要重启实例后才能生效。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22461
 
@@ -34837,6 +37683,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         增加Ip段
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         增加Ip段。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22736
 
@@ -34854,6 +37702,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         回滚快照
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         重置磁盘
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22975
 
@@ -34880,6 +37730,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         挂载磁盘
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         实例的状态必须为running或者stopped，且实例的安全控制标识不为locked，且不欠费。<br/>在该接口中设置的DeleteWithInstance属性，在实例的安全控制标记为locked时，释放实例时会忽略磁盘的DeleteWithInstance属性而被同时释放。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23345
 
@@ -34905,6 +37757,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         删除ECS实例
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23347
 
@@ -34924,6 +37778,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23348
 
         :param instance_id: 实例ID
@@ -34945,6 +37801,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         修改实例属性
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23349
 
         :param instance_id: 指定的实例ID
@@ -34972,6 +37830,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         重启实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         重启ECS实例
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23352
 
@@ -35005,6 +37865,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询磁盘
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23353
 
         :param region_id: 实例所属于的Region ID
@@ -35047,6 +37909,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         停止ECS实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         停止实例运行
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23354
 
@@ -35075,6 +37939,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建磁盘
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23356
 
         :param region_id: 实例所属的Region ID
@@ -35106,6 +37972,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         启动ecs实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         启动ECS实例
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23358
 
@@ -35171,6 +38039,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建ECS实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23365
 
         :param region_id: 实例所属的Region ID
@@ -35284,6 +38154,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建安全组
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新建一个安全组，通过安全组防火墙规则配置实现对一组实例的防火墙配置。一个安全组可包含多个实例，但一个实例只能属于一个安全组。新建的安全组，默认只打开组内实例之间的访问权限，其他访问权限全部关闭。若用户允许其他组的机器或来自互联网的访问，则可通过授权安全组权限接口来对安全组防火墙策略进行修改。防火墙规则区分内网和公网。每个用户最多可创建100个安全组
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23374
 
@@ -35310,6 +38182,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         分配公网IP地址
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         给一个特定实例分配一个可用公网IP地址。 ？	实例的状态必须为Running或Stopped状态，才可以调用此接口。 ？	分配的IP必须在实例启动或重启后才能生效。 ？	分配的时候只能是IP，不能是IP段。 ？	目前，一个实例只能分配一个IP。当调用此接口时，如果实例已经拥有一个公网IP，将直接返回原IP地址。如果需要重新分配新地址，请先调用释放公网IP地址接口，再重新分配公网IP地址即可。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23376
 
@@ -35336,6 +38210,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询可用镜像
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询用户可以使用的镜像列表。显示出的镜像资源列表包括用户自己私有的镜像资源和其他公共的镜像资源，此接口支持分页查询，查询结果包括可使用的镜像资源的总数和当前页的镜像资源。每页的数量默认为10条。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23379
 
@@ -35375,6 +38251,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询快照列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23380
 
         :param region_id: 无
@@ -35401,6 +38279,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例资源规格列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23381
 
         """
@@ -35414,6 +38294,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询可用区
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23382
 
         :param region_id: 指定的Region ID
@@ -35430,6 +38312,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询可用地域列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23383
 
         """
@@ -35446,6 +38330,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询安全组列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23387
 
         :param region_id: 数据中心id
@@ -35470,6 +38356,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         4.6.3	查询安全组规则
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询安全组规则
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23388
 
@@ -35499,6 +38387,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         授权安全组
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         设定安全组对外提供的访问权限，支持两种授权方式： 1、开放同一region内其他Group对其的访问权限；2、开放指定某IP 地址范围（CIDR格式）对其的访问权限。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23390
 
@@ -35547,6 +38437,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23508
 
         :param region_id: 区域Id
@@ -35602,6 +38494,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建数据库实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23679
 
         :param region_id: 数据中心，长度不超过50个字符
@@ -35654,6 +38548,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         修改实例访问白名单
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         修改允许访问实例的IP名单
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23714
 
@@ -35679,6 +38575,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查看数据库实例详情
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用户只能查看属于自己的实例列表，返回实例列表信息包括：实例状态、公网/私网、实例连接地址/端口，是否被锁，是否过期等，以供用户追加数据库、修改实例等操作。用户也可以查找指定名称、类型、状态的实例信息。如果查找请求参数错误，返回数据为空
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23724
 
@@ -35716,6 +38614,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查看数据库实例列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23725
 
         :param region_id: 实例的region
@@ -35797,6 +38697,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         实例性能
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取实例性能值
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24377
 
@@ -35843,6 +38745,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例配置
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查看实例配置
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24432
 
@@ -35862,6 +38766,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         变配实例容量
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24433
 
         :param instance_id: (全局唯一);16位字符串
@@ -35883,6 +38789,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         获取实时监控值
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24437
 
         :param instance_ids: 实例ID， 若多个实例ID使用英文半角”,”分隔，置空时默认为所有实例ID。(全局唯一)16位字符串
@@ -35901,6 +38809,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         获取可用region
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24438
 
         """
@@ -35913,6 +38823,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查看监控列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24439
 
         """
@@ -35930,6 +38842,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         查询实例列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24440
 
         :param instance_ids: 指定实例ID时，需输入(全局唯一)16位字符串；<br/>若查询多个实例ID时，使用英文半角”,”分隔各ID；置空时默认为查询该用户名下所有实例；
@@ -35959,6 +38873,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         获取历史监控信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24441
 
         :param instance_id: 实例ID
@@ -35984,6 +38900,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         删除实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24443
 
         :param instance_id: 实例ID
@@ -36008,6 +38926,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         创建实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24447
 
         :param password: 说明：实例密码<br/>规则：大写字母、小写字母、数字、下划线，至少包含3种或以上。<br/>长度8~32位
@@ -36176,6 +39096,8 @@ class TbALiYun(DingTalkBaseAPI):
     ):
         """
         锁定实例
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24906
 
         :param dbinstance_id: 实例名称
@@ -36553,6 +39475,8 @@ class TbHuoChePiao(DingTalkBaseAPI):
     ):
         """
         代理人卧铺信息回传接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         该API提供给代理商调用，代理商把卧铺的中铺，上铺的价格传过来
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24929
 
@@ -36582,6 +39506,8 @@ class TbHuoChePiao(DingTalkBaseAPI):
     ):
         """
         代理商自动退款
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         代理商自动退款调用实现退款
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25833
 
@@ -36623,6 +39549,8 @@ class TbHuoChePiao(DingTalkBaseAPI):
     ):
         """
         阿里小号发送注册验证短信给12306
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25890
 
         :param agent_id: 代理商id
@@ -36835,6 +39763,8 @@ class TbHuoChePiao(DingTalkBaseAPI):
     ):
         """
         代理商自动退款v2--增加鉴权校验
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         代理商自动退款调用实现退款
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29811
 
@@ -37268,6 +40198,8 @@ class TbTAE(DingTalkBaseAPI):
     ):
         """
         判断是否存在店铺优惠券
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24230
 
         :param seller_nick: 卖家昵称
@@ -37940,6 +40872,8 @@ class TbShouTaoKaiFang(DingTalkBaseAPI):
     ):
         """
         互动城活动列表对应鉴权接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         该接口不会对外开放，只是用来内部鉴权所用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26117
 
@@ -38027,6 +40961,8 @@ class TbShouTaoKaiFang(DingTalkBaseAPI):
     ):
         """
         AR互动能力开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         ar能力的鉴权接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27556
 
@@ -38044,6 +40980,8 @@ class TbShouTaoKaiFang(DingTalkBaseAPI):
     ):
         """
         保存视频
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         保存视频。js代码通过这个接口保存视频信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31290
 
@@ -38059,6 +40997,8 @@ class TbShouTaoKaiFang(DingTalkBaseAPI):
     ):
         """
         视频上传获取token接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用户上传视频前需要通过本接口申请token
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31291
 
@@ -38077,6 +41017,8 @@ class TbShouTaoKaiFang(DingTalkBaseAPI):
     ):
         """
         获取上传视频列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         传入视频id，获取视频上传的列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31292
 
@@ -38144,6 +41086,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         标准消费接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         标准的消费接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23316
 
@@ -38174,6 +41118,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         App设备utdid和云设备id的绑定
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23663
 
         :param utd_id: usertrack的utdid，必需
@@ -38212,6 +41158,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         SDK数据上报接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23791
 
         :param user_id: 用户ID
@@ -38244,6 +41192,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         用户反馈添加
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         添加用户反馈
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23817
 
@@ -38278,6 +41228,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         用户信息加密
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23822
 
         :param uuid: t65ID
@@ -38297,6 +41249,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         App获取用户信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23826
 
         """
@@ -38337,6 +41291,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         主动取消赊销服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         登陆用户发送短信验证码
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24953
 
@@ -38350,6 +41306,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         开通赊销服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25369
 
         """
@@ -38362,6 +41320,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         发送短信验证码
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25370
 
         """
@@ -38375,6 +41335,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         校验短信验证码
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25371
 
         :param auth_code: 短信验证码
@@ -38392,6 +41354,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         充值消费的抽奖结果查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         充值抽奖结果查询
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25372
 
@@ -38434,6 +41398,8 @@ class TbBaoDian(DingTalkBaseAPI):
     ):
         """
         数娱游戏礼包标记为已发放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         对用户账户下的待发放游戏礼包，标记为已发放状态
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25490
 
@@ -38505,6 +41471,8 @@ class TbJAEZuJian(DingTalkBaseAPI):
     ):
         """
         拍照上传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         JAE 无线API开放 拍照上传组件
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22819
 
@@ -38519,6 +41487,8 @@ class TbJAEZuJian(DingTalkBaseAPI):
     ):
         """
         微淘关注
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         JAE 开放API 微淘关注
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22826
 
@@ -38536,6 +41506,8 @@ class TbJAEZuJian(DingTalkBaseAPI):
     ):
         """
         分享组件
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         JAE API 分享组件
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22827
 
@@ -38559,6 +41531,8 @@ class TbJAEZuJian(DingTalkBaseAPI):
     ):
         """
         网络类型
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         JAE 开放API 获取网络类型
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=22833
 
@@ -38622,6 +41596,8 @@ class TbQiChePiao(DingTalkBaseAPI):
     ):
         """
         城市变更
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         代理商通知城市变更，比如可售变为不可售等
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25727
 
@@ -38797,6 +41773,8 @@ class TbQiChePiao(DingTalkBaseAPI):
     ):
         """
         商家汽车票车次更新通知接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家汽车票车次更新后，调用该接口通知平台。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27925
 
@@ -39085,6 +42063,8 @@ class TbQiChePiao(DingTalkBaseAPI):
     ):
         """
         热门路线获取
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询汽车票目前售卖的热门路线
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35504
 
@@ -39152,6 +42132,24 @@ class TbQiChePiao(DingTalkBaseAPI):
             }
         )
 
+    def taobao_bus_numbers_stockprice_update(
+            self,
+            param_top_bus_price_and_stock_update_r_q=None
+    ):
+        """
+        汽车票更新价格库存
+        用于汽车票代理商更新价格库存
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43569
+
+        :param param_top_bus_price_and_stock_update_r_q: 请求参数
+        """
+        return self._top_request(
+            "taobao.bus.numbers.stockprice.update",
+            {
+                "param_top_bus_price_and_stock_update_r_q": param_top_bus_price_and_stock_update_r_q
+            }
+        )
+
 
 class TbMaShangTao(DingTalkBaseAPI):
     """
@@ -39163,6 +42161,8 @@ class TbMaShangTao(DingTalkBaseAPI):
     ):
         """
         生成包裹码二维码图片链接
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23399
 
         """
@@ -40515,6 +43515,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         天天-排行榜详情
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         排行榜详情
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25245
 
@@ -40536,6 +43538,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         排行榜列表页
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         虾米排行榜列表页面
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25246
 
@@ -40555,6 +43559,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         天天动听耳机绑定查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25315
 
         :param utdid: 设备id
@@ -40576,6 +43582,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         虾米－电台详情接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         虾米电台歌曲详情
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25390
 
@@ -40672,6 +43680,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         获取手机配置
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取配置
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27047
 
@@ -40774,6 +43784,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         获取启动图片
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27060
 
         :param type: 类型
@@ -40829,6 +43841,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         播放日志添加
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27062
 
         :param id: 歌曲id
@@ -40878,6 +43892,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         虾米歌曲搜索5.0接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         虾米歌曲搜索接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27710
 
@@ -40903,6 +43919,8 @@ class TbXiaMi(DingTalkBaseAPI):
     ):
         """
         虾米艺人搜索
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         虾米艺人搜索接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27711
 
@@ -41176,6 +44194,8 @@ class TbTianMaoHuDongJieKou(DingTalkBaseAPI):
     ):
         """
         互动游戏分数保存
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23769
 
         :param interact_id: 互动实例ID
@@ -41195,6 +44215,8 @@ class TbTianMaoHuDongJieKou(DingTalkBaseAPI):
     ):
         """
         天猫互动游戏分数查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23770
 
         :param interact_id: 互动实例ID ISV通过绑定互动奖池并且生成互动实例接口 获取该ID
@@ -41536,6 +44558,8 @@ class TbTianMaoHuDongJieKou(DingTalkBaseAPI):
     ):
         """
         淘小铺生成活动口令
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24787
 
         :param nick: 用户nick
@@ -41938,6 +44962,8 @@ class TbTianMaoHuDongJieKou(DingTalkBaseAPI):
     ):
         """
         无线抽奖权限包接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27653
 
         """
@@ -41986,6 +45012,8 @@ class TbTianMaoHuDongJieKou(DingTalkBaseAPI):
     ):
         """
         权益平台奖池接口开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         权益平台通用开放抽奖接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28710
 
@@ -42004,6 +45032,8 @@ class TbTianMaoHuDongJieKou(DingTalkBaseAPI):
     ):
         """
         线下设备抽奖
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         为线下大屏用户提供抽奖功能
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31970
 
@@ -42038,6 +45068,8 @@ class TbDMP(DingTalkBaseAPI):
     ):
         """
         创建人群
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23342
 
         :param valid_date: 过期时间
@@ -42107,6 +45139,8 @@ class TbDMP(DingTalkBaseAPI):
     ):
         """
         根据人群名称获取人群
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24183
 
         :param crowd_name: 人群名称
@@ -42125,6 +45159,8 @@ class TbDMP(DingTalkBaseAPI):
     ):
         """
         用户是否订购的app
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24186
 
         :param top_query: query对象
@@ -42309,6 +45345,8 @@ class TbShengHuoFuWu(DingTalkBaseAPI):
     ):
         """
         私有化门店列表查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25174
 
         :param private_store_query_d_o: 门店查询条件
@@ -42686,6 +45724,8 @@ class TbJiuDianDaoGou(DingTalkBaseAPI):
     ):
         """
         酒店列表搜索接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供酒店小搜的酒店列表数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=23019
 
@@ -43027,6 +46067,24 @@ class TbBaoXian(DingTalkBaseAPI):
             {
                 "claim_no": claim_no,
                 "goods_status": goods_status
+            }
+        )
+
+    def alipay_baoxian_claim_survey_conclusion_submit(
+            self,
+            facilitator_survey_conclusions=None
+    ):
+        """
+        保险退货服务商勘察结论提交接口
+        保险退货服务商提交勘察结论
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42999
+
+        :param facilitator_survey_conclusions: 勘察结论
+        """
+        return self._top_request(
+            "alipay.baoxian.claim.survey.conclusion.submit",
+            {
+                "facilitator_survey_conclusions": facilitator_survey_conclusions
             }
         )
 
@@ -43575,6 +46633,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         isv资源创建接口（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27411
 
         :param param_create_isv_resource_request: isv创建资源的参数
@@ -43592,6 +46652,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         isv和商家资源更新（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         isv和商家的资源获取接口（云打印开源存储）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27424
 
@@ -43610,6 +46672,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         isv资源列表获取（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         isv资源列表查询（云打印开源存储）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27425
 
@@ -43628,6 +46692,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         商家资源创建（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家资源创建接口(云打印开源存储)
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27426
 
@@ -43646,6 +46712,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         isv和商家资源发布（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         isv和商家资源发布接口(云打印开源存储)
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27427
 
@@ -43710,6 +46778,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         商家资源详情查询（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家资源详情获取（云打印开源存储）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27538
 
@@ -43728,6 +46798,8 @@ class TbDianZiMianDan(DingTalkBaseAPI):
     ):
         """
         isv资源详情获取（云打印开源存储）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         isv资源详情查询（云打印开源存储）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27539
 
@@ -44789,6 +47861,8 @@ class TbALiTongXin(DingTalkBaseAPI):
     ):
         """
         外部商家兑换混淆nick接口（已作废，请使用alibaba.alicom.exchange.createbymixnick）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         外部商家兑换混淆nick接口，已作废，请使用alibaba.alicom.exchange.createbymixnick
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27668
 
@@ -44966,6 +48040,8 @@ class TbALiTongXin(DingTalkBaseAPI):
     ):
         """
         线下拉新佣金查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         线下渠道用户查询指定店铺指定时间段拉新的佣金
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28986
 
@@ -45090,6 +48166,8 @@ class TbALiTongXin(DingTalkBaseAPI):
     ):
         """
         金融购机订单信息校验
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31279
 
         :param trade_status: 订单状态1: 等待买家付款   2:等待卖家发货   4:已退款  6: 交易成功
@@ -45117,6 +48195,8 @@ class TbALiTongXin(DingTalkBaseAPI):
     ):
         """
         擦除物联卡实名认证信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         针对物联卡业务中的共享设备，抹掉实名认证信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32576
 
@@ -45142,6 +48222,8 @@ class TbALiTongXin(DingTalkBaseAPI):
     ):
         """
         退网接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         佰才邦退网接口调用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33217
 
@@ -45169,6 +48251,8 @@ class TbALiTongXin(DingTalkBaseAPI):
     ):
         """
         入网接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         佰才邦入网退网接口调用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33218
 
@@ -45406,6 +48490,117 @@ class TbALiTongXin(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_wtt_offline_record_queryagentinfo(
+            self,
+            order_id,
+            phone
+    ):
+        """
+        线下推广充送等业务订单来源
+        线下推广充送等业务订单来源的查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43864
+
+        :param order_id: 淘宝订单号
+        :param phone: 业务号码
+        """
+        return self._top_request(
+            "alibaba.wtt.offline.record.queryagentinfo",
+            {
+                "order_id": order_id,
+                "phone": phone
+            }
+        )
+
+    def alibaba_alicom_order_preauthorize_create(
+            self,
+            pre_authorize_model=None
+    ):
+        """
+        业务办理结果
+        授授权:签约结果通知
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44226
+
+        :param pre_authorize_model: 入参
+        """
+        return self._top_request(
+            "alibaba.alicom.order.preauthorize.create",
+            {
+                "pre_authorize_model": pre_authorize_model
+            }
+        )
+
+    def alibaba_alicom_order_preauthorize_fulfillment(
+            self,
+            pre_authorize_model=None
+    ):
+        """
+        履约结果
+        预授权-履约结果
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44240
+
+        :param pre_authorize_model: 入参
+        """
+        return self._top_request(
+            "alibaba.alicom.order.preauthorize.fulfillment",
+            {
+                "pre_authorize_model": pre_authorize_model
+            }
+        )
+
+    def alibaba_alicom_order_preauthorize_query_fulfillment(
+            self,
+            pre_authorize_model=None
+    ):
+        """
+        履约结果查询
+        预授权-履约结果查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44241
+
+        :param pre_authorize_model: 入参
+        """
+        return self._top_request(
+            "alibaba.alicom.order.preauthorize.query.fulfillment",
+            {
+                "pre_authorize_model": pre_authorize_model
+            }
+        )
+
+    def alibaba_wtt_offline_creditcard_addrecord(
+            self,
+            credt_card_detail
+    ):
+        """
+        信用卡拉新数据接入
+        阿里通信线下渠道信用卡拉新数据录入-开放给合作银行
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44647
+
+        :param credt_card_detail: 请求参数
+        """
+        return self._top_request(
+            "alibaba.wtt.offline.creditcard.addrecord",
+            {
+                "credt_card_detail": credt_card_detail
+            }
+        )
+
+    def alibaba_alicom_order_preauthorize_query_fund(
+            self,
+            pre_authorize_model=None
+    ):
+        """
+        资金流水查询
+        预授权-资金流水查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44682
+
+        :param pre_authorize_model: 入参
+        """
+        return self._top_request(
+            "alibaba.alicom.order.preauthorize.query.fund",
+            {
+                "pre_authorize_model": pre_authorize_model
+            }
+        )
+
 
 class TbTVYouXi(DingTalkBaseAPI):
     """
@@ -45418,6 +48613,8 @@ class TbTVYouXi(DingTalkBaseAPI):
     ):
         """
         激活许可证
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25474
 
         :param device: 设备编码
@@ -45439,6 +48636,8 @@ class TbTVYouXi(DingTalkBaseAPI):
     ):
         """
         内购订单付款
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25475
 
         :param order_id: 内购交易流水号
@@ -45468,6 +48667,8 @@ class TbTVYouXi(DingTalkBaseAPI):
     ):
         """
         购买内购商店商品
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25477
 
         :param device: 设备
@@ -45498,6 +48699,8 @@ class TbTVYouXi(DingTalkBaseAPI):
     ):
         """
         读取内购商品列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25478
 
         :param device: 设备
@@ -46321,6 +49524,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—新增推广单元
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新增推广单元接口（支持单个和批量新增）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24273
 
@@ -46340,6 +49545,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—更新推广单元
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据输入条件更新推广单元（支持单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24274
 
@@ -46359,6 +49566,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—查询推广单元
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据用户输入条件查询推广单元列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24276
 
@@ -46380,6 +49589,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—绑定创意
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广单元ID和创意ID列表绑定创意（支持单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24277
 
@@ -46403,6 +49614,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         创意模板—查询创意模板
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         创意模板查询（根据模板ID列表查询模板）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24278
 
@@ -46422,6 +49635,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广用户—新增用户
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用户新增（支持单个批量新增）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24279
 
@@ -46441,6 +49656,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广用户—更新推广用户
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广用户更新（支持单个批量的更新）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24280
 
@@ -46461,6 +49678,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广用户—查询推广用户
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广用户查询接口（支持多种条件查询）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24281
 
@@ -46482,6 +49701,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广创意—新增创意
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         创意新增（支持单个批量增加创意）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24282
 
@@ -46501,6 +49722,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广创意—更新创意
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据输入条件更新创意（支持单个批量更新）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24283
 
@@ -46521,6 +49744,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广创意—根据创意主键id查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据创意id查询创意（单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24284
 
@@ -46541,6 +49766,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广创意—查询创意列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据查询条件查询推广创意列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24285
 
@@ -46557,6 +49784,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广创意—删除创意
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         创意删除（支持单个批量删除创意）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24286
 
@@ -46579,6 +49808,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—获取定向服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广单元ID批量获取定向列表（支持单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24287
 
@@ -46602,6 +49833,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—设置定向
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广单元设置定向（支持单个批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24288
 
@@ -46626,6 +49859,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—删除服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         opendsp推广计划删除（支持批量和单个）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24289
 
@@ -46649,6 +49884,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—设置定向
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广计划设置定向
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24290
 
@@ -46673,6 +49910,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—根据推广单元ID获取推广单元列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广单元id获取推广单元列表（支持单个和批量获取）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24291
 
@@ -46695,6 +49934,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—获取定向列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广计划ID获取定向列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24293
 
@@ -46716,6 +49957,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         字典服务—查询字典列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据KEY查询对应字典
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24294
 
@@ -46736,6 +49979,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—删除推广单元
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广单元ID删除推广单元（支持单个批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24295
 
@@ -46759,6 +50004,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—解绑创意
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广单元ID和创意ID列表解绑创意（支持单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24296
 
@@ -46782,6 +50029,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—根据输入条件查询计划
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据输入条件查询推广计划
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24297
 
@@ -46801,6 +50050,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—新增推广计划
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广计划新增（支持单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24298
 
@@ -46820,6 +50071,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—更新推广计划
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广计划更新（支持批量和单个）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24299
 
@@ -46840,6 +50093,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广计划—根据计划ID查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广计划根据主键计划ID查询（支持单个和批量）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24300
 
@@ -46862,6 +50117,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广单元—根据推广单元id获取绑定的创意
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据推广单元id获取推广单元绑定的创意
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24393
 
@@ -46887,6 +50144,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         推广创意—创意文件上传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         为外部dsp提供创意文件上传，如图片视频等
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24394
 
@@ -46914,6 +50173,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报表—推广计划维度报表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广计划维度报表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24415
 
@@ -46936,6 +50197,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报表—创意维度报表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         创意维度报表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24416
 
@@ -46958,6 +50221,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报表-推广主维度报表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广主维度报表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24419
 
@@ -46980,6 +50245,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报表—推广单元维度报表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广单元日报表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24425
 
@@ -47002,6 +50269,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报表—人群维度报表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         人群维度报表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24458
 
@@ -47024,6 +50293,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报表—推广主维度相关报表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         推广主维度相关报表包括离线报表和实时报表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24922
 
@@ -47045,6 +50316,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报价控制——报价控制查询接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         报价控制查询接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25065
 
@@ -47064,6 +50337,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报价控制——报价控制新增接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         报价控制新增接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25066
 
@@ -47083,6 +50358,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         报价控制——报价控制更新接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         报价控制更新接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25067
 
@@ -47103,6 +50380,8 @@ class TbDSP(DingTalkBaseAPI):
     ):
         """
         自定义报表—查询接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         自定义报表查询接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25285
 
@@ -47165,6 +50444,8 @@ class TbALiCheLianWang(DingTalkBaseAPI):
     ):
         """
         根据经纬坐标或ip查询所属省市信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据经纬坐标或ip查询所属省市信息，直接调用，则以客户端IP返回所述地区，如传递经纬坐标，则以经纬度坐标返回所属地区
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=24857
 
@@ -47202,6 +50483,8 @@ class TbALiCheLianWang(DingTalkBaseAPI):
     ):
         """
         获取导航地图数据更新信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         地图数据清单查询，更新包下载地址获取，包含全量更新及增量更新
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25064
 
@@ -47262,6 +50545,8 @@ class TbALiCheLianWang(DingTalkBaseAPI):
     ):
         """
         HF天气信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取HF天气信息内容
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25182
 
@@ -48108,6 +51393,8 @@ class TbZuanZhan(DingTalkBaseAPI):
     ):
         """
         钻石展位全店取消DMP渠道应用接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         钻石展位全店取消DMP渠道应用接口；注意：全店和单品是两个渠道，分开两个接口调用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28898
 
@@ -48393,6 +51680,8 @@ class TbZuanZhan(DingTalkBaseAPI):
     ):
         """
         应用全店计划DMP人群到渠道接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28914
 
         :param crowd_id: DMP人群ID
@@ -49478,6 +52767,241 @@ class TbZuanZhan(DingTalkBaseAPI):
             result_processor=lambda x: x["creative_offline_rpt_total_list"]
         )
 
+    def taobao_zuanshi_banner_upgrade_target_predict_uv(
+            self,
+            target_labels
+    ):
+        """
+        预估定向标签uv
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42836
+
+        :param target_labels: 预估定向标签信息
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.target.predict.uv",
+            {
+                "target_labels": target_labels
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_target_suggest_find(
+            self,
+            target_type,
+            campaign_type
+    ):
+        """
+        钻石展位定向推荐查询
+        根据定向类型，查询推荐定向
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42837
+
+        :param target_type: 定向类型
+        :param campaign_type: 计划类型(cpm/cpc)
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.target.suggest.find",
+            {
+                "target_type": target_type,
+                "campaign_type": campaign_type
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_target_predict_pv(
+            self,
+            target_labels
+    ):
+        """
+        pv预估
+        预估定向标签pv
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42838
+
+        :param target_labels: 预估定向标签信息
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.target.predict.pv",
+            {
+                "target_labels": target_labels
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_target_find(
+            self,
+            campaign_type
+    ):
+        """
+        查询有权限的定向列表
+        查询客户有权限的新定向列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42839
+
+        :param campaign_type: 计划类型(cpm/cpc)
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.target.find",
+            {
+                "campaign_type": campaign_type
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_target_label_find(
+            self,
+            target_type,
+            campaign_type,
+            option_name='',
+            option_page_size='50',
+            option_offset='0'
+    ):
+        """
+        根据定向类型查询定向标签
+        根据定向类型查询客户可用标签
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42857
+
+        :param target_type: 定向类型
+        :param campaign_type: 计划类型(cpm/cpc)
+        :param option_name: 选项名称，用于搜索
+        :param option_page_size: 选项分页每页数量
+        :param option_offset: 当前页要显示数据的起始位置
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.target.label.find",
+            {
+                "target_type": target_type,
+                "campaign_type": campaign_type,
+                "option_name": option_name,
+                "option_page_size": option_page_size,
+                "option_offset": option_offset
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_crowd_page(
+            self,
+            campaign_id,
+            adgroup_id,
+            campaign_name='',
+            status='',
+            page_size='50',
+            crowd_id='',
+            target_types='',
+            crowd_name='',
+            offset='0',
+            target_type='',
+            adgroup_name=''
+    ):
+        """
+        分页查询全店计划下的新定向
+        [新]分页查询全店计划下的新定向
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42858
+
+        :param campaign_id: 计划id
+        :param adgroup_id: 单元id
+        :param campaign_name: 计划名称
+        :param status: 人群状态
+        :param page_size: 分页大小
+        :param crowd_id: 定向id
+        :param target_types: 定向类型
+        :param crowd_name: 人群名称
+        :param offset: 分页偏移量
+        :param target_type: 定向类型
+        :param adgroup_name: 单元名称
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.crowd.page",
+            {
+                "campaign_id": campaign_id,
+                "adgroup_id": adgroup_id,
+                "campaign_name": campaign_name,
+                "status": status,
+                "page_size": page_size,
+                "crowd_id": crowd_id,
+                "target_types": target_types,
+                "crowd_name": crowd_name,
+                "offset": offset,
+                "target_type": target_type,
+                "adgroup_name": adgroup_name
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_crowd_delete(
+            self,
+            crowds=None
+    ):
+        """
+        删除全店计划下的新定向
+        [新]删除全店计划下的新定向
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42859
+
+        :param crowds: 人群
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.crowd.delete",
+            {
+                "crowds": crowds
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_crowd_update(
+            self,
+            crowds=None
+    ):
+        """
+        更新全店计划下的新定向
+        [新]更新全店计划下的新定向
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42860
+
+        :param crowds: 人群
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.crowd.update",
+            {
+                "crowds": crowds
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_crowd_add(
+            self,
+            crowds=None
+    ):
+        """
+        增加全店计划下的新定向
+        [新]增加全店计划下的新定向
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42861
+
+        :param crowds: 新增定向人群
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.crowd.add",
+            {
+                "crowds": crowds
+            }
+        )
+
+    def taobao_zuanshi_banner_upgrade_adgroup_create(
+            self,
+            campaign_id,
+            title,
+            crowds,
+            adzone_bid_d_t_os,
+            intelligent_bid='1'
+    ):
+        """
+        新定向体系下新增单元
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43117
+
+        :param campaign_id: 计划id
+        :param title: 单元标题
+        :param crowds: 人群结构
+        :param adzone_bid_d_t_os: 资源位列表
+        :param intelligent_bid: 智能出价，0：不使用,1：优化进店，2：优化成交，cpc不能选择2优化成交
+        """
+        return self._top_request(
+            "taobao.zuanshi.banner.upgrade.adgroup.create",
+            {
+                "campaign_id": campaign_id,
+                "title": title,
+                "crowds": crowds,
+                "adzone_bid_d_t_os": adzone_bid_d_t_os,
+                "intelligent_bid": intelligent_bid
+            }
+        )
+
 
 class TbXuNiYuanXian(DingTalkBaseAPI):
     """
@@ -49493,6 +53017,8 @@ class TbXuNiYuanXian(DingTalkBaseAPI):
     ):
         """
         全球播票据状态变更接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28215
 
         :param order_no: 阿里数娱点播订单号
@@ -49646,6 +53172,8 @@ class TbXuNiYuanXian(DingTalkBaseAPI):
     ):
         """
         根据视频源+视频ID获得相关推荐
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35821
 
         :param from_: 视频来源
@@ -49669,6 +53197,8 @@ class TbXuNiYuanXian(DingTalkBaseAPI):
     ):
         """
         根据频道ID获取频道下节目单以及当前播放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据聚焦播单ID拿到下面播单视频，根据左侧播单ID列表批量拿到播单信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35822
 
@@ -49841,6 +53371,27 @@ class TbZhiShiKu(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_kclub_kc_qa_search_page(
+            self,
+            query,
+            auth
+    ):
+        """
+        知识云-知识检索(分页)
+        知识云-知识搜索服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40537
+
+        :param query: 查询参数
+        :param auth: 鉴权
+        """
+        return self._top_request(
+            "alibaba.kclub.kc.qa.search.page",
+            {
+                "query": query,
+                "auth": auth
+            }
+        )
+
 
 class TbFanQiZhaFengKong(DingTalkBaseAPI):
     """
@@ -49908,6 +53459,8 @@ class TbFanQiZhaFengKong(DingTalkBaseAPI):
     ):
         """
         反欺诈用户风险查询反馈
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         反欺诈用户风险信息查询的反馈接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25948
 
@@ -51007,6 +54560,109 @@ class TbTianMaoFuWuShuJu(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_service_billing_query(
+            self,
+            gmt_create_start='',
+            gmt_create_end=''
+    ):
+        """
+        服务平台结算出账信息
+        服务平台结算单明细查询服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42709
+
+        :param gmt_create_start: 账单查询开始时间。格式示例 2019-03-26 17:15:28
+        :param gmt_create_end: 账单查询结束时间，时间区间限制未15分钟。 格式示例 2019-03-26 17:15:28
+        """
+        return self._top_request(
+            "alibaba.service.billing.query",
+            {
+                "gmt_create_start": gmt_create_start,
+                "gmt_create_end": gmt_create_end
+            },
+            result_processor=lambda x: x["settlement_detail_query_result"]
+        )
+
+    def alibaba_service_settlement_query(
+            self,
+            gmt_create_start='',
+            gmt_create_end='',
+            current_page='',
+            page_size=''
+    ):
+        """
+        服务平台结算单明细查询服务
+        给服务商提供结算单明细查询功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43721
+
+        :param gmt_create_start: 账单查询开始时间。格式示例 2019-03-26 17:15:28
+        :param gmt_create_end: 账单查询结束时间，时间区间限制未15分钟。 格式示例 2019-03-26 17:15:28
+        :param current_page: 当前页面，开始值为1
+        :param page_size: 页面展示条数大小
+        """
+        return self._top_request(
+            "alibaba.service.settlement.query",
+            {
+                "gmt_create_start": gmt_create_start,
+                "gmt_create_end": gmt_create_end,
+                "current_page": current_page,
+                "page_size": page_size
+            },
+            result_processor=lambda x: x["settlement_detail_query_result"]
+        )
+
+    def tmall_servicecenter_reservecond_create(
+            self,
+            roc_list=None
+    ):
+        """
+        创建主动预约开通条件
+        1、设置主动预约开通条件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43949
+
+        :param roc_list: 主动预约开通条件
+        """
+        return self._top_request(
+            "tmall.servicecenter.reservecond.create",
+            {
+                "roc_list": roc_list
+            }
+        )
+
+    def tmall_servicecenter_reservecond_delete(
+            self,
+            reserve_open_condition_del_dto=None
+    ):
+        """
+        删除主动预约开通条件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44128
+
+        :param reserve_open_condition_del_dto: 主动预约条件删除
+        """
+        return self._top_request(
+            "tmall.servicecenter.reservecond.delete",
+            {
+                "reserve_open_condition_del_dto": reserve_open_condition_del_dto
+            }
+        )
+
+    def tmall_servicecenter_reservecond_update(
+            self,
+            roc_list=None
+    ):
+        """
+        主动预约条件更新
+        1、设置主动预约开通条件
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44177
+
+        :param roc_list: 主动预约开通条件
+        """
+        return self._top_request(
+            "tmall.servicecenter.reservecond.update",
+            {
+                "roc_list": roc_list
+            }
+        )
+
 
 class TbZhiNengSheBei(DingTalkBaseAPI):
     """
@@ -52035,6 +55691,8 @@ class TbZhiNengSheBei(DingTalkBaseAPI):
     ):
         """
         设置商品的自定义价格
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         设置商品的自定义价格，仅智能硬件可用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39950
 
@@ -52397,6 +56055,105 @@ class TbZhiNengSheBei(DingTalkBaseAPI):
                 "user_id": user_id,
                 "ext": ext,
                 "utd_id": utd_id
+            }
+        )
+
+    def taobao_ailab_aicloud_top_device_deviceid_convert(
+            self,
+            device_open_id,
+            skill_id
+    ):
+        """
+        开放设备id转换内部设备id
+        将开放设备id转换为内部设备id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42979
+
+        :param device_open_id: 设备openId
+        :param skill_id: 技能id
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.device.deviceid.convert",
+            {
+                "device_open_id": device_open_id,
+                "skill_id": skill_id
+            }
+        )
+
+    def taobao_ailab_aicloud_top_device_extinfo_get(
+            self,
+            origin_user_id,
+            schema_key,
+            user_type,
+            device_id
+    ):
+        """
+        获取设备扩展信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42980
+
+        :param origin_user_id: 三方id、淘宝openId
+        :param schema_key: 账号秘钥
+        :param user_type: 类型：openTaoBao, extUser
+        :param device_id: 设备id
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.device.extinfo.get",
+            {
+                "origin_user_id": origin_user_id,
+                "schema_key": schema_key,
+                "user_type": user_type,
+                "device_id": device_id
+            }
+        )
+
+    def taobao_ailab_aicloud_top_device_statusinfo_get(
+            self,
+            origin_user_id='',
+            schema_key='',
+            user_type='',
+            device_id=''
+    ):
+        """
+        获取设备状态信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43671
+
+        :param origin_user_id: 三方用户id或淘宝openId
+        :param schema_key: 账号秘钥
+        :param user_type: 三方传extUser，淘宝传openTaoBaoUser
+        :param device_id: 设备id
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.device.statusinfo.get",
+            {
+                "origin_user_id": origin_user_id,
+                "schema_key": schema_key,
+                "user_type": user_type,
+                "device_id": device_id
+            }
+        )
+
+    def taobao_ailab_aicloud_top_device_detailinfo_get(
+            self,
+            origin_user_id='',
+            schema_key='',
+            user_type='',
+            device_id=''
+    ):
+        """
+        获取设备详细信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43724
+
+        :param origin_user_id: 三方用户id或淘宝openId
+        :param schema_key: 账号秘钥
+        :param user_type: 三方传extUser，淘宝传openTaoBaoUser
+        :param device_id: 设备id
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.device.detailinfo.get",
+            {
+                "origin_user_id": origin_user_id,
+                "schema_key": schema_key,
+                "user_type": user_type,
+                "device_id": device_id
             }
         )
 
@@ -53401,6 +57158,8 @@ class TbBaiChuanTuiSong(DingTalkBaseAPI):
     ):
         """
         消息发送接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25976
 
         :param message_desc: 消息描述
@@ -53443,6 +57202,8 @@ class TbBaiChuanTuiSong(DingTalkBaseAPI):
     ):
         """
         push 发送接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         1.百川push&sms 发送功能
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25979
 
@@ -53769,7 +57530,10 @@ class TbGuoJiZhanShangPin(DingTalkBaseAPI):
             category_id='',
             subject='',
             current_page='1',
-            page_size='10'
+            page_size='10',
+            group_id3='',
+            group_id2='',
+            group_id1=''
     ):
         """
         商品查询
@@ -53781,6 +57545,9 @@ class TbGuoJiZhanShangPin(DingTalkBaseAPI):
         :param subject: 商品名称，支持模糊匹配
         :param current_page: 当前页
         :param page_size: 每页大小，最大30
+        :param group_id3: 商品三级分组id，可选填。若填写-1 则表示取回的商品没有三级分组，不填入代表取回的商品不关心它的三级分组，填写对应的group id将返回这个分组下的商品
+        :param group_id2: 商品二级分组id，可选填。若填写-1 则表示取回的商品没有二级分组，不填入代表取回的商品不关系它的二级分组，填写对应的group id将返回这个分组下的商品
+        :param group_id1: 商品一级分组id，可选填。若填写0 则表示取回的商品没有一级分组，不填入代表取回的商品不关心它的一级分组，填写对应的group id将返回这个分组下的商品
         """
         return self._top_request(
             "alibaba.icbu.product.list",
@@ -53789,7 +57556,10 @@ class TbGuoJiZhanShangPin(DingTalkBaseAPI):
                 "category_id": category_id,
                 "subject": subject,
                 "current_page": current_page,
-                "page_size": page_size
+                "page_size": page_size,
+                "group_id3": group_id3,
+                "group_id2": group_id2,
+                "group_id1": group_id1
             }
         )
 
@@ -54545,6 +58315,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         获取修改信息保护结果
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26147
 
         :param ip: 登录时候的IP地址
@@ -54613,6 +58385,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         高级应用加固接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提交应用进行应用自定义加固,加固后需通过alibaba.security.jaq.app.shieldresult.get接口查询加固结果
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26181
 
@@ -54713,6 +58487,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         聚安全文本过滤
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文本关键词过滤接口, 用于检测文本中是否有违规的文本
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26549
 
@@ -54789,6 +58565,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         聚安全获取异步智能鉴黄结果接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取异步黄图图像检测结果接口根据图像检测接口返回taskid来获取对应图像的检测结果
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26555
 
@@ -54808,6 +58586,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         聚安全智能鉴黄异步检测接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         异步黄图图像检测接口，不会实时返回图像检测结果，需要在1分钟后调用获取异步图像检测结果接口来获取最终检测结果，适合于图片量较大的用户来使用
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26557
 
@@ -55144,6 +58924,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         聚安全-实人认证日志打点接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         聚安全实人认证日志打点接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27039
 
@@ -55242,6 +59024,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         聚安全安全验证检查结果获取接口（国际版）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         为国际版用户获取二次验证的结果
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27794
 
@@ -55322,6 +59106,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         终端-准备认证
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用于向认证终端发起认证换取token，stsToken
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29857
 
@@ -55343,6 +59129,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         终端-开始认证
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         向认证终端发起认证
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29858
 
@@ -55549,6 +59337,8 @@ class TbJuAnQuan(DingTalkBaseAPI):
     ):
         """
         事件上报接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         事件上报
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32954
 
@@ -56111,6 +59901,8 @@ class TbMiaoJie(DingTalkBaseAPI):
     ):
         """
         云货架校验购物车sku信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         校验购物车sku库存、上下架信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35538
 
@@ -56415,6 +60207,8 @@ class TbMiaoJie(DingTalkBaseAPI):
     ):
         """
         删除指定流程
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         业务删除流程
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38019
 
@@ -56613,6 +60407,89 @@ class TbMiaoJie(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_mj_oc_bigpos_banksale_adjustment_apply(
+            self,
+            store_no='',
+            amount='0',
+            card_no='',
+            oper_time='',
+            operator='',
+            pos_no=''
+    ):
+        """
+        大pos银行卡调账申请
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42759
+
+        :param store_no: 门店号
+        :param amount: 调账金额
+        :param card_no: 卡号
+        :param oper_time: 交易时间
+        :param operator: 收银员号
+        :param pos_no: 调账收银机号
+        """
+        return self._top_request(
+            "alibaba.mj.oc.bigpos.banksale.adjustment.apply",
+            {
+                "store_no": store_no,
+                "amount": amount,
+                "card_no": card_no,
+                "oper_time": oper_time,
+                "operator": operator,
+                "pos_no": pos_no
+            }
+        )
+
+    def alibaba_mj_oc_bigpos_banksale_query(
+            self,
+            start_time='',
+            card_no='',
+            out_store_no='',
+            end_time=''
+    ):
+        """
+        大pos银行卡查账接口
+        大pos银行卡查账接口，给收银员查询银行卡销售记录，便于调账
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42791
+
+        :param start_time: 开始时间
+        :param card_no: 卡号
+        :param out_store_no: 外部门店号
+        :param end_time: 结束时间
+        """
+        return self._top_request(
+            "alibaba.mj.oc.bigpos.banksale.query",
+            {
+                "start_time": start_time,
+                "card_no": card_no,
+                "out_store_no": out_store_no,
+                "end_time": end_time
+            }
+        )
+
+    def alibaba_mos_finance_bankinfo_querybank(
+            self,
+            supplier_id='',
+            store_no='',
+            company_id=''
+    ):
+        """
+        供应商银行账号查询
+        查询供应商对应的银行账号信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43618
+
+        :param supplier_id: 供应商id
+        :param store_no: 门店号
+        :param company_id: 签约主体id
+        """
+        return self._top_request(
+            "alibaba.mos.finance.bankinfo.querybank",
+            {
+                "supplier_id": supplier_id,
+                "store_no": store_no,
+                "company_id": company_id
+            }
+        )
+
 
 class TbCaiNiaoPeiSong(DingTalkBaseAPI):
     """
@@ -56625,6 +60502,8 @@ class TbCaiNiaoPeiSong(DingTalkBaseAPI):
     ):
         """
         获取菜鸟配送面单号
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         打印面单时，通过此接口获取面单号及打打印信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25658
 
@@ -57494,6 +61373,8 @@ class TbCaiNiaoCangPei(DingTalkBaseAPI):
     ):
         """
         创建组合商品与子商品关系
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26722
 
         :param item_id: 组合商品ID
@@ -57513,6 +61394,8 @@ class TbCaiNiaoCangPei(DingTalkBaseAPI):
     ):
         """
         删除货品组合关系
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26723
 
         :param item_id: 组合货品ID
@@ -57547,6 +61430,8 @@ class TbCaiNiaoCangPei(DingTalkBaseAPI):
     ):
         """
         ERP发货库存预占用
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26923
 
         :param content: 库存占用
@@ -57564,6 +61449,8 @@ class TbCaiNiaoCangPei(DingTalkBaseAPI):
     ):
         """
         ERP释放预占用库存
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26924
 
         :param content: 库存释放
@@ -57581,6 +61468,8 @@ class TbCaiNiaoCangPei(DingTalkBaseAPI):
     ):
         """
         有货无单销退入库单消息回传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26943
 
         :param content: WlbWmsUnknownPackageUpload
@@ -58225,6 +62114,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         更新订单同步状态为完成
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         配合订单拉取接口，更新订单处理状态为已处理。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30621
 
@@ -58434,6 +62325,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         外部商户订单同步到五道口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         外部商户老pos机产生的订单同步到五道口，用于扣减库存等操作
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30643
 
@@ -58500,6 +62393,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         五道口订单退款数据同步状态更新
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据退款单据ID更新退款数据消费状态
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30775
 
@@ -58670,6 +62565,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         删除特价商品
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         将参加活动的商品从特价活动中移除
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31401
 
@@ -58753,6 +62650,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         逆向调拨单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         返回调出方为入参仓Code的调拨单列表
         获取范围是在修改开始时间和修改结束时间之间
         分页获取
@@ -58788,6 +62687,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         退仓单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供基于修改开始时间和修改结束时间的分页查询
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31479
 
@@ -58821,6 +62722,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         获取采购入库单
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         通过店仓code查询采购订单
         方式为通过更新时间范围增量拉取
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31484
@@ -58855,6 +62758,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         质量反馈(差异)单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供基于创建时间的范围筛选
         拉取到的都是未处理的差异单
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31485
@@ -58889,6 +62794,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         退供单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         基于修改开始时间和修改结束时间提供了分页的查询方式
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31486
 
@@ -58922,6 +62829,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         正向调拨
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取入参店仓Code为调拨单中调入方的单据
         提供根据修改时间的范围查询
         分页方式获取
@@ -58957,6 +62866,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         采购入库金额调整单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供了分页查询的方式进行入库调整单据查询
         范围是根据入参的修改时间来确定
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31488
@@ -58991,6 +62902,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         物流配货出库单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供基于修改时间的增量分页查询
         单据状态为门店已收货
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31489
@@ -59025,6 +62938,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         门店配货入库单开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供门店配货入库单开放接口
         基于修改的开始结束时间进行分页查询
         入参为入库机构code
@@ -59056,6 +62971,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
     ):
         """
         质量反馈(差异)单提交开放
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         接入方从质量反馈单列表中拉取到的数据处理完成后需要通过该接口进行提交
         如果非线下补发，归责给仓的部分接口中会自动生成退仓单并将退仓单号设置到对应的sku上
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31491
@@ -61127,7 +65044,8 @@ class TbWuDaoKou(DingTalkBaseAPI):
             self,
             version_id,
             activity_id,
-            activity_sku_list=None
+            activity_sku_list=None,
+            shop_id=''
     ):
         """
         营销商品数据同步
@@ -61137,13 +65055,15 @@ class TbWuDaoKou(DingTalkBaseAPI):
         :param version_id: 数据版本Id
         :param activity_id: 大润发活动Id
         :param activity_sku_list: 淘鲜达活动商品信息
+        :param shop_id: 活动对应的门店Id
         """
         return self._top_request(
             "alibaba.wdk.marketing.open.darunfa.activity.sku.sync",
             {
                 "version_id": version_id,
                 "activity_id": activity_id,
-                "activity_sku_list": activity_sku_list
+                "activity_sku_list": activity_sku_list,
+                "shop_id": shop_id
             }
         )
 
@@ -61203,6 +65123,234 @@ class TbWuDaoKou(DingTalkBaseAPI):
             "alibaba.wdk.item.merchant.category.query",
             {
                 "query_request": query_request
+            }
+        )
+
+    def alibaba_wdk_merchant_routing_register(
+            self,
+            merchant_routing_info_register
+    ):
+        """
+        商家注册更新路由信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42601
+
+        :param merchant_routing_info_register: 接口入参
+        """
+        return self._top_request(
+            "alibaba.wdk.merchant.routing.register",
+            {
+                "merchant_routing_info_register": merchant_routing_info_register
+            }
+        )
+
+    def wdk_wms_pick_medicine_query(
+            self,
+            shop_id,
+            uuid
+    ):
+        """
+        查询拣货单中的药品信息
+        联营商药机查询拣货单中的药品信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42642
+
+        :param shop_id: shopId
+        :param uuid: uuid
+        """
+        return self._top_request(
+            "wdk.wms.pick.medicine.query",
+            {
+                "shop_id": shop_id,
+                "uuid": uuid
+            }
+        )
+
+    def wdk_wms_pick_medicine_checksell(
+            self,
+            uuid='',
+            shop_id=''
+    ):
+        """
+        联营商药品柜核销
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42643
+
+        :param uuid: 从二维码扫描出的信息
+        :param shop_id: shopId
+        """
+        return self._top_request(
+            "wdk.wms.pick.medicine.checksell",
+            {
+                "uuid": uuid,
+                "shop_id": shop_id
+            }
+        )
+
+    def alibaba_wdk_marketing_open_heartbeat(
+            self,
+            heart_beat
+    ):
+        """
+        心跳服务【10s一次】
+        商家数据同步心跳服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42745
+
+        :param heart_beat: 心跳信息
+        """
+        return self._top_request(
+            "alibaba.wdk.marketing.open.heartbeat",
+            {
+                "heart_beat": heart_beat
+            }
+        )
+
+    def alibaba_wdk_sku_merchantsku_scroll_query(
+            self,
+            org_no='',
+            scroll_id=''
+    ):
+        """
+        商家商品批量查询接口
+        提供主档商品数据接口查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43208
+
+        :param org_no: HM
+        :param scroll_id: 第一次为null，后面从结果中获取
+        """
+        return self._top_request(
+            "alibaba.wdk.sku.merchantsku.scroll.query",
+            {
+                "org_no": org_no,
+                "scroll_id": scroll_id
+            }
+        )
+
+    def alibaba_wdk_sku_storesku_scroll_query(
+            self,
+            store_id='',
+            scroll_id=''
+    ):
+        """
+        门店商品批量查询接口
+        提供门店商品批量查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43209
+
+        :param store_id: 经营的id
+        :param scroll_id: 历游标，首次调用传递null，后续传递ScrollPageResult.getScrollId()
+        """
+        return self._top_request(
+            "alibaba.wdk.sku.storesku.scroll.query",
+            {
+                "store_id": store_id,
+                "scroll_id": scroll_id
+            }
+        )
+
+    def alibaba_txcs_brandmarketing_coupon_qrcode_get(
+            self,
+            coupon_qrcode_param_do
+    ):
+        """
+        品牌营销导购员券页面二维码获取
+        构建券页码二维码url
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43861
+
+        :param coupon_qrcode_param_do: 请求信息
+        """
+        return self._top_request(
+            "alibaba.txcs.brandmarketing.coupon.qrcode.get",
+            {
+                "coupon_qrcode_param_do": coupon_qrcode_param_do
+            },
+            result_processor=lambda x: x["api_result"]
+        )
+
+    def alibaba_txcs_brandmarketing_coupon_statistics_get(
+            self,
+            coupon_statistics_param_do
+    ):
+        """
+        品牌营销导购员券推广统计数据回流
+        请求券统计数据回流
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43862
+
+        :param coupon_statistics_param_do: 请求信息
+        """
+        return self._top_request(
+            "alibaba.txcs.brandmarketing.coupon.statistics.get",
+            {
+                "coupon_statistics_param_do": coupon_statistics_param_do
+            },
+            result_processor=lambda x: x["api_page_result"]
+        )
+
+    def alibaba_wdk_purchase_price(
+            self,
+            wdk_open_purchase_price=None
+    ):
+        """
+        rt回传采购价
+        猫超共享库存项目-rt回传采购价
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44087
+
+        :param wdk_open_purchase_price: 入参
+        """
+        return self._top_request(
+            "alibaba.wdk.purchase.price",
+            {
+                "wdk_open_purchase_price": wdk_open_purchase_price
+            }
+        )
+
+    def alibaba_wdk_fulfill_bill_return_warehouse_on_task_status_changed(
+            self,
+            return_warehouse_result=None
+    ):
+        """
+        退仓结果回传
+        退货入仓结果回传
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44157
+
+        :param return_warehouse_result: 退仓结果
+        """
+        return self._top_request(
+            "alibaba.wdk.fulfill.bill.return.warehouse.on.task.status.changed",
+            {
+                "return_warehouse_result": return_warehouse_result
+            }
+        )
+
+    def alibaba_wdk_eleme_bill_detail_get(
+            self,
+            ele_bill_request
+    ):
+        """
+        饿了么对账单查询，带订单明细
+        查询饿了么对账单信息，带订单明细
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44162
+
+        :param ele_bill_request: 对账单查询参数
+        """
+        return self._top_request(
+            "alibaba.wdk.eleme.bill.detail.get",
+            {
+                "ele_bill_request": ele_bill_request
+            }
+        )
+
+    def alibaba_wdk_eleme_bill_get(
+            self,
+            ele_bill_request
+    ):
+        """
+        饿了么日维度对账单查询
+        查询饿了么日维度对账单信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44163
+
+        :param ele_bill_request: 对账单查询参数
+        """
+        return self._top_request(
+            "alibaba.wdk.eleme.bill.get",
+            {
+                "ele_bill_request": ele_bill_request
             }
         )
 
@@ -61870,6 +66018,8 @@ class TbTaoBaoNeiRong(DingTalkBaseAPI):
     ):
         """
         内容详情接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         根据内容平台中内容id查询详情
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27011
 
@@ -62119,6 +66269,73 @@ class TbLvXingYongChe(DingTalkBaseAPI):
                 "provider_id": provider_id,
                 "third_order_id": third_order_id
             }
+        )
+
+    def alitrip_travel_crsdriver_arrange(
+            self,
+            crs_driver_arrange_param
+    ):
+        """
+        CRS接送机商家派司机接口
+        提供给CRS接送机商家派司机的API
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44234
+
+        :param crs_driver_arrange_param: 请求对象
+        """
+        return self._top_request(
+            "alitrip.travel.crsdriver.arrange",
+            {
+                "crs_driver_arrange_param": crs_driver_arrange_param
+            }
+        )
+
+    def alitrip_travel_crsorder_complete(
+            self,
+            crs_order_complete_param
+    ):
+        """
+        CRS接送机商家服务完成接口
+        提供给CRS接送机商家的服务完成回调接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44235
+
+        :param crs_order_complete_param: 请求对象
+        """
+        return self._top_request(
+            "alitrip.travel.crsorder.complete",
+            {
+                "crs_order_complete_param": crs_order_complete_param
+            }
+        )
+
+    def alitrip_travel_crsorder_search(
+            self,
+            crs_order_status,
+            begin_car_use_time,
+            end_car_use_time,
+            page_size='20',
+            current_page='1'
+    ):
+        """
+        CRS接送机订单列表搜索
+        提供给CRS商家搜索订单列表，仅返回订单号列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44511
+
+        :param crs_order_status: 订单状态，10-待派单，20-待用车，30-已取消，40-待处理退款申请，60-已关闭，70-已完成
+        :param begin_car_use_time: 用车时间-起始
+        :param end_car_use_time: 用车时间-终止
+        :param page_size: 页大小，默认20
+        :param current_page: 当前页，默认值1
+        """
+        return self._top_request(
+            "alitrip.travel.crsorder.search",
+            {
+                "crs_order_status": crs_order_status,
+                "begin_car_use_time": begin_car_use_time,
+                "end_car_use_time": end_car_use_time,
+                "page_size": page_size,
+                "current_page": current_page
+            },
+            result_processor=lambda x: x["order_string_list"]
         )
 
 
@@ -62461,6 +66678,8 @@ class TbCaiNiaoWuXian(DingTalkBaseAPI):
     ):
         """
         小件员提交抢单申请
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         小件员提交抢单申请（注意返回的是申请是否成功而不是抢单是否成功，抢单成功与否会有异步消息给出）
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27311
 
@@ -62716,6 +66935,8 @@ class TbCaiNiaoWuXian(DingTalkBaseAPI):
     ):
         """
         获取包裹侠用户状态
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33514
 
         :param cp_code: cpcode
@@ -64765,6 +68986,8 @@ class TbTvZhiFu(DingTalkBaseAPI):
     ):
         """
         tv支付消费抽奖结果查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询消费抽奖结果
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26209
 
@@ -64884,6 +69107,8 @@ class TbTvZhiFu(DingTalkBaseAPI):
     ):
         """
         tv支付取消授权
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         tv支付用户取消设备授权
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26216
 
@@ -65031,6 +69256,8 @@ class TbTvZhiFu(DingTalkBaseAPI):
     ):
         """
         tv支付为订单生成二维码
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         tv支付为已有alipay订单生成二维码
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26221
 
@@ -65079,6 +69306,8 @@ class TbTvZhiFu(DingTalkBaseAPI):
     ):
         """
         创建续费订单序列
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         创建tv授权续费支付序列
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27001
 
@@ -65120,6 +69349,8 @@ class TbTvZhiFu(DingTalkBaseAPI):
     ):
         """
         tv支付三方续费
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         由tv sdk接入方触发续费动作。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27002
 
@@ -65156,6 +69387,8 @@ class TbTvZhiFu(DingTalkBaseAPI):
     ):
         """
         sdk上传业务数据
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         供sdk上传数据，汇总给BI进行分析
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27350
 
@@ -65188,6 +69421,8 @@ class TbYunOSID2(DingTalkBaseAPI):
     ):
         """
         id2获取jtag公钥
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         该接口通过传入id2获取相对应机型的jtag publickey
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26235
 
@@ -65209,6 +69444,8 @@ class TbYunOSID2(DingTalkBaseAPI):
     ):
         """
         使用jtag私钥签名cmd
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用id2对应的jtag私钥对nonce+cmd进行签名
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26236
 
@@ -65235,6 +69472,8 @@ class TbYunOSID2(DingTalkBaseAPI):
     ):
         """
         id2加密接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         对id2对指定字符串进行加密
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28232
 
@@ -65259,6 +69498,8 @@ class TbYunOSID2(DingTalkBaseAPI):
     ):
         """
         产品私钥加密
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         ID2 产品私钥加密接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29321
 
@@ -65282,6 +69523,8 @@ class TbYunOSID2(DingTalkBaseAPI):
     ):
         """
         获取产品公钥
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29379
 
         :param type: 类型
@@ -65506,6 +69749,89 @@ class TbALiJianKangYao(DingTalkBaseAPI):
             "alibaba.alihealth.nr.trade.order.get",
             {
                 "order_id": order_id
+            }
+        )
+
+    def taobao_alihealth_drug_store_get(
+            self,
+            shop_id
+    ):
+        """
+        根据店铺id获取店铺详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30580
+
+        :param shop_id: 店铺ID
+        """
+        return self._top_request(
+            "taobao.alihealth.drug.store.get",
+            {
+                "shop_id": shop_id
+            },
+            result_processor=lambda x: x["model"]
+        )
+
+    def taobao_alihealth_drug_store_search(
+            self,
+            shop_id,
+            keyword='',
+            page_size='10',
+            page_no='1'
+    ):
+        """
+        药品店内搜索
+        提供给千牛智能客服，在阿里健康O2O店铺内搜索药品
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30610
+
+        :param shop_id: 店铺ID
+        :param keyword: 搜索关键字
+        :param page_size: 每页显示数量
+        :param page_no: 页码
+        """
+        return self._top_request(
+            "taobao.alihealth.drug.store.search",
+            {
+                "shop_id": shop_id,
+                "keyword": keyword,
+                "page_size": page_size,
+                "page_no": page_no
+            },
+            result_processor=lambda x: x["model"]
+        )
+
+    def taobao_alihealth_drug_user_shop_get(
+            self,
+            user_nick
+    ):
+        """
+        根据用户id获取店铺id
+        提供给千牛智能客服，获取用户当前咨询的店铺ID
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30611
+
+        :param user_nick: 用户昵称
+        """
+        return self._top_request(
+            "taobao.alihealth.drug.user.shop.get",
+            {
+                "user_nick": user_nick
+            },
+            result_processor=lambda x: x["shop_id"]
+        )
+
+    def alibaba_alihealth_simpleitem_query(
+            self,
+            itemid
+    ):
+        """
+        商品类目规格品牌查询
+        根据商品ID获取商品的叶子类目，品牌，规格
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43808
+
+        :param itemid: 商品ID列表
+        """
+        return self._top_request(
+            "alibaba.alihealth.simpleitem.query",
+            {
+                "itemid": itemid
             }
         )
 
@@ -65940,7 +70266,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
             traveller_template_id='',
             item_custom_tag='',
             high_lights=None,
-            business_license=''
+            business_license='',
+            seller_cids='',
+            second_kill='',
+            has_discount='false'
     ):
         """
         境外一日游/多日游 产品维护接口
@@ -65978,6 +70307,9 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param item_custom_tag: 可选，商家自定义标签（最多4个字，超长则自动截断，会进行违禁词校验）
         :param high_lights: 一日游 产品亮点
         :param business_license: 必填，营业执照图片路径。图片链接支持外链图片（即商家系统中图片链接，必须外网可访问，且格式为jpg或jpeg，大小在3M以内），或者用户淘宝空间内的图片链接。对于外链图片，将自动下载并上传用户淘宝图片空间。
+        :param seller_cids: 关联商品与店铺类目 结构:'cid1,cid2,...,'。如何获取卖家店铺类目具体参见：http://open.taobao.com/doc2/apiDetail.htm?apiId=65
+        :param second_kill: 商品秒杀，商品秒杀三个值：可选类型web_only(只能通过web网络秒杀)，wap_only(只能通过wap网络秒杀)，web_and_wap(既能通过web秒杀也能通过wap秒杀)
+        :param has_discount: 是否支持会员打折。可选值：true，false；默认值：false(不打折)。不传的话默认为false
         """
         return self._top_request(
             "alitrip.daytours.product.upload",
@@ -66009,7 +70341,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
                 "traveller_template_id": traveller_template_id,
                 "item_custom_tag": item_custom_tag,
                 "high_lights": high_lights,
-                "business_license": business_license
+                "business_license": business_license,
+                "seller_cids": seller_cids,
+                "second_kill": second_kill,
+                "has_discount": has_discount
             },
             result_processor=lambda x: x["first_result"]
         )
@@ -66253,7 +70588,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
             sub_stock='',
             item_custom_tag='',
             traveller_template_id='',
-            tourist_service_provider=''
+            tourist_service_provider='',
+            seller_cids='',
+            second_kill='',
+            has_discount='false'
     ):
         """
         当地玩乐 产品维护接口
@@ -66286,7 +70624,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param sub_stock: 可选，减库存方式。0-拍下减库存。1-付款减库存。不传默认为0
         :param item_custom_tag: 可选，商家自定义标签（最多4个字，超长则自动截断，会进行违禁词校验）
         :param traveller_template_id: 可选，出行人模板id。模板id需要商家以店铺账号身份登录飞猪商家工作台，从卖家工具->出行人管理中获取。注意：如果传0则代表设置为不需要出行人模板或使用飞猪平台默认的类目模板。
-        :param tourist_service_provider: 真实的旅游服务提供商
+        :param tourist_service_provider: 代订服务说明（请填写真实的旅游服务提供商）
+        :param seller_cids: 关联商品与店铺类目 结构:'cid1,cid2,...,'。如何获取卖家店铺类目具体参见：http://open.taobao.com/doc2/apiDetail.htm?apiId=65
+        :param second_kill: 商品秒杀，商品秒杀三个值：可选类型web_only(只能通过web网络秒杀)，wap_only(只能通过wap网络秒杀)，web_and_wap(既能通过web秒杀也能通过wap秒杀)
+        :param has_discount: 是否支持会员打折。可选值：true，false；默认值：false(不打折)。不传的话默认为false
         """
         return self._top_request(
             "alitrip.localplay.product.upload",
@@ -66314,7 +70655,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
                 "sub_stock": sub_stock,
                 "item_custom_tag": item_custom_tag,
                 "traveller_template_id": traveller_template_id,
-                "tourist_service_provider": tourist_service_provider
+                "tourist_service_provider": tourist_service_provider,
+                "seller_cids": seller_cids,
+                "second_kill": second_kill,
+                "has_discount": has_discount
             },
             result_processor=lambda x: x["first_result"]
         )
@@ -66345,7 +70689,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
             traveller_template_id='',
             is_overseas_tour='',
             refund_regulations_json='',
-            package_operation='0'
+            package_operation='0',
+            seller_cids='',
+            second_kill='',
+            has_discount='false'
     ):
         """
         自由行商品发布及编辑接口
@@ -66380,6 +70727,9 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param is_overseas_tour: 新发布商品时必填。是否出境游，0-不是，1-是。
         :param refund_regulations_json: 特殊可选，退款规则（json数组格式）。自定义退改时需填写（与refund_regulations字段二选一）。示例中一共包含4条规则（3条平日规则，1条节假日规则），按照顺序每条规则含义如下：出行前5日及以上，买家违约收取总费用的50，卖家违约收取总费用的20；出行前4日至1日，买家违约收取总费用的80，卖家违约收取总费用的50；行程开始当天，买家违约收取总费用的100，卖家违约收取总费用的70；如果行程日期包含节假日，则节假日条款为买家违约收取总费用的100，卖家违约收取总费用的90
         :param package_operation: 0：使用上传的套餐信息（free_tour_package_info）覆盖商品上原有的套餐信息（此时free_tour_package_info中设置的packageOperation无效）；1：根据套餐信息（free_tour_package_info）中的packageOperation和outProductId增加，修改，删除指定套餐，====默认值为0===
+        :param seller_cids: 关联商品与店铺类目 结构:'cid1,cid2,...,'。如何获取卖家店铺类目具体参见：http://open.taobao.com/doc2/apiDetail.htm?apiId=65
+        :param second_kill: 商品秒杀，商品秒杀三个值：可选类型web_only(只能通过web网络秒杀)，wap_only(只能通过wap网络秒杀)，web_and_wap(既能通过web秒杀也能通过wap秒杀)
+        :param has_discount: 是否支持会员打折。可选值：true，false；默认值：false(不打折)。不传的话默认为false
         """
         return self._top_request(
             "alitrip.freetour.product.upload",
@@ -66408,7 +70758,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
                 "traveller_template_id": traveller_template_id,
                 "is_overseas_tour": is_overseas_tour,
                 "refund_regulations_json": refund_regulations_json,
-                "package_operation": package_operation
+                "package_operation": package_operation,
+                "seller_cids": seller_cids,
+                "second_kill": second_kill,
+                "has_discount": has_discount
             },
             result_processor=lambda x: x["first_result"]
         )
@@ -66442,7 +70795,10 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
             pure_play='',
             refund_regulations_json='',
             package_operation='0',
-            group_tour_type=''
+            group_tour_type='',
+            seller_cids='',
+            second_kill='',
+            has_discount='false'
     ):
         """
         新版跟团游商品维护接口
@@ -66476,6 +70832,9 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
         :param refund_regulations_json: 特殊可选，退款规则（json数组格式）。自定义退改时需填写（与refund_regulations字段二选一）。示例中一共包含4条规则（3条平日规则，1条节假日规则），按照顺序每条规则含义如下：出行前5日及以上，买家违约收取总费用的50，卖家违约收取总费用的20；出行前4日至1日，买家违约收取总费用的80，卖家违约收取总费用的50；行程开始当天，买家违约收取总费用的100，卖家违约收取总费用的70；如果行程日期包含节假日，则节假日条款为买家违约收取总费用的100，卖家违约收取总费用的90
         :param package_operation: 0：使用上传的套餐信息（group_tour_package_info）覆盖商品上原有的套餐信息（此时group_tour_package_info中设置的packageOperation无效）；1：根据套餐信息（group_tour_package_info）中的packageOperation和outProductId增加，修改，删除指定套餐，====默认值为0===
         :param group_tour_type: 必填，线路的“细分类型”属性：1-普通跟团游、2-半自由行、3-私家团；不填默认值设置为'1-普通跟团游'。
+        :param seller_cids: 关联商品与店铺类目 结构:'cid1,cid2,...,'。如何获取卖家店铺类目具体参见：http://open.taobao.com/doc2/apiDetail.htm?apiId=65
+        :param second_kill: 商品秒杀，商品秒杀三个值：可选类型web_only(只能通过web网络秒杀)，wap_only(只能通过wap网络秒杀)，web_and_wap(既能通过web秒杀也能通过wap秒杀)
+        :param has_discount: 是否支持会员打折。可选值：true，false；默认值：false(不打折)。不传的话默认为false
         """
         return self._top_request(
             "alitrip.grouptour.product.upload",
@@ -66507,7 +70866,173 @@ class TbDuJiaShangPinGuanLi(DingTalkBaseAPI):
                 "pure_play": pure_play,
                 "refund_regulations_json": refund_regulations_json,
                 "package_operation": package_operation,
-                "group_tour_type": group_tour_type
+                "group_tour_type": group_tour_type,
+                "seller_cids": seller_cids,
+                "second_kill": second_kill,
+                "has_discount": has_discount
+            },
+            result_processor=lambda x: x["first_result"]
+        )
+
+    def taobao_alitrip_travel_product_base_add(
+            self,
+            base_info,
+            booking_rules,
+            product_sale_info,
+            itineraries=None,
+            refund_info=None,
+            cruise_product_ext=None
+    ):
+        """
+        供应商新增产品API
+        飞猪供销平台供应商可通过该API发布新产品
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43494
+
+        :param base_info: 产品基本信息
+        :param booking_rules: 必填，预定规则结构。示例： [{  'rule_type': 'fee_excluded',  'rule_desc': '费用包含描述'},{  'rule_type': 'fee_included',  'rule_desc': '费用不含描述'},{  'rule_type': 'order_info',  'rule_desc': '预定须知描述'}]
+        :param product_sale_info: 选填，商品的销售属性相关信息
+        :param itineraries: 选填，详细行程描述结构
+        :param refund_info: 选填，退款规则结构
+        :param cruise_product_ext: 特殊选填（当发布邮轮商品时必填，其他情况不填）邮轮商品相关信息，发布邮轮商品时必填
+        """
+        return self._top_request(
+            "taobao.alitrip.travel.product.base.add",
+            {
+                "base_info": base_info,
+                "booking_rules": booking_rules,
+                "product_sale_info": product_sale_info,
+                "itineraries": itineraries,
+                "refund_info": refund_info,
+                "cruise_product_ext": cruise_product_ext
+            },
+            result_processor=lambda x: x["travel_item"]
+        )
+
+    def taobao_alitrip_travel_product_base_modify(
+            self,
+            item_id,
+            itineraries=None,
+            base_info=None,
+            refund_info=None,
+            booking_rules=None,
+            cruise_product_ext=None,
+            product_sale_info=None
+    ):
+        """
+        供应商编辑产品API
+        飞猪供销平台供应商可通过该API编辑产品
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43495
+
+        :param item_id: 产品id
+        :param itineraries: 详细行程描述结构
+        :param base_info: 产品基本信息
+        :param refund_info: 退款规则结构
+        :param booking_rules: 预定规则结构。示例： [{ 'rule_type': 'fee_excluded', 'rule_desc': '费用包含描述'},{ 'rule_type': 'fee_included', 'rule_desc': '费用不含描述'},{ 'rule_type': 'order_info', 'rule_desc': '预定须知描述'}]
+        :param cruise_product_ext: 邮轮商品相关信息
+        :param product_sale_info: 商品的销售属性相关信息
+        """
+        return self._top_request(
+            "taobao.alitrip.travel.product.base.modify",
+            {
+                "item_id": item_id,
+                "itineraries": itineraries,
+                "base_info": base_info,
+                "refund_info": refund_info,
+                "booking_rules": booking_rules,
+                "cruise_product_ext": cruise_product_ext,
+                "product_sale_info": product_sale_info
+            },
+            result_processor=lambda x: x["travel_item"]
+        )
+
+    def taobao_alitrip_travel_product_sku_override(
+            self,
+            out_product_id='',
+            item_id='',
+            skus=None
+    ):
+        """
+        （供销）产品级别日历价格库存修改，全量覆盖
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43498
+
+        :param out_product_id: 商品 外部商家编码。itemId和outProductId至少填写一个
+        :param item_id: 商品id。itemId和outProductId至少填写一个
+        :param skus: 商品日历价格库存套餐
+        """
+        return self._top_request(
+            "taobao.alitrip.travel.product.sku.override",
+            {
+                "out_product_id": out_product_id,
+                "item_id": item_id,
+                "skus": skus
+            },
+            result_processor=lambda x: x["travel_item"]
+        )
+
+    def alitrip_travel_gereralproduct_update(
+            self,
+            base_info,
+            booking_rules,
+            refund_info=None,
+            product_sale_info=None,
+            date_sku_info_list=None
+    ):
+        """
+        通用类目产品发布编辑
+        提供给飞猪供销平台供应商发布编辑通用类目产品的API
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43499
+
+        :param base_info: 产品基本信息
+        :param booking_rules: 必填，预定规则结构。示例： [{ 'rule_type': 'fee_excluded', 'rule_desc': '费用包含描述'},{ 'rule_type': 'fee_included', 'rule_desc': '费用不含描述'},{ 'rule_type': 'order_info', 'rule_desc': '预定须知描述'}]
+        :param refund_info: 退款规则结构
+        :param product_sale_info: 产品销售信息
+        :param date_sku_info_list: 更新sku信息，仅限日历商品使用
+        """
+        return self._top_request(
+            "alitrip.travel.gereralproduct.update",
+            {
+                "base_info": base_info,
+                "booking_rules": booking_rules,
+                "refund_info": refund_info,
+                "product_sale_info": product_sale_info,
+                "date_sku_info_list": date_sku_info_list
+            },
+            result_processor=lambda x: x["first_result"]
+        )
+
+    def alitrip_travel_product_gereralsku_update(
+            self,
+            item_id,
+            alias=None,
+            properties=None,
+            price='',
+            quantity='',
+            outer_id='',
+            date_list=None
+    ):
+        """
+        (供销)船票通用类目sku新增&编辑API
+        发布SKU信息（如果properties重复 则更新）
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43502
+
+        :param item_id: 淘宝商品ID
+        :param alias: sku销售属性别名；如套餐1 需要调整成其他 需要在这里修改
+        :param properties: 商品属性列表；由类目的属性PID和VID组成，属性的pid调用taobao.itemprops.get取得，属性值的vid用taobao.itempropvalues.get取得vid。如果该类目下面没有属性，可以不用填写。如果有属性，必选属性必填，其他非必选属性可以选择不填写.属性不能超过35对
+        :param price: Sku的销售价格。精确到2位小数;单位:分。如:20007，表示:200元7分。修改后的sku价格要保证商品的价格在所有sku价格所形成的价格区间内（例如：商品价格为6元，sku价格有5元、10元两种，如果要修改5元sku的价格，那么修改的范围只能是0-6元之间；如果要修改10元的sku，那么修改的范围只能是6到无穷大的区间中）
+        :param quantity: Sku的库存数量。sku的总数量应该小于等于商品总数量(Item的NUM)，sku数量变化后item的总数量也会随着变化。取值范围:大于等于零的整数
+        :param outer_id: 商家编码
+        :param date_list: SKU的销售价格库存，日历商品使用
+        """
+        return self._top_request(
+            "alitrip.travel.product.gereralsku.update",
+            {
+                "item_id": item_id,
+                "alias": alias,
+                "properties": properties,
+                "price": price,
+                "quantity": quantity,
+                "outer_id": outer_id,
+                "date_list": date_list
             },
             result_processor=lambda x: x["first_result"]
         )
@@ -67422,7 +71947,7 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
         :param common_allot_release_time: 普通保留房提前x小时自动确认时间 比如设置为6 那么从入住当日24点往前推6小时即18:00以前可以自动确认有房，否则是待确认
         :param company_assist: 是否企业托管RP 0-普通rp,1-企业托管rp
         :param hotel_company_mapping_d_o_s: 酒店-企业-rp映射实体集合
-        :param resource_type: 直采,非直采(取值：携程、去哪儿、艺龙、美团、其他)
+        :param resource_type: 商品来源渠道。1：直采（直连酒店PMS）, 1-1：直采（非直连） 2：携程系, 3：美团, 4：国内旅行社分销, 5：海外供应商。非酒店资源方卖家必须提供商品来源渠道，携程系包括携程、去哪儿、艺龙。
         :param rpid: 不推荐使用，使用ratePlanCode来标识要修改的RP
         """
         return self._top_request(
@@ -67535,7 +72060,8 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
             source='',
             allotment_release_time='',
             common_allot_release_time='',
-            resource_type=''
+            resource_type='',
+            bottom_price_flag=''
     ):
         """
         酒店产品库rateplan添加
@@ -67591,7 +72117,8 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
         :param source: 来源
         :param allotment_release_time: 保留房提前x小时自动确认时间，比如设置为6 那么从入住当日24点往前推6小时即18:00以前可以自动确认有房，否则是待确认
         :param common_allot_release_time: 普通保留房提前x小时自动确认时间，比如设置为6 那么从入住当日24点往前推6小时即18:00以前可以自动确认有房，否则是待确认
-        :param resource_type: 直采,非直采(取值：携程、去哪儿、艺龙、美团、其他)
+        :param resource_type: 商品来源渠道。1：直采（直连酒店PMS）, 1-1：直采（非直连） 2：携程系, 3：美团, 4：国内旅行社分销, 5：海外供应商。非酒店资源方卖家必须提供商品来源渠道，携程系包括携程、去哪儿、艺龙。
+        :param bottom_price_flag: 是否底价加价，1是底价加价,0 非底价加价rp
         """
         return self._top_request(
             "taobao.xhotel.rateplan.add",
@@ -67645,7 +72172,8 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
                 "source": source,
                 "allotment_release_time": allotment_release_time,
                 "common_allot_release_time": common_allot_release_time,
-                "resource_type": resource_type
+                "resource_type": resource_type,
+                "bottom_price_flag": bottom_price_flag
             },
             result_processor=lambda x: x["rpid"]
         )
@@ -68333,6 +72861,57 @@ class TbJiuDianShangPin(DingTalkBaseAPI):
             "taobao.xhotel.servicetime.get",
             {
                 "hid": hid
+            }
+        )
+
+    def taobao_xhotel_delete(
+            self,
+            hid='',
+            vendor='taobao',
+            outer_id=''
+    ):
+        """
+        删除酒店接口
+        删除飞猪酒店数据接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43194
+
+        :param hid: 酒店id，传参方式  hid   或者   outer_id+vendor
+        :param vendor: 酒店vendor
+        :param outer_id: 酒店编码
+        """
+        return self._top_request(
+            "taobao.xhotel.delete",
+            {
+                "hid": hid,
+                "vendor": vendor,
+                "outer_id": outer_id
+            }
+        )
+
+    def taobao_xhotel_roomtype_delete_public(
+            self,
+            operator,
+            rid='',
+            vendor='',
+            outer_rid=''
+    ):
+        """
+        商家删除房型数据接口
+        房型删除TOP接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43195
+
+        :param operator: 具体操作人，比如酒店帐号、小二名称等
+        :param rid: 房型rid ，传参方式：rid    或者   outer_id+vendor
+        :param vendor: vendor
+        :param outer_rid: 外部房型ID
+        """
+        return self._top_request(
+            "taobao.xhotel.roomtype.delete.public",
+            {
+                "operator": operator,
+                "rid": rid,
+                "vendor": vendor,
+                "outer_rid": outer_rid
             }
         )
 
@@ -69294,6 +73873,8 @@ class TbJiuDianXianXiaXinYongZhu(DingTalkBaseAPI):
     ):
         """
         联房结账接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         信用住联房结账接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=25692
 
@@ -69418,6 +73999,8 @@ class TbJiuDianXianXiaXinYongZhu(DingTalkBaseAPI):
     ):
         """
         酒店线下信用住签约验证码发送
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         酒店线下信用住签约前，发送校验的验证码
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38247
 
@@ -70677,6 +75260,105 @@ class TbQuanQuDao(DingTalkBaseAPI):
         """
         return self._top_request(
             "alibaba.retail.commission.order.sync",
+            {
+                "param0": param0
+            }
+        )
+
+    def taobao_jst_astrolabe_orderstatus_sync(
+            self,
+            parent_order_code,
+            sub_order_ids='',
+            action_time='',
+            operator='',
+            type='',
+            status='',
+            store_id=''
+    ):
+        """
+        线下门店派单以及单据相关操作接口
+        针对ERP系统部署在门店的商家，将派单状态回流到星盘
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37940
+
+        :param parent_order_code: 交易订单
+        :param sub_order_ids: 子订单Id
+        :param action_time: 事件发生时间
+        :param operator: 操作人
+        :param type: 业务类型
+        :param status: 订单状态
+        :param store_id: 目标门店的商户中心门店编码
+        """
+        return self._top_request(
+            "taobao.jst.astrolabe.orderstatus.sync",
+            {
+                "parent_order_code": parent_order_code,
+                "sub_order_ids": sub_order_ids,
+                "action_time": action_time,
+                "operator": operator,
+                "type": type,
+                "status": status,
+                "store_id": store_id
+            }
+        )
+
+    def alibaba_retail_commission_status_change(
+            self,
+            param0=None
+    ):
+        """
+        分佣状态变更
+        分佣系统，分佣状态变更接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42661
+
+        :param param0: 请求参数
+        """
+        return self._top_request(
+            "alibaba.retail.commission.status.change",
+            {
+                "param0": param0
+            }
+        )
+
+    def alibaba_retail_commission_order_query(
+            self,
+            end_pay_time,
+            start_pay_time,
+            page_no='1',
+            page_size='10'
+    ):
+        """
+        分销订单查询
+        查询商家的分销订单
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42927
+
+        :param end_pay_time: 查询三个月内交易创建时间开始。格式:yyyy-MM-dd HH:mm:ss
+        :param start_pay_time: 查询交易创建时间结束。格式:yyyy-MM-dd HH:mm:ss
+        :param page_no: 页码，默认第一页
+        :param page_size: 页大小，默认每页十条
+        """
+        return self._top_request(
+            "alibaba.retail.commission.order.query",
+            {
+                "end_pay_time": end_pay_time,
+                "start_pay_time": start_pay_time,
+                "page_no": page_no,
+                "page_size": page_size
+            }
+        )
+
+    def alibaba_retail_commission_result_query(
+            self,
+            param0=None
+    ):
+        """
+        分佣结果查询
+        查询导购分佣记录
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43948
+
+        :param param0: 请求参数
+        """
+        return self._top_request(
+            "alibaba.retail.commission.result.query",
             {
                 "param0": param0
             }
@@ -73920,6 +78602,8 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
     ):
         """
         获取航信加密字符串
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27036
 
         """
@@ -73951,6 +78635,8 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
     ):
         """
         E-proxy回传开票结果（没有pdf数据）
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         开票商返回开票结果数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27101
 
@@ -74156,6 +78842,8 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
     ):
         """
         发票动态组配置
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         读取发票动态组配置
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27857
 
@@ -74339,6 +79027,8 @@ class TbDianZiFaPiao(DingTalkBaseAPI):
     ):
         """
         开票申请消息测试接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29866
 
         :param business_type: 0=个人，1=企业
@@ -75181,6 +79871,8 @@ class TbCaiNiaoGuoGuo(DingTalkBaseAPI):
     ):
         """
         小件员异常反馈
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29270
 
         :param mail_no: 运单号
@@ -75503,6 +80195,24 @@ class TbDuJiaQianZhengGuanLi(DingTalkBaseAPI):
             }
         )
 
+    def alitrip_travel_visa_applicant_query(
+            self,
+            param0=None
+    ):
+        """
+        签证申请人查询接口
+        签证申请人查询接口，商家可根据条件查询申请人id，用于签证办理
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44042
+
+        :param param0: 请求参数
+        """
+        return self._top_request(
+            "alitrip.travel.visa.applicant.query",
+            {
+                "param0": param0
+            }
+        )
+
 
 class TbALiYinYueYinYueJiaoYi(DingTalkBaseAPI):
     """
@@ -75538,6 +80248,8 @@ class TbALiYinYueYinYueJiaoYi(DingTalkBaseAPI):
     ):
         """
         阿里音乐微信支付回调
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27853
 
         :param xml_string: xml串
@@ -75562,6 +80274,8 @@ class TbALiYinYueYunYingHuoDong(DingTalkBaseAPI):
     ):
         """
         获取个性化分享配置
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27784
 
         :param item_id: item的id
@@ -75623,7 +80337,8 @@ class TbTiJianJiGou(DingTalkBaseAPI):
             department='',
             address='',
             add_items=None,
-            add_packs=None
+            add_packs=None,
+            hava_report=''
     ):
         """
         体检机构对接_体检套餐预定确认
@@ -75647,6 +80362,7 @@ class TbTiJianJiGou(DingTalkBaseAPI):
         :param address: 报告邮寄地址
         :param add_items: 加项列表
         :param add_packs: 加项包列表
+        :param hava_report: 0没报告1有报告
         """
         return self._top_request(
             "alibaba.alihealth.examination.reserve.confirm",
@@ -75667,7 +80383,8 @@ class TbTiJianJiGou(DingTalkBaseAPI):
                 "department": department,
                 "address": address,
                 "add_items": add_items,
-                "add_packs": add_packs
+                "add_packs": add_packs,
+                "hava_report": hava_report
             }
         )
 
@@ -75799,6 +80516,8 @@ class TbTiJianJiGou(DingTalkBaseAPI):
     ):
         """
         体检机构对接_体检订单取消
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27417
 
         :param merchant_code: 商户唯一码
@@ -75817,6 +80536,8 @@ class TbTiJianJiGou(DingTalkBaseAPI):
     ):
         """
         获取支持的体检机构
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取支持的体检机构,用于让用户选择体检地点
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36385
 
@@ -76024,6 +80745,42 @@ class TbTiJianJiGou(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_alihealth_examination_items_publish(
+            self,
+            isv_packages,
+            isv_item_d_t_o_s,
+            group_id='',
+            isv_item_relation_d_t_o_s=None,
+            hospital_codes='',
+            isv_item_pack_d_t_o_s=None,
+            isv_pack_relation_d_t_o_s=None
+    ):
+        """
+        单项/加项包信息同步
+        体检机构对接_单项/加项包信息发布／更新
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42985
+
+        :param isv_packages: 套餐列表
+        :param isv_item_d_t_o_s: 单项信息列表
+        :param group_id: 商品id，机构保证全局唯一
+        :param isv_item_relation_d_t_o_s: 单项之间关系
+        :param hospital_codes: 体检机构标识
+        :param isv_item_pack_d_t_o_s: 加项包列表
+        :param isv_pack_relation_d_t_o_s: 加项包关系列表
+        """
+        return self._top_request(
+            "alibaba.alihealth.examination.items.publish",
+            {
+                "isv_packages": isv_packages,
+                "isv_item_d_t_o_s": isv_item_d_t_o_s,
+                "group_id": group_id,
+                "isv_item_relation_d_t_o_s": isv_item_relation_d_t_o_s,
+                "hospital_codes": hospital_codes,
+                "isv_item_pack_d_t_o_s": isv_item_pack_d_t_o_s,
+                "isv_pack_relation_d_t_o_s": isv_pack_relation_d_t_o_s
+            }
+        )
+
 
 class Tb1688TuiKe(DingTalkBaseAPI):
     """
@@ -76183,6 +80940,8 @@ class TbShangHu(DingTalkBaseAPI):
     ):
         """
         商户中心子账号创建
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         开发者可以调开放平台接口创建商户中心所属的子账号。字段内容和商户中心excel表导入的相同。
         一次调用可以创建一条子账号。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27591
@@ -76202,6 +80961,8 @@ class TbShangHu(DingTalkBaseAPI):
     ):
         """
         批量启用子账号
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27593
 
         :param ids: 子账号ID数组
@@ -76219,6 +80980,8 @@ class TbShangHu(DingTalkBaseAPI):
     ):
         """
         批量禁用子账号
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27594
 
         :param ids: 子账号ID数组
@@ -76236,6 +80999,8 @@ class TbShangHu(DingTalkBaseAPI):
     ):
         """
         商户中心子账号编辑
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         开发者可以调用开放平台的接口，修改商户中心子账号的信息。可修改字段和PC端操作相同。
         新增“离职”这个可编辑状态，就调用子账号后台离职的功能。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27595
@@ -76387,6 +81152,8 @@ class TbDianDongChe(DingTalkBaseAPI):
     ):
         """
         车况数据上传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         电动车数据回流
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27704
 
@@ -77446,6 +82213,8 @@ class TbZhiNengPOS(DingTalkBaseAPI):
     ):
         """
         小店白名单检测
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提供小店白名单检查top接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28776
 
@@ -78758,6 +83527,8 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
     ):
         """
         查询门店商品详情
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新零售中台门店商品查询接口，提供对外查询相关门店的商品详情
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31166
 
@@ -78804,6 +83575,8 @@ class TbTianMaoMenDian(DingTalkBaseAPI):
     ):
         """
         增加门店商品
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         新零售中台门店商品创建接口，提供对外创建相关门店的商品
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31414
 
@@ -81443,6 +86216,8 @@ class TbIoTI(DingTalkBaseAPI):
     ):
         """
         智能设备消息推送
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         向设备推送消息，控制指令。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28510
 
@@ -81507,6 +86282,48 @@ class TbIoTI(DingTalkBaseAPI):
                 "signature": signature
             },
             result_processor=lambda x: x["resp_content"]
+        )
+
+    def alibaba_it_esl_sendota(
+            self,
+            mac_ap='',
+            ota_data_base64_string=''
+    ):
+        """
+        电子价签ota接口
+        厂测接口，电子价签ota接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43535
+
+        :param mac_ap: mac
+        :param ota_data_base64_string: base64的ota包
+        """
+        return self._top_request(
+            "alibaba.it.esl.sendota",
+            {
+                "mac_ap": mac_ap,
+                "ota_data_base64_string": ota_data_base64_string
+            }
+        )
+
+    def alibaba_it_esl_sendled(
+            self,
+            mac_ap='',
+            type=''
+    ):
+        """
+        厂测LED控制
+        针对厂测生产的的价签，增加led闪灯的接口，进行led 闪灯测试
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43536
+
+        :param mac_ap: mac
+        :param type: 0、1、2、3：关蓝绿红
+        """
+        return self._top_request(
+            "alibaba.it.esl.sendled",
+            {
+                "mac_ap": mac_ap,
+                "type": type
+            }
         )
 
 
@@ -81658,6 +86475,8 @@ class TbZhiHuiMenDian(DingTalkBaseAPI):
     ):
         """
         智慧门店扫码购URL生成
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30577
 
         :param o2o_guide_id: 商户中心的导购员id
@@ -82285,6 +87104,8 @@ class TbZhiHuiMenDian(DingTalkBaseAPI):
     ):
         """
         快闪店查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询快闪店信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33661
 
@@ -82380,6 +87201,8 @@ class TbZhiHuiMenDian(DingTalkBaseAPI):
     ):
         """
         快闪活动外部传播数据统计数据回流
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33790
 
         :param report_date: 按天频度回流总体数据，格式：yyyy-MM-dd
@@ -82549,6 +87372,8 @@ class TbZhiHuiMenDian(DingTalkBaseAPI):
     ):
         """
         查询人脸是否已经注册入库
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         上传人脸图片，查询该人脸是否已经被注册到人脸库
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36978
 
@@ -82891,6 +87716,8 @@ class TbXianYu(DingTalkBaseAPI):
     ):
         """
         报价同步回写
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         使用延迟报价时，产生价格后将报价信息同步给闲鱼
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32382
 
@@ -83083,6 +87910,62 @@ class TbXianYu(DingTalkBaseAPI):
             "taobao.idle.recycle.refund.detail",
             {
                 "biz_order_id": biz_order_id
+            }
+        )
+
+    def alibaba_idle_consignment_order_get(
+            self,
+            biz_order_id
+    ):
+        """
+        闲鱼帮卖订单查询
+        闲鱼帮卖服务商以闲鱼交易买家身份查询订单信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44110
+
+        :param biz_order_id: 闲鱼订单ID
+        """
+        return self._top_request(
+            "alibaba.idle.consignment.order.get",
+            {
+                "biz_order_id": biz_order_id
+            }
+        )
+
+    def alibaba_idle_consignment_order_perform(
+            self,
+            param=None,
+            attribute=None
+    ):
+        """
+        帮卖订单履约
+        帮卖订单履约，回收商同步订单信息，驱动交易流转
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44121
+
+        :param param: 帮卖订单同步DTO
+        :param attribute: 履约节点数据
+        """
+        return self._top_request(
+            "alibaba.idle.consignment.order.perform",
+            {
+                "param": param,
+                "attribute": attribute
+            }
+        )
+
+    def alibaba_idle_consignment_spu_statistics(
+            self,
+            param=None
+    ):
+        """
+        闲鱼帮卖同步服务商交易统计信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44122
+
+        :param param: 入参
+        """
+        return self._top_request(
+            "alibaba.idle.consignment.spu.statistics",
+            {
+                "param": param
             }
         )
 
@@ -84003,6 +88886,8 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
     ):
         """
         测试top接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39128
 
         :param user_name: 名称随便填写
@@ -84284,23 +89169,23 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
     ):
         """
         生产批发单据上传
-        生产批发单据上传（非零售企业使用）
+        生产批发单据上传（非零售企业使用），包括生产入库（101）采购入库（102），退货入库（103），调拨入库（104）,销售出库（201）,退货出库（202），调拨出库（203），销毁出库（205），抽检出库（206）直调出库（207）。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41031
 
-        :param bill_code: 单据编号
+        :param bill_code: 单据编号【同一个企业不能上传相同单据号】
         :param bill_time: 单据日期
-        :param bill_type: 单据类型
-        :param physic_type: 药品类型
-        :param ref_user_id: 货主企业
-        :param from_user_id: 发货企业
-        :param to_user_id: 收货企业
-        :param oper_ic_code: 操作人标识
+        :param bill_type: 单据类型【102代表采购入库,201代表销售出库】
+        :param physic_type: 药品类型【3普药2特药】
+        :param ref_user_id: 货主企业【注意：该入参是ref_ent_id，不是ent_id】
+        :param from_user_id: 发货企业【注意：该入参是ent_id,并不是ref_ent_id】
+        :param to_user_id: 收货企业【注意：该入参是ent_id,并不是ref_ent_id】
+        :param oper_ic_code: 操作人标识（appkey编号）
         :param file_content: 单据文件体【bas64字符串】
         :param upload_file_name: 单据名称
         :param client_type: 客户端类型【暂定都写2】
-        :param agent_ref_user_id: 第三方物流代理企业
-        :param dest_user_id: 直调企业
-        :param oper_ic_name: 操作人姓名
+        :param agent_ref_user_id: 第三方物流代理企业【注意：该入参是ref_ent_id，不是ent_id】
+        :param dest_user_id: 直调企业【注意：该入参是ent_id,并不是ref_ent_id】
+        :param oper_ic_name: 单据提交者姓名
         """
         return self._top_request(
             "alibaba.alihealth.drug.kyt.uploadcircubill",
@@ -84341,18 +89226,18 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         单据处理状态查询
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41048
 
-        :param ref_ent_id: 企业ID
-        :param begin_date: 开始日期
-        :param end_date: 结束日期
+        :param ref_ent_id: 企业ref_ent_id（货主企业的ref_ent_id）
+        :param begin_date: 开始日期（没有时分秒）
+        :param end_date: 结束日期（没有时分秒）
         :param bill_type: 单据类型 A：全部 AI：全部入库 AO：全部出库
         :param page_size: 页大小
         :param page: 页码
-        :param bill_code: 单据号
+        :param bill_code: 单据号（精确值，不支持模糊查询）
         :param drug_type: 药品类型
         :param deal_status: 状态  1, 上传成功     3, 处理成功     4, 处理失败
         :param from_user_id: 发货商
         :param to_user_id: 收货商
-        :param agent_ref_user_id: 代理商
+        :param agent_ref_user_id: 代理商（第三方物流企业）
         """
         return self._top_request(
             "alibaba.alihealth.drug.kyt.searchstatus",
@@ -84733,7 +89618,7 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
     ):
         """
         企业上传出入库信息
-        零售企业上传出入库信息，包括采购入库（102），退货入库（103），供应入库（107）,销售出库（201）,退货出库（202），销毁出库（205），抽检出库（206）， 供应出库（209）,
+        企业上传出入库信息，包括采购入库（102），退货入库（103），供应入库（107）,销售出库（201）,退货出库（202），销毁出库（205），抽检出库（206）， 供应出库（209）,
         不包括对个人的零售出库，疫苗接种，领药出库。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41215
 
@@ -84741,15 +89626,15 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
         :param bill_time: 单据时间
         :param bill_type: 单据类型【102代表采购入库】
         :param physic_type: 药品类型【3普药2特药】
-        :param ref_user_id: 上传企业的单位编码
-        :param from_user_id: 发货企业entId
-        :param to_user_id: 收货企业entId
+        :param ref_user_id: 上传企业的单位维一编码【注意：该入参是ref_ent_id，不是ent_id】
+        :param from_user_id: 发货企业entId【注意：该入参是ent_id,并不是ref_ent_id】
+        :param to_user_id: 收货企业entId【注意：该入参是ent_id,并不是ref_ent_id】
         :param oper_ic_code: 单据提交者（appkey编号）
         :param oper_ic_name: 单据提交者姓名
         :param client_type: 客户端类型[必须填2]
         :param trace_codes: 追溯码[多个时用逗号分开]
         :param agent_ref_user_id: 代理企业REF标识
-        :param dest_user_id: 直调企业标识
+        :param dest_user_id: 直调企业标识【注意：该入参是ent_id,并不是ref_ent_id】
         :param return_reason_code: 退货原因代码[退货入出库时填写]
         :param return_reason_des: 退货原因描述[退货入出库时填写]
         :param cancel_reason_code: 注销原因代码【销毁出库时填写】
@@ -85628,8 +90513,7 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
             ent_name
     ):
         """
-        根据企业名称查询企业唯一标（ref_ent_id）和企业ID(ent_id)
-        根据企业名称查询ID
+        根据企业名称查询企业唯一标识【ref_ent_id】和企业ID【ent_id】
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41800
 
         :param ent_name: 公司名称
@@ -85877,6 +90761,602 @@ class TbALiJianKangZhuiSuMa(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_alihealth_trace_policy_add(
+            self,
+            policy_record_info_d_o=None
+    ):
+        """
+        保单记录信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42577
+
+        :param policy_record_info_d_o: 入参
+        """
+        return self._top_request(
+            "alibaba.alihealth.trace.policy.add",
+            {
+                "policy_record_info_d_o": policy_record_info_d_o
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_singlerelation(
+            self,
+            code,
+            ref_ent_id,
+            des_ref_ent_id
+    ):
+        """
+        多融单码查贸易
+        单码关联关系查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42648
+
+        :param code: 追溯码
+        :param ref_ent_id: 接口调用企业的唯一标识（接口调用者）
+        :param des_ref_ent_id: 目标企业唯一标识（为哪个企业查询，一般与入参ref_ent_id一样）
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.singlerelation",
+            {
+                "code": code,
+                "ref_ent_id": ref_ent_id,
+                "des_ref_ent_id": des_ref_ent_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_querycodeactive(
+            self,
+            ref_ent_id,
+            codes
+    ):
+        """
+        查询码是否激活
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42834
+
+        :param ref_ent_id: 企业
+        :param codes: 码
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.querycodeactive",
+            {
+                "ref_ent_id": ref_ent_id,
+                "codes": codes
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_uploadinoutbill(
+            self,
+            bill_code,
+            bill_time,
+            bill_type,
+            physic_type,
+            ref_user_id,
+            from_user_id,
+            to_user_id,
+            oper_ic_code,
+            oper_ic_name,
+            client_type,
+            trace_codes,
+            agent_ref_user_id='',
+            dest_user_id='',
+            return_reason_code='',
+            return_reason_des='',
+            cancel_reason_code='',
+            cancel_reason_des='',
+            executer_name='',
+            executer_code='',
+            superviser_name='',
+            superviser_code='',
+            warehouse_id='',
+            drug_id=''
+    ):
+        """
+        疫苗企业出入库上传
+        零售企业上传出入库信息，包括采购入库（102），退货入库（103），供应入库（107）,退货出库（202），销毁出库（205），抽检出库（206）， 供应出库（209）,
+        不包括对个人的零售出库，疫苗接种，领药出库。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42909
+
+        :param bill_code: 单据编码
+        :param bill_time: 单据时间
+        :param bill_type: 单据类型【102代表采购入库】
+        :param physic_type: 药品类型【3普药2特药】
+        :param ref_user_id: 上传企业的单位编码
+        :param from_user_id: 发货企业entId
+        :param to_user_id: 收货企业entId
+        :param oper_ic_code: 单据提交者（appkey编号）
+        :param oper_ic_name: 单据提交者姓名
+        :param client_type: 客户端类型[必须填2]
+        :param trace_codes: 追溯码[多个时用逗号分开]
+        :param agent_ref_user_id: 代理企业REF标识
+        :param dest_user_id: 直调企业标识
+        :param return_reason_code: 退货原因代码[退货入出库时填写]
+        :param return_reason_des: 退货原因描述[退货入出库时填写]
+        :param cancel_reason_code: 注销原因代码【销毁出库时填写】
+        :param cancel_reason_des: 注销原因描述【销毁出库时填写】
+        :param executer_name: 执行人姓名【销毁出库时填写】
+        :param executer_code: 执行人证件号【销毁出库时填写】
+        :param superviser_name: 监督人姓名【销毁出库时填写】
+        :param superviser_code: 监督人证件号【销毁出库时填写】
+        :param warehouse_id: 仓号
+        :param drug_id: 药品ID[企业自已系统的药品ID]
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.uploadinoutbill",
+            {
+                "bill_code": bill_code,
+                "bill_time": bill_time,
+                "bill_type": bill_type,
+                "physic_type": physic_type,
+                "ref_user_id": ref_user_id,
+                "from_user_id": from_user_id,
+                "to_user_id": to_user_id,
+                "oper_ic_code": oper_ic_code,
+                "oper_ic_name": oper_ic_name,
+                "client_type": client_type,
+                "trace_codes": trace_codes,
+                "agent_ref_user_id": agent_ref_user_id,
+                "dest_user_id": dest_user_id,
+                "return_reason_code": return_reason_code,
+                "return_reason_des": return_reason_des,
+                "cancel_reason_code": cancel_reason_code,
+                "cancel_reason_des": cancel_reason_des,
+                "executer_name": executer_name,
+                "executer_code": executer_code,
+                "superviser_name": superviser_name,
+                "superviser_code": superviser_code,
+                "warehouse_id": warehouse_id,
+                "drug_id": drug_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_searchstatus(
+            self,
+            ref_ent_id,
+            begin_date,
+            end_date,
+            bill_type,
+            page_size,
+            page,
+            bill_code='',
+            drug_type='',
+            deal_status='',
+            from_user_id='',
+            to_user_id='',
+            agent_ref_user_id=''
+    ):
+        """
+        疫苗企业上传单据后处理状态查询
+        单据处理状态查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42910
+
+        :param ref_ent_id: 企业ID
+        :param begin_date: 开始日期
+        :param end_date: 结束日期
+        :param bill_type: 单据类型 A：全部 AI：全部入库 AO：全部出库
+        :param page_size: 页大小
+        :param page: 页码
+        :param bill_code: 单据号
+        :param drug_type: 药品类型
+        :param deal_status: 状态  1, 上传成功     3, 处理成功     4, 处理失败
+        :param from_user_id: 发货商
+        :param to_user_id: 收货商
+        :param agent_ref_user_id: 代理商
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.searchstatus",
+            {
+                "ref_ent_id": ref_ent_id,
+                "begin_date": begin_date,
+                "end_date": end_date,
+                "bill_type": bill_type,
+                "page_size": page_size,
+                "page": page,
+                "bill_code": bill_code,
+                "drug_type": drug_type,
+                "deal_status": deal_status,
+                "from_user_id": from_user_id,
+                "to_user_id": to_user_id,
+                "agent_ref_user_id": agent_ref_user_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_getbyentid(
+            self,
+            ref_ent_id,
+            ent_id
+    ):
+        """
+        多融通过企业ID得到一个企业的详细信息
+        根据企业主键查看企业详细信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42911
+
+        :param ref_ent_id: 接口调用企业的唯一标识（接口调用者）
+        :param ent_id: 准备要查询的企业ID（返回该企业ID的详细信息）
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.getbyentid",
+            {
+                "ref_ent_id": ref_ent_id,
+                "ent_id": ent_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_getbyrefentid(
+            self,
+            ref_ent_id,
+            dest_ref_ent_id
+    ):
+        """
+        多融通过一个企业唯一标识查询企业详细信息
+        根据企业唯一标识查看企业详细信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42912
+
+        :param ref_ent_id: 接口调用企业的唯一标识（接口调用者）
+        :param dest_ref_ent_id: 准备要查询的企业唯一标识（返回该唯一标识企业的详细信息）
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.getbyrefentid",
+            {
+                "ref_ent_id": ref_ent_id,
+                "dest_ref_ent_id": dest_ref_ent_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_getentinfo(
+            self,
+            ent_name
+    ):
+        """
+        通过企业名得到唯一标识（ref_ent_id）及企业ID(ent_id)
+        根据企业名称查询ID
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42916
+
+        :param ent_name: 公司名称(全称)
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.getentinfo",
+            {
+                "ent_name": ent_name
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_listparts(
+            self,
+            ref_ent_id,
+            page_size,
+            page,
+            ent_name='',
+            ref_partner_id='',
+            begin_date='',
+            end_date=''
+    ):
+        """
+        多融查询一个企业的往来单位
+        查询往来单位列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42922
+
+        :param ref_ent_id: 企业ID
+        :param page_size: 页大小
+        :param page: 页码
+        :param ent_name: 企业名称
+        :param ref_partner_id: 企业自定义编号
+        :param begin_date: 开始时间
+        :param end_date: 结束时间
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.listparts",
+            {
+                "ref_ent_id": ref_ent_id,
+                "page_size": page_size,
+                "page": page,
+                "ent_name": ent_name,
+                "ref_partner_id": ref_partner_id,
+                "begin_date": begin_date,
+                "end_date": end_date
+            }
+        )
+
+    def alibaba_alihealth_drug_code_kyt_dr_querycode(
+            self,
+            ref_ent_id,
+            codes
+    ):
+        """
+        多融根据码查询码信息
+        服务描述
+        此接口，针对有码药品，提供可通过追溯码获取该药品的基础信息和生产状况信息。
+        核查平台优先过滤非8开头的，长度非20位数字的码信息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43000
+
+        :param ref_ent_id: 企业唯一标识（或appkey）
+        :param codes: 码列表
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.code.kyt.dr.querycode",
+            {
+                "ref_ent_id": ref_ent_id,
+                "codes": codes
+            }
+        )
+
+    def alibaba_alihealth_drug_scan_querycode(
+            self,
+            code,
+            webchat_id,
+            scan_time,
+            province_code='',
+            city_code='',
+            area_code=''
+    ):
+        """
+        查询药监码对应的有效期和包装规格
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43192
+
+        :param code: 溯源码
+        :param webchat_id: 用户标识id
+        :param scan_time: 扫码日期
+        :param province_code: 省编码
+        :param city_code: 市编码
+        :param area_code: 区编码
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.scan.querycode",
+            {
+                "code": code,
+                "webchat_id": webchat_id,
+                "scan_time": scan_time,
+                "province_code": province_code,
+                "city_code": city_code,
+                "area_code": area_code
+            }
+        )
+
+    def alibaba_alihealth_drug_code_kyt_querycode(
+            self,
+            ref_ent_id,
+            codes
+    ):
+        """
+        查询追溯码对应的药品信息
+        服务描述
+        此接口，针对有码药品，提供可通过追溯码获取该药品的基础信息和生产状况信息；
+        若所传的监管码是非最小包装监管码，且存在药品混包的情况，则此接口不支持。这种
+        情况下，需要分多次调用该接口。
+        核查平台优先过滤非8开头的，长度非20位数字的码信息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43232
+
+        :param ref_ent_id: 企业id
+        :param codes: 码列表
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.code.kyt.querycode",
+            {
+                "ref_ent_id": ref_ent_id,
+                "codes": codes
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_billcheck(
+            self,
+            bill_code,
+            bill_type,
+            ower_ref_ent_id,
+            ref_ent_id=''
+    ):
+        """
+        疫苗追溯验证
+        各级疾控在入库完成后，需要做追溯信息验证
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43310
+
+        :param bill_code: 单据编号
+        :param bill_type: 单据类型
+        :param ower_ref_ent_id: 单据企业refEntId
+        :param ref_ent_id: 调用企业ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.billcheck",
+            {
+                "bill_code": bill_code,
+                "bill_type": bill_type,
+                "ower_ref_ent_id": ower_ref_ent_id,
+                "ref_ent_id": ref_ent_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_drugrecal(
+            self,
+            recall_begin_time,
+            recall_end_time,
+            ref_ent_id=''
+    ):
+        """
+        疫苗药品召回
+        生产企业发布的召回信息，按照批次进行召回，收货和发货环节的单据处理中调用接口进行查询；
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43313
+
+        :param recall_begin_time: 召回开始时间
+        :param recall_end_time: 召回结束时间
+        :param ref_ent_id: 调用企业ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.drugrecal",
+            {
+                "recall_begin_time": recall_begin_time,
+                "recall_end_time": recall_end_time,
+                "ref_ent_id": ref_ent_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_getproteminfo(
+            self,
+            drug_ent_base_info_id,
+            batch_no,
+            bill_out_code,
+            ref_ent_id=''
+    ):
+        """
+        疫苗，获取生产企业的存储和运输温度
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43415
+
+        :param drug_ent_base_info_id: 药品ID
+        :param batch_no: 批次编号
+        :param bill_out_code: 出库单号
+        :param ref_ent_id: 调用企业ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.getproteminfo",
+            {
+                "drug_ent_base_info_id": drug_ent_base_info_id,
+                "batch_no": batch_no,
+                "bill_out_code": bill_out_code,
+                "ref_ent_id": ref_ent_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_transportupload(
+            self,
+            ref_ent_id,
+            bill_code,
+            transport_ref_ent_name,
+            equipment_code,
+            content,
+            transport_ref_ent_id='',
+            equipment_name=''
+    ):
+        """
+        疫苗运输温度上传
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43416
+
+        :param ref_ent_id: 企业RefEntId
+        :param bill_code: 单据编号
+        :param transport_ref_ent_name: 运输企业名称
+        :param equipment_code: 设备编号
+        :param content: 温度信息
+        :param transport_ref_ent_id: 运输企业RefEntId
+        :param equipment_name: 设备名称
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.transportupload",
+            {
+                "ref_ent_id": ref_ent_id,
+                "bill_code": bill_code,
+                "transport_ref_ent_name": transport_ref_ent_name,
+                "equipment_code": equipment_code,
+                "content": content,
+                "transport_ref_ent_id": transport_ref_ent_id,
+                "equipment_name": equipment_name
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_storageupload(
+            self,
+            ref_ent_id,
+            equipment_code,
+            content,
+            equipment_name=''
+    ):
+        """
+        疫苗存储温度上传
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43417
+
+        :param ref_ent_id: 企业RefEntId
+        :param equipment_code: 设备编号
+        :param content: 温度信息
+        :param equipment_name: 设备名称
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.storageupload",
+            {
+                "ref_ent_id": ref_ent_id,
+                "equipment_code": equipment_code,
+                "content": content,
+                "equipment_name": equipment_name
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_dr_associateequi(
+            self,
+            ref_ent_id,
+            bill_codes,
+            va_equipment_id
+    ):
+        """
+        疫苗单据与设备绑定
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43441
+
+        :param ref_ent_id: 企业refentid
+        :param bill_codes: 单据编号，多个用逗号分隔
+        :param va_equipment_id: 设备ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.dr.associateequi",
+            {
+                "ref_ent_id": ref_ent_id,
+                "bill_codes": bill_codes,
+                "va_equipment_id": va_equipment_id
+            }
+        )
+
+    def alibaba_alihealth_drug_kyt_getentlicense(
+            self,
+            ref_ent_id
+    ):
+        """
+        获取企业资质
+        获取企业的资质信息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43660
+
+        :param ref_ent_id: 企业ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.getentlicense",
+            {
+                "ref_ent_id": ref_ent_id
+            },
+            result_processor=lambda x: x["model_list"]
+        )
+
+    def alibaba_alihealth_drug_kyt_getdruglicense(
+            self,
+            ref_ent_id,
+            drug_id
+    ):
+        """
+        获取药品资质信息
+        获取药品的资质信息。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43686
+
+        :param ref_ent_id: 企业ID
+        :param drug_id: 药品ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.kyt.getdruglicense",
+            {
+                "ref_ent_id": ref_ent_id,
+                "drug_id": drug_id
+            },
+            result_processor=lambda x: x["model_list"]
+        )
+
+    def alibaba_alihealth_drug_download_getentauthent(
+            self,
+            auth_begin_date='',
+            auth_end_date=''
+    ):
+        """
+        获取授权企业列表
+        D2D数据落地获取授权企业列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44037
+
+        :param auth_begin_date: 授权开始时间
+        :param auth_end_date: 授权结束时间
+        """
+        return self._top_request(
+            "alibaba.alihealth.drug.download.getentauthent",
+            {
+                "auth_begin_date": auth_begin_date,
+                "auth_end_date": auth_end_date
+            }
+        )
+
 
 class TbHuiYuanZhongXin(DingTalkBaseAPI):
     """
@@ -85937,18 +91417,21 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
 
     def alibaba_alihealth_baby_baseinfo_get(
             self,
-            baby_id
+            baby_id,
+            tp_user_id='0'
     ):
         """
-        获取宝宝信息
+        三方从我们这获取宝宝信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29413
 
         :param baby_id: 宝宝id
+        :param tp_user_id: 宝宝所属的用户
         """
         return self._top_request(
             "alibaba.alihealth.baby.baseinfo.get",
             {
-                "baby_id": baby_id
+                "baby_id": baby_id,
+                "tp_user_id": tp_user_id
             }
         )
 
@@ -86011,6 +91494,8 @@ class TbALiJianKangHuiYuanGuanLi(DingTalkBaseAPI):
     ):
         """
         宝宝发育评测提醒开关接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         同步宝宝发育评测提醒开关
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=29491
 
@@ -86786,6 +92271,129 @@ class TbPinXiao(DingTalkBaseAPI):
             }
         )
 
+    def taobao_brand_specialshow_rpt_campaign_get(
+            self,
+            traffictype,
+            startdate,
+            enddate,
+            effect='15'
+    ):
+        """
+        品牌特秀推广计划报表数据查询
+        获取品牌特秀广告campaign分日报表数据，只能查询近90天内的数据，包括展现量，点击量等
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42844
+
+        :param traffictype: 流量类型 1: PC站内, 2: PC站外 , 4: 无线站内, 5: 无线站外,支持多种一起查询,如1,2,4,5
+        :param startdate: 查询开始时间(最多查询90天数据)
+        :param enddate: 查询截至时间(最晚查询到昨天)
+        :param effect: 转化周期,默认15天,可选 3,7,15
+        """
+        return self._top_request(
+            "taobao.brand.specialshow.rpt.campaign.get",
+            {
+                "traffictype": traffictype,
+                "startdate": startdate,
+                "enddate": enddate,
+                "effect": effect
+            }
+        )
+
+    def taobao_brand_specialshow_rpt_adgroup_get(
+            self,
+            traffic_type,
+            start_date,
+            end_date,
+            effect='15',
+            page_index='',
+            page_size=''
+    ):
+        """
+        品牌特秀推广计划报表数据查询
+        获取品牌特秀广告adgroup分日报表数据，只能查询近90天内的数据，包括展现量，点击量等
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42845
+
+        :param traffic_type: 流量类型 1: PC站内, 2: PC站外 , 4: 无线站内, 5: 无线站外,支持多种一起查询,如1,2,4,5
+        :param start_date: 开始时间(最多可查询最近90天)
+        :param end_date: 截至时间(最晚到昨天)
+        :param effect: 转化周期默认15天,3,7,15
+        :param page_index: 当前页数
+        :param page_size: 每页条数
+        """
+        return self._top_request(
+            "taobao.brand.specialshow.rpt.adgroup.get",
+            {
+                "traffic_type": traffic_type,
+                "start_date": start_date,
+                "end_date": end_date,
+                "effect": effect,
+                "page_index": page_index,
+                "page_size": page_size
+            }
+        )
+
+    def taobao_brandhub_specialshow_rpt_campaign_get(
+            self,
+            start_date,
+            end_date,
+            solution_id='',
+            page_index='',
+            page_size=''
+    ):
+        """
+        品牌号品牌特秀计划报表数据查询
+        获取品牌号品牌特秀广告campaign分日报表数据，只能查询近90天内的数据，包括展现量，点击量等
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43976
+
+        :param start_date: 开始时间(最多可查询最近90天)
+        :param end_date: 截至时间(最晚到昨天)
+        :param solution_id: 指定计划id
+        :param page_index: 当前页数
+        :param page_size: 每页条数
+        """
+        return self._top_request(
+            "taobao.brandhub.specialshow.rpt.campaign.get",
+            {
+                "start_date": start_date,
+                "end_date": end_date,
+                "solution_id": solution_id,
+                "page_index": page_index,
+                "page_size": page_size
+            }
+        )
+
+    def taobao_brandhub_specialshow_rpt_adgroup_get(
+            self,
+            start_date,
+            end_date,
+            solution_id='',
+            task_id='',
+            page_index='',
+            page_size=''
+    ):
+        """
+        品牌号品牌特秀单元报表数据查询
+        获取品牌号品牌特秀广告adgroup分日报表数据，只能查询近90天内的数据，包括展现量，点击量等
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43977
+
+        :param start_date: 开始时间(最多可查询最近90天)
+        :param end_date: 截至时间(最晚到昨天)
+        :param solution_id: 指定计划id
+        :param task_id: 指定任务id
+        :param page_index: 当前页数
+        :param page_size: 可选页数
+        """
+        return self._top_request(
+            "taobao.brandhub.specialshow.rpt.adgroup.get",
+            {
+                "start_date": start_date,
+                "end_date": end_date,
+                "solution_id": solution_id,
+                "task_id": task_id,
+                "page_index": page_index,
+                "page_size": page_size
+            }
+        )
+
 
 class TbXiaoMi(DingTalkBaseAPI):
     """
@@ -86822,6 +92430,62 @@ class TbXiaoMi(DingTalkBaseAPI):
                 "id": id,
                 "expires": expires,
                 "routing": routing
+            }
+        )
+
+    def taobao_alime_message_open_send(
+            self,
+            message=None,
+            app_id=''
+    ):
+        """
+        小蜜发消息接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43223
+
+        :param message: Message
+        :param app_id: appId
+        """
+        return self._top_request(
+            "taobao.alime.message.open.send",
+            {
+                "message": message,
+                "app_id": app_id
+            }
+        )
+
+    def taobao_alime_user_token_advance_get(
+            self,
+            routing='0',
+            type='',
+            foreign_id='',
+            nick='',
+            source='',
+            id='',
+            expires='60'
+    ):
+        """
+        获取用户免登录令牌v2
+        根据第三账号信息获取用户的免登录令牌
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44065
+
+        :param routing: 路由id, 一般为用户id，用于异地容灾
+        :param type: 用户类型，0为普通用户，1为访客用户
+        :param foreign_id: 用户在第三方账号中的唯一id
+        :param nick: 用户昵称
+        :param source: 小蜜分配给第三方账号的来源
+        :param id: 用户在小蜜账号中的唯一id
+        :param expires: 令牌的过期时间(时间为秒)，最大为3600
+        """
+        return self._top_request(
+            "taobao.alime.user.token.advance.get",
+            {
+                "routing": routing,
+                "type": type,
+                "foreign_id": foreign_id,
+                "nick": nick,
+                "source": source,
+                "id": id,
+                "expires": expires
             }
         )
 
@@ -86916,6 +92580,138 @@ class TbDaMaiPiaoWuYunFenXiao(DingTalkBaseAPI):
             "alibaba.damai.maitix.projects.query"
         )
 
+    def alibaba_damai_maitix_projectlists_query(
+            self
+    ):
+        """
+        大麦-项目列表查询新接口
+        新版第三方平台根据商家appket查询授权的项目列表信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42624
+
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.projectlists.query"
+        )
+
+    def alibaba_damai_maitix_project_query(
+            self,
+            project_id
+    ):
+        """
+        大麦-单项目详情
+        新版第三方平台查询授权的单个项目详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42629
+
+        :param project_id: 项目id
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.project.query",
+            {
+                "project_id": project_id
+            }
+        )
+
+    def alibaba_damai_maitix_order_directrefund(
+            self,
+            param
+    ):
+        """
+        大麦-直接退票
+        大麦-退票
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43627
+
+        :param param: 退票入参
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.order.directrefund",
+            {
+                "param": param
+            }
+        )
+
+    def alibaba_damai_maitix_order_distribution_create(
+            self,
+            param
+    ):
+        """
+        大麦-新分销下单
+        createDistributionOrder
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43662
+
+        :param param: 下单参数param
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.order.distribution.create",
+            {
+                "param": param
+            }
+        )
+
+    def alibaba_damai_maitix_project_distribution_query(
+            self,
+            project_id=''
+    ):
+        """
+        分销单项目详情查询
+        发布分销项目查询单个项目信息接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43682
+
+        :param project_id: 项目id
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.project.distribution.query",
+            {
+                "project_id": project_id
+            }
+        )
+
+    def alibaba_damai_maitix_project_distribution_querylist(
+            self
+    ):
+        """
+        分销项目列表查询
+        分销项目列表查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43683
+
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.project.distribution.querylist"
+        )
+
+    def alibaba_damai_maitix_eticket_distribution_query(
+            self,
+            param
+    ):
+        """
+        分销电子票查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44328
+
+        :param param: 入参param
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.eticket.distribution.query",
+            {
+                "param": param
+            }
+        )
+
+    def alibaba_damai_maitix_project_distribution_querybypage(
+            self,
+            param=None
+    ):
+        """
+        分销项目分页查询项目列表服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44335
+
+        :param param: 入参param
+        """
+        return self._top_request(
+            "alibaba.damai.maitix.project.distribution.querybypage",
+            {
+                "param": param
+            }
+        )
+
 
 class TbTianMaoJingLingKaiFang(DingTalkBaseAPI):
     """
@@ -86927,6 +92723,8 @@ class TbTianMaoJingLingKaiFang(DingTalkBaseAPI):
     ):
         """
         天猫精灵获取用户信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取用户注册和绑定设备相关信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=30346
 
@@ -87478,6 +93276,35 @@ class TbTianMaoJingLingKaiFang(DingTalkBaseAPI):
             }
         )
 
+    def taobao_ailab_aicloud_top_memo_alarm_create(
+            self,
+            schema,
+            user_id,
+            param_create_alarm_param,
+            ext='',
+            utd_id=''
+    ):
+        """
+        天猫精灵闹钟创建
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42913
+
+        :param schema: schema
+        :param user_id: 企业用户ID
+        :param param_create_alarm_param: 创建闹钟入参
+        :param ext: 扩展信息json段，用于存放APP类型，APP版本等等信息。
+        :param utd_id: 手持设备ID
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.memo.alarm.create",
+            {
+                "schema": schema,
+                "user_id": user_id,
+                "param_create_alarm_param": param_create_alarm_param,
+                "ext": ext,
+                "utd_id": utd_id
+            }
+        )
+
 
 class TbZhiHuiYuanQu(DingTalkBaseAPI):
     """
@@ -87577,6 +93404,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         拓扑批量实例化
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         该接口提供给ISV进行规则模板批量实例化。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31911
 
@@ -88016,6 +93845,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         分页查询管理员
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32220
 
         :param company_id: 公司ID
@@ -88086,6 +93917,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         修改角色赋予的权限
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32222
 
         :param role: 系统自动生成
@@ -88148,6 +93981,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         删除权限
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32224
 
         :param system_id: 系统id
@@ -88177,6 +94012,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         修改角色
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32225
 
         :param system_id: 系统id
@@ -88295,6 +94132,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         删除角色
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32229
 
         :param system_id: 系统id
@@ -88328,6 +94167,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         分页查询角色
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32230
 
         :param system_id: 系统id
@@ -88496,6 +94337,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         修改权限
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32235
 
         :param system_id: 系统id
@@ -88531,6 +94374,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         校验用户是否有该权限
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32236
 
         :param system_id: 系统id
@@ -88953,6 +94798,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         分页只查询角色列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33530
 
         :param system_id: 系统id
@@ -88997,6 +94844,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         根据楼宇+楼层（可选）查询实时人员记录
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         HSF接口名称：com.alibaba.campus.api.adminmap.service.top.UserLocationQueryApiTopService
         HSF方法名称：getUserLocationInfosByBuildingAndFloorId
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33582
@@ -89021,6 +94870,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         根据楼宇+楼层（可选）查询实时人数
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         HSF接口名称：com.alibaba.campus.api.adminmap.service.top.UserLocationQueryApiTopService
         HSF方法名称：getUserCountByBuildingAndFloorId
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33583
@@ -89174,6 +95025,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         分页查询多个应用的角色
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35877
 
         :param work_bench_context: 公共入参
@@ -89194,6 +95047,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         分页查询多个应用的管理员
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35920
 
         :param work_bench_context: 公共入参
@@ -89234,6 +95089,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         用户可以添加多个应用的角色
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37046
 
         :param param0: 系统入参
@@ -89254,6 +95111,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         修改用户和角色的关系(支持多个应用)
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37047
 
         :param param0: 系统入参
@@ -89274,6 +95133,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         删除用户和角色的关系(支持多应用)
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37048
 
         :param param0: 系统入参
@@ -89294,6 +95155,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         分页查询用户授权记录
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37049
 
         :param param0: 系统入参
@@ -89765,6 +95628,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         createorderfood
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         供应商系统下单时将订单数据同步未来餐厅
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38586
 
@@ -89786,6 +95651,8 @@ class TbZhiHuiYuanQu(DingTalkBaseAPI):
     ):
         """
         changeorderstatus
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         供应商订单状态变化发钉钉消息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38587
 
@@ -90102,6 +95969,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取品牌号商家信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取品牌号基础信息，包括品牌名称、品牌logo(长、方)、品牌故事、品牌档案等
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31009
 
@@ -90118,6 +95987,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取预约服务列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取品牌号预约服务列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31029
 
@@ -90138,6 +96009,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取关联店铺信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取品牌号关联的店铺信息，包括店铺名称，店铺id，店铺商家id
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31031
 
@@ -90154,6 +96027,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取个人主页动态列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取品牌号相关内容动态
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31032
 
@@ -90174,6 +96049,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取直播列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31033
 
         """
@@ -90188,6 +96065,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取商品列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取品牌号已授权关联店铺的商品列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31058
 
@@ -90207,6 +96086,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取会员信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取会员信息，包含对应的品牌id，品牌名称，会员等级，logo等
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31059
 
@@ -90226,6 +96107,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         获取猜图寻宝权益信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取猜图寻宝活动列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31069
 
@@ -90246,6 +96129,8 @@ class TbPinPaiHaoApi(DingTalkBaseAPI):
     ):
         """
         视频截图服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         视频上传时用于自动截图
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31577
 
@@ -90573,6 +96458,8 @@ class TbShangJiaYingXiaoZhongXin(DingTalkBaseAPI):
     ):
         """
         套餐条件查询接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         搭配宝套餐的条件查询接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31123
 
@@ -90591,6 +96478,8 @@ class TbShangJiaYingXiaoZhongXin(DingTalkBaseAPI):
     ):
         """
         搭配宝套餐的删除接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家管理套餐的删除API
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31129
 
@@ -90609,6 +96498,8 @@ class TbShangJiaYingXiaoZhongXin(DingTalkBaseAPI):
     ):
         """
         搭配宝单个套餐查询接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询搭配宝的单个套餐信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31135
 
@@ -90627,6 +96518,8 @@ class TbShangJiaYingXiaoZhongXin(DingTalkBaseAPI):
     ):
         """
         搭配宝创建套餐接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         搭配宝套餐创建功能
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31142
 
@@ -90645,6 +96538,8 @@ class TbShangJiaYingXiaoZhongXin(DingTalkBaseAPI):
     ):
         """
         搭配宝套餐编辑接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         搭配宝套餐创建功能
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=31150
 
@@ -90960,6 +96855,23 @@ class TbICBURFQ(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_icbu_rfq_read(
+            self,
+            rfq_id_list
+    ):
+        """
+        是否已读RFQ
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42604
+
+        :param rfq_id_list: 查询RFQID列表
+        """
+        return self._top_request(
+            "alibaba.icbu.rfq.read",
+            {
+                "rfq_id_list": rfq_id_list
+            }
+        )
+
 
 class TbICBUXinBao(DingTalkBaseAPI):
     """
@@ -91128,6 +97040,8 @@ class TbLingShouZhongDuan(DingTalkBaseAPI):
     ):
         """
         卡券领取
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         第三方服务提供第三方服务的用户标识和卡券信息通过零售中台获取卡券
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38151
 
@@ -91250,6 +97164,8 @@ class TbALiOSYingYongZhongXin(DingTalkBaseAPI):
     ):
         """
         应用查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         通过包名列表查询应用信息列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32092
 
@@ -91329,6 +97245,8 @@ class TbALiOSYingYongZhongXin(DingTalkBaseAPI):
     ):
         """
         获取广告列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         给掌阅提供广告列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35799
 
@@ -91536,6 +97454,8 @@ class TbRARHuiLiu(DingTalkBaseAPI):
     ):
         """
         RAR会员数据回流
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         1.RAR会员数据回流
         2.建议每次传输条目不超过100条，报文长度不超过100kb
         3.该接口不支持删除
@@ -91557,6 +97477,8 @@ class TbRARHuiLiu(DingTalkBaseAPI):
     ):
         """
         RAR数据回流store
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         rar一期数据回流接口，回流门店store数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32310
 
@@ -91575,6 +97497,8 @@ class TbRARHuiLiu(DingTalkBaseAPI):
     ):
         """
         回流数据查询接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         查询回流数据，单条记录
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32311
 
@@ -91593,6 +97517,8 @@ class TbRARHuiLiu(DingTalkBaseAPI):
     ):
         """
         rar一期订单回流
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         rar一期回流订单数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32440
 
@@ -91611,6 +97537,8 @@ class TbRARHuiLiu(DingTalkBaseAPI):
     ):
         """
         rar一期商品回流
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         rar一期商品数据回流接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=32449
 
@@ -91772,6 +97700,8 @@ class TbLingShouTongZhiNengPOSKaiFang(DingTalkBaseAPI):
     ):
         """
         pos流水查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38666
 
         :param user_id: 用户id
@@ -91798,6 +97728,8 @@ class TbLingShouTongZhiNengPOSKaiFang(DingTalkBaseAPI):
     ):
         """
         pos商品快照查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         pos根据userId查询商品快照
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38667
 
@@ -92397,6 +98329,24 @@ class TbTianMaoXinLingShou(DingTalkBaseAPI):
             }
         )
 
+    def tmall_nr_fulfill_sold_orderlist_query(
+            self,
+            param0=None
+    ):
+        """
+        零售商获取品牌商的特定订单列表
+        零售商获取品牌商的特定订单列表，后端服务有零售商和品牌商的绑定关系，存在开关控制；同时后端存在定时送业务等特殊业务的校验，非同城配送业务不能返回，返回值存在品牌方用户的电话号码，当前电话号码是屏蔽中间四位
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36940
+
+        :param param0: 入参对象
+        """
+        return self._top_request(
+            "tmall.nr.fulfill.sold.orderlist.query",
+            {
+                "param0": param0
+            }
+        )
+
 
 class TbDPAAS(DingTalkBaseAPI):
     """
@@ -92410,6 +98360,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         商家授权详情获取
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         三方获取商家授权信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33307
 
@@ -92445,6 +98397,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         客流数据回流
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         客流数据回流,每次一条数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33315
 
@@ -92492,6 +98446,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         门店设备获取
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         服务商（瑞为），获取门店硬件设备
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33347
 
@@ -92518,6 +98474,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         DPAAS会员图片匹配结果回传API
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         会员图片匹配结果回传
         dpaas项目开放接口，用户回传会员图片匹配结果
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33377
@@ -92551,6 +98509,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         硬件设备信息回传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         DPAAS平台开放接口
         商家CRM系统硬件设备信息回传
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33398
@@ -92582,6 +98542,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         客流及图片信息查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         服务商查询接口，查询线下回流的客流图片数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33409
 
@@ -92610,6 +98572,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         DPAAS会员图片匹配结果回传API
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         会员图片匹配结果回传
         dpaas项目开放接口，用户回传会员图片匹配结果
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33416
@@ -92657,6 +98621,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         DPaaS门店更新
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         编辑商户信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33466
 
@@ -92741,6 +98707,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         DPaaS门店添加
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家添加一个商户信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33467
 
@@ -92802,6 +98770,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         获取DPaaS门店列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33471
 
         :param page_no: 查询的页码
@@ -92825,6 +98795,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         DPaaS营销信息回传
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33498
 
         :param customer_id: 自定义客户id，必须与用户数据customer中的id保持一致
@@ -92850,6 +98822,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         DPaaS平台门店类型获取
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家在ERP中调用该接口，获取门店类目
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33570
 
@@ -92869,6 +98843,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         上传图片图片
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33804
 
         :param customer_id: 客户ID
@@ -92893,6 +98869,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         更新DPaaS人脸信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33806
 
         :param token: 授权token
@@ -92921,6 +98899,8 @@ class TbDPAAS(DingTalkBaseAPI):
     ):
         """
         获取访客统计数据
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=33831
 
         :param store_code: 门店编码
@@ -93517,6 +99497,8 @@ class TbALiJianKangYiMiao(DingTalkBaseAPI):
     ):
         """
         疫苗预约日期提交
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         微信小程序疫苗预约日期提交
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37808
 
@@ -93601,6 +99583,8 @@ class TbALiJianKangYiMiao(DingTalkBaseAPI):
     ):
         """
         疫苗预约登记创建
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         微信小程序疫苗预约登记创建
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37812
 
@@ -93820,6 +99804,8 @@ class TbJiaoYuZhangHao(DingTalkBaseAPI):
     ):
         """
         创建学校机构
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         教育多端平台开放创建学校机构能力
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35309
 
@@ -93847,6 +99833,8 @@ class TbJiaoYuZhangHao(DingTalkBaseAPI):
     ):
         """
         修改教育账号(包括密码)
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         教育多端平台开放修改教育账号能力
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35310
 
@@ -93877,6 +99865,8 @@ class TbJiaoYuZhangHao(DingTalkBaseAPI):
     ):
         """
         删除教育账号
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         教育多端平台开放修改删除账号能力
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35311
 
@@ -93898,6 +99888,8 @@ class TbJiaoYuZhangHao(DingTalkBaseAPI):
     ):
         """
         教育账号登录验证
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         教育多端平台开放修改验证教育账号能力
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35313
 
@@ -93919,6 +99911,8 @@ class TbJiaoYuZhangHao(DingTalkBaseAPI):
     ):
         """
         创建教育账号
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         教育多端平台开放创建教育账号能力
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35314
 
@@ -93945,6 +99939,8 @@ class TbJiaoYuZhangHao(DingTalkBaseAPI):
     ):
         """
         下发设备指令
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         下发设备定时开关机指令
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35329
 
@@ -94026,6 +100022,204 @@ class TbYongHuZengZhang(DingTalkBaseAPI):
                 "icon_url": icon_url,
                 "m_count": m_count,
                 "t_count": t_count
+            }
+        )
+
+    def taobao_usergrowth_delivery_ask(
+            self,
+            channel,
+            adid,
+            keyword_type='',
+            keyword='',
+            screen_height='',
+            ip_area_name='',
+            app='',
+            network='',
+            education='',
+            made='',
+            ad_floor_price='',
+            has_pet='',
+            ad_type='',
+            brand='',
+            ip_prov_name='',
+            is_remark_user='',
+            publish_name='',
+            is_gift_prefer='',
+            id_card_number='',
+            geo_lat='',
+            has_house='',
+            ad_height='',
+            model='',
+            mobile='',
+            os='',
+            is_dicount_prefer='',
+            gender='',
+            carrier='',
+            age='',
+            description='',
+            app_cat='',
+            baby_gender='',
+            ad_img_type='',
+            idfa_md5='',
+            pos_id='',
+            reg_city_level='',
+            ip_city_name='',
+            orientation='',
+            is_undergraduate='',
+            app_ver='',
+            idfa='',
+            pay_layer='',
+            app_id='',
+            life_stage='',
+            ukeywords='',
+            ad_pos='',
+            cid='',
+            pos_cat='',
+            screen_width='',
+            imei='',
+            ad_width='',
+            imei_md5='',
+            user_income='',
+            is_cash_prefer='',
+            app_install_flag='',
+            geo_lon='',
+            is_sharing_user='',
+            has_car='',
+            app_name='',
+            career_type='',
+            transform_type=''
+    ):
+        """
+        广告投放询问
+        提供给媒体在曝光广告前调用， 返回是否曝光以及曝光的物料信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43098
+
+        :param channel: 渠道标识，向淘宝技术申请
+        :param adid: 广告id，淘宝和媒体协商
+        :param keyword_type: 关键词类型
+        :param keyword: 关键词
+        :param screen_height: 设备屏幕纵向分辨率，单位：像素
+        :param ip_area_name: 注册IP解析区县名
+        :param app: 转化目标app, 1：淘宝；2：天猫；
+        :param network: 网络类，0：未知，1：WIFI, 2: 2G, 3: 3G, 4: 4G; 5: 5G
+        :param education: 预测学历,初高中,博士,专科,硕士,本科
+        :param made: 设备厂商
+        :param ad_floor_price: 底价，单位为分
+        :param has_pet: 是否有宠物?0：没有 1：有 2：预测有
+        :param ad_type: 广告类型 0:横幅,1: 插屏, 2:开屏, 3:原生,4:视频
+        :param brand: 手机品牌
+        :param ip_prov_name: 注册IP解析的省份名称
+        :param is_remark_user: 是否爱评价： 0： 不是? 1：是
+        :param publish_name: 合作方名称
+        :param is_gift_prefer: 是否爱赠品： 0： 不是? 1：是
+        :param id_card_number: 用户身份证号
+        :param geo_lat: 设备维度
+        :param has_house: 预测是否有房 0：没房 1：有房 2：预测有房
+        :param ad_height: 广告位高度
+        :param model: 设备型号
+        :param mobile: 手机号
+        :param os: 用户所使用设备的系统， 0： android, 1: ios, 2: windowsphone, 3: other
+        :param is_dicount_prefer: 是否爱折扣： 0： 不是? 1：是
+        :param gender: 性别, 0:未知 1： 男 2：女
+        :param carrier: 运营商，0: 未知， 1:移动,2:电信,3:联通
+        :param age: 年龄
+        :param description: 关键词的描述
+        :param app_cat: app类别
+        :param baby_gender: 宝宝性别，0:F 1:M 2:未知，但有宝宝 3: 没有宝宝
+        :param ad_img_type: 广告位支持图片格式 0: jpg, 1:?jpeg, 2: gif
+        :param idfa_md5: idfa的md5值， 32位小写
+        :param pos_id: 给定appid中的位置id，用于提高转化率
+        :param reg_city_level: 注册IP解析的城市等级
+        :param ip_city_name: 注册IP解析城市名称
+        :param orientation: 设备方向：0:未知， 1： 纵向；2： 横向
+        :param is_undergraduate: 预测是否在校大学生?0：不是 1 是 2 预测是
+        :param app_ver: app版本号
+        :param idfa: idfa原生值
+        :param pay_layer: 用户网购支付层级：? 0： 0~50       1： 50~200?2： 200~500    3： 500以上
+        :param app_id: 对接的appId
+        :param life_stage: 预测人生阶段
+        :param ukeywords: 用户感兴趣的标签,多个用逗号隔开。如动漫、历史
+        :param ad_pos: 广告位位置 0:未知,1:头部,2:底部, 3:侧边栏,4:全屏 默认传0
+        :param cid: 广告创意id，淘宝和媒体协商
+        :param pos_cat: 素材展示所在的页面或者频道
+        :param screen_width: 设备屏幕水平分辨率，单位：像素
+        :param imei: imei原生值
+        :param ad_width: 广告位宽度
+        :param imei_md5: imei的md5值， 32位小写
+        :param user_income: 预测月收入
+        :param is_cash_prefer: 是否爱返现： 0： 不是? 1：是
+        :param app_install_flag: 安装转化目标app的标识， 0： 未安装转化目标app, 1: 安装了转化目标app
+        :param geo_lon: 设备经度
+        :param is_sharing_user: 是否爱分享： 0： 不是? 1：是
+        :param has_car: 预测是否有车,0: 没有车 1：自己注册有车2：预测有车
+        :param app_name: 对接的appName
+        :param career_type: 预测职业
+        :param transform_type: 转化类型， 1： 激活；2： 新登；100：定向促活
+        """
+        return self._top_request(
+            "taobao.usergrowth.delivery.ask",
+            {
+                "channel": channel,
+                "adid": adid,
+                "keyword_type": keyword_type,
+                "keyword": keyword,
+                "screen_height": screen_height,
+                "ip_area_name": ip_area_name,
+                "app": app,
+                "network": network,
+                "education": education,
+                "made": made,
+                "ad_floor_price": ad_floor_price,
+                "has_pet": has_pet,
+                "ad_type": ad_type,
+                "brand": brand,
+                "ip_prov_name": ip_prov_name,
+                "is_remark_user": is_remark_user,
+                "publish_name": publish_name,
+                "is_gift_prefer": is_gift_prefer,
+                "id_card_number": id_card_number,
+                "geo_lat": geo_lat,
+                "has_house": has_house,
+                "ad_height": ad_height,
+                "model": model,
+                "mobile": mobile,
+                "os": os,
+                "is_dicount_prefer": is_dicount_prefer,
+                "gender": gender,
+                "carrier": carrier,
+                "age": age,
+                "description": description,
+                "app_cat": app_cat,
+                "baby_gender": baby_gender,
+                "ad_img_type": ad_img_type,
+                "idfa_md5": idfa_md5,
+                "pos_id": pos_id,
+                "reg_city_level": reg_city_level,
+                "ip_city_name": ip_city_name,
+                "orientation": orientation,
+                "is_undergraduate": is_undergraduate,
+                "app_ver": app_ver,
+                "idfa": idfa,
+                "pay_layer": pay_layer,
+                "app_id": app_id,
+                "life_stage": life_stage,
+                "ukeywords": ukeywords,
+                "ad_pos": ad_pos,
+                "cid": cid,
+                "pos_cat": pos_cat,
+                "screen_width": screen_width,
+                "imei": imei,
+                "ad_width": ad_width,
+                "imei_md5": imei_md5,
+                "user_income": user_income,
+                "is_cash_prefer": is_cash_prefer,
+                "app_install_flag": app_install_flag,
+                "geo_lon": geo_lon,
+                "is_sharing_user": is_sharing_user,
+                "has_car": has_car,
+                "app_name": app_name,
+                "career_type": career_type,
+                "transform_type": transform_type
             }
         )
 
@@ -94264,6 +100458,86 @@ class TbHuDongBa(DingTalkBaseAPI):
             }
         )
 
+    def tmall_fans_arena_record(
+            self,
+            cash_pool_id='',
+            score='',
+            mix_nick=''
+    ):
+        """
+        记录完成擂台的用户
+        记录完成擂台的用户和完成分数
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44031
+
+        :param cash_pool_id: 资金池id
+        :param score: 用户得分
+        :param mix_nick: mixnick
+        """
+        return self._top_request(
+            "tmall.fans.arena.record",
+            {
+                "cash_pool_id": cash_pool_id,
+                "score": score,
+                "mix_nick": mix_nick
+            },
+            result_processor=lambda x: x["fans_result"]
+        )
+
+    def tmall_fans_arena_push(
+            self,
+            push_list=None
+    ):
+        """
+        消息推送
+        超级擂台消息推送
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44032
+
+        :param push_list: 推送列表
+        """
+        return self._top_request(
+            "tmall.fans.arena.push",
+            {
+                "push_list": push_list
+            }
+        )
+
+    def tmall_fans_cashpool_create(
+            self,
+            create_cash_pool_param_do
+    ):
+        """
+        创建资金池
+        商家创建资金池接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44033
+
+        :param create_cash_pool_param_do: 创建资奖池输入对象
+        """
+        return self._top_request(
+            "tmall.fans.cashpool.create",
+            {
+                "create_cash_pool_param_do": create_cash_pool_param_do
+            },
+            result_processor=lambda x: x["fans_result"]
+        )
+
+    def tmall_fans_cashpool_checkpay(
+            self,
+            cash_pool_list=''
+    ):
+        """
+        检查资金池付款状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44034
+
+        :param cash_pool_list: 资金池列表
+        """
+        return self._top_request(
+            "tmall.fans.cashpool.checkpay",
+            {
+                "cash_pool_list": cash_pool_list
+            },
+            result_processor=lambda x: x["fans_result"]
+        )
+
 
 class TbFeiZhuJiPiaoQianTaiLeiMu(DingTalkBaseAPI):
     """
@@ -94385,6 +100659,19 @@ class TbFeiZhuJiPiaoQianTaiLeiMu(DingTalkBaseAPI):
             }
         )
 
+    def alitrip_flight_basic_data_city_queryAll(
+            self
+    ):
+        """
+        机票基础数据城市数据查询
+        机票基础数据城市数据查询top接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42575
+
+        """
+        return self._top_request(
+            "alitrip.flight.basic.data.city.queryAll"
+        )
+
 
 class TbPingTaiZhiLi(DingTalkBaseAPI):
     """
@@ -94481,6 +100768,8 @@ class TbALiJianKangYiSheng(DingTalkBaseAPI):
     ):
         """
         阿里健康订单发货通知接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         阿里健康对外提供的，由第三方调用的订单发货状态更新、物流单号更新接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35884
 
@@ -94604,6 +100893,80 @@ class TbALiJianKangYiSheng(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_alihealth_outflow_getbyverifycode(
+            self,
+            prescription_get_by_verify_request=None
+    ):
+        """
+        处方外流药店通过核销码获取处方
+        阿里健康对合作药店提供通过核销码查看处方的功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42603
+
+        :param prescription_get_by_verify_request: 入参
+        """
+        return self._top_request(
+            "alibaba.alihealth.outflow.getbyverifycode",
+            {
+                "prescription_get_by_verify_request": prescription_get_by_verify_request
+            }
+        )
+
+    def alibaba_alihealth_outflow_prescription_update(
+            self,
+            update_request=None
+    ):
+        """
+        处方外流-修改处方
+        阿里健康-处方外流-对外提供处方修改功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42644
+
+        :param update_request: 入参对象
+        """
+        return self._top_request(
+            "alibaba.alihealth.outflow.prescription.update",
+            {
+                "update_request": update_request
+            },
+            result_processor=lambda x: x["service_result"]
+        )
+
+    def alibaba_alihealth_asyncprescribe_prescription_search(
+            self,
+            search_request=None
+    ):
+        """
+        异步开方处方查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43511
+
+        :param search_request: 查询入参
+        """
+        return self._top_request(
+            "alibaba.alihealth.asyncprescribe.prescription.search",
+            {
+                "search_request": search_request
+            },
+            result_processor=lambda x: x["service_result"]
+        )
+
+    def alibaba_alihealth_asyncprescribe_prescription_detail(
+            self,
+            detail_request=None
+    ):
+        """
+        异步开方处方详情
+        异步开方处方查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43570
+
+        :param detail_request: 入参
+        """
+        return self._top_request(
+            "alibaba.alihealth.asyncprescribe.prescription.detail",
+            {
+                "detail_request": detail_request
+            },
+            result_processor=lambda x: x["service_result"]
+        )
+
 
 class TbFeiZhuJiuDianBiaoZhunKu(DingTalkBaseAPI):
     """
@@ -94649,6 +101012,97 @@ class TbFeiZhuJiuDianBiaoZhunKu(DingTalkBaseAPI):
             }
         )
 
+    def alitrip_hotel_hstdf_shotel_matchsroomself(
+            self,
+            param0=None
+    ):
+        """
+        匹配标准房型以及卖家房型
+        匹配卖家房型以及标准房型，返回匹配结果
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42711
+
+        :param param0: SroomTypeMatchParam
+        """
+        return self._top_request(
+            "alitrip.hotel.hstdf.shotel.matchsroomself",
+            {
+                "param0": param0
+            }
+        )
+
+    def alitrip_hotel_hstdf_shotel_matchshotelself(
+            self,
+            param0
+    ):
+        """
+        自主匹配标准酒店以及卖家酒店
+        商家通过指定的标准酒店id和卖家酒店id进行匹配
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42712
+
+        :param param0: HotelMatchParam
+        """
+        return self._top_request(
+            "alitrip.hotel.hstdf.shotel.matchshotelself",
+            {
+                "param0": param0
+            }
+        )
+
+    def alitrip_hotel_hstdf_shotel_exportshotel(
+            self,
+            hid=''
+    ):
+        """
+        商家自主导出相似度高的标准酒店
+        商家通过给出自己的卖家酒店信息，通过接口可以返回相似度高的标准酒店信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42713
+
+        :param hid: 123456
+        """
+        return self._top_request(
+            "alitrip.hotel.hstdf.shotel.exportshotel",
+            {
+                "hid": hid
+            },
+            result_processor=lambda x: x["top_result_set"]
+        )
+
+    def alitrip_hotel_hstdf_shotel_exportsroomtype(
+            self,
+            hid
+    ):
+        """
+        导出一个卖家房型下的所有标准房型
+        导出一个卖家酒店下的所有标准房型
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42725
+
+        :param hid: 卖家酒店id
+        """
+        return self._top_request(
+            "alitrip.hotel.hstdf.shotel.exportsroomtype",
+            {
+                "hid": hid
+            }
+        )
+
+    def alitrip_hotel_hstdf_shotel_exnotmatchroom(
+            self,
+            hid=''
+    ):
+        """
+        导出一个hid下所有未匹配rid的接口
+        导出一个卖家hid下所有未匹配的rid信息，包括rid，名称、英文名称、床型、窗型、面积、对外系统id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43307
+
+        :param hid: 卖家酒店hid
+        """
+        return self._top_request(
+            "alitrip.hotel.hstdf.shotel.exnotmatchroom",
+            {
+                "hid": hid
+            }
+        )
+
 
 class TbAEDropshipper(DingTalkBaseAPI):
     """
@@ -94685,6 +101139,8 @@ class TbAEDropshipper(DingTalkBaseAPI):
     ):
         """
         订单详情查询
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         订单查询
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=35445
 
@@ -94884,6 +101340,24 @@ class TbXinXiPingTaiCaiGou(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_pur_media_statistics(
+            self,
+            media_statistics_d_t_o=None
+    ):
+        """
+        新媒体统计信息
+        清博同步新媒体的统计信息给到采购平台
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43350
+
+        :param media_statistics_d_t_o: 新媒体统计对象
+        """
+        return self._top_request(
+            "alibaba.pur.media.statistics",
+            {
+                "media_statistics_d_t_o": media_statistics_d_t_o
+            }
+        )
+
 
 class TbLingShouTongZiDongShouHuoJi(DingTalkBaseAPI):
     """
@@ -94897,6 +101371,8 @@ class TbLingShouTongZiDongShouHuoJi(DingTalkBaseAPI):
     ):
         """
         自动售货机设备激活
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         自动售货机在完成安装流程后，需要调用此激活接口才能正常使用。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=36395
 
@@ -94935,6 +101411,8 @@ class TbLingShouTongZiDongShouHuoJi(DingTalkBaseAPI):
     ):
         """
         零售通门店订单物流信息回传接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         零售通与供应商进行订单对接，通过此接口回流订单物流信息。
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=37257
 
@@ -95169,6 +101647,77 @@ class TbOttZhiFu(DingTalkBaseAPI):
                 "extra": extra,
                 "order_type": order_type,
                 "real_price": real_price
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def youku_ott_pay_order_authpay(
+            self,
+            buyer,
+            original_order_no,
+            order_no,
+            product_id,
+            callback_url=''
+    ):
+        """
+        委托代扣服务
+        应用中心sdk连续包月委托代扣服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42561
+
+        :param buyer: cp用户名
+        :param original_order_no: 连续包月原始cp订单号
+        :param order_no: 委托扣款cp订单号
+        :param product_id: 已配置开通连续包月的产品id
+        :param callback_url: 回调
+        """
+        return self._top_request(
+            "youku.ott.pay.order.authpay",
+            {
+                "buyer": buyer,
+                "original_order_no": original_order_no,
+                "order_no": order_no,
+                "product_id": product_id,
+                "callback_url": callback_url
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def youku_ott_pay_order_deleteorder(
+            self,
+            buyer='',
+            product_id='',
+            product_name='',
+            order_no='',
+            callback_url='',
+            extra='',
+            order_type='0',
+            original_order_no=''
+    ):
+        """
+        退订应用中心支付订单
+        应用中心sdk连续包月退订接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42564
+
+        :param buyer: 下单账号， cp账号
+        :param product_id: 商品id
+        :param product_name: 商品名称
+        :param order_no: cp订单号
+        :param callback_url: 回调地址
+        :param extra: 订单无关的其他参数,如埋点统计的utdid, mac地址等
+        :param order_type: 订单类型，1为连续包月类型,2为取消连续包月
+        :param original_order_no: 连续包月原始订单
+        """
+        return self._top_request(
+            "youku.ott.pay.order.deleteorder",
+            {
+                "buyer": buyer,
+                "product_id": product_id,
+                "product_name": product_name,
+                "order_no": order_no,
+                "callback_url": callback_url,
+                "extra": extra,
+                "order_type": order_type,
+                "original_order_no": original_order_no
             },
             result_processor=lambda x: x["data"]
         )
@@ -95517,6 +102066,8 @@ class TbALIOSGuangGaoPingTai(DingTalkBaseAPI):
     ):
         """
         探针数据上报接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         用于厂商向我们上报探针数据
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40208
 
@@ -95917,6 +102468,98 @@ class TbYeWuPingTaiXinLingShou(DingTalkBaseAPI):
             }
         )
 
+    def taobao_uscesl_biz_light_up(
+            self,
+            store_id,
+            biz_brand_key,
+            esl_bar_code,
+            led_color,
+            light_up_time
+    ):
+        """
+        价签LED等点亮
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41540
+
+        :param store_id: 门店ID
+        :param biz_brand_key: 商家编号
+        :param esl_bar_code: 价签条码
+        :param led_color: 亮灯颜色，绿：值为2；红：值为4
+        :param light_up_time: 亮灯时长，单位：秒，最大长度3600秒
+        """
+        return self._top_request(
+            "taobao.uscesl.biz.light.up",
+            {
+                "store_id": store_id,
+                "biz_brand_key": biz_brand_key,
+                "esl_bar_code": esl_bar_code,
+                "led_color": led_color,
+                "light_up_time": light_up_time
+            }
+        )
+
+    def taobao_uscesl_biz_ap_search(
+            self,
+            biz_brand_key,
+            store_id,
+            limit='',
+            is_activate='',
+            mac='',
+            current_page=''
+    ):
+        """
+        AP列表查询
+        查询当前门店下登记的AP列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42088
+
+        :param biz_brand_key: 商家编码
+        :param store_id: 门店ID
+        :param limit: 每页显示数
+        :param is_activate: 是否激活
+        :param mac: 价签条码
+        :param current_page: 页码
+        """
+        return self._top_request(
+            "taobao.uscesl.biz.ap.search",
+            {
+                "biz_brand_key": biz_brand_key,
+                "store_id": store_id,
+                "limit": limit,
+                "is_activate": is_activate,
+                "mac": mac,
+                "current_page": current_page
+            }
+        )
+
+    def taobao_uscesl_biz_item_light_up(
+            self,
+            item_bar_code='',
+            led_color='',
+            light_up_time='',
+            store_id='',
+            biz_brand_key=''
+    ):
+        """
+        商品条码亮灯API
+        亮灯API
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42934
+
+        :param item_bar_code: 商品条码
+        :param led_color: 亮灯颜色，绿：值为2；红：值为4
+        :param light_up_time: 亮灯时长，单位：秒，最大长度3600秒
+        :param store_id: 门店编号
+        :param biz_brand_key: 商家编号
+        """
+        return self._top_request(
+            "taobao.uscesl.biz.item.light.up",
+            {
+                "item_bar_code": item_bar_code,
+                "led_color": led_color,
+                "light_up_time": light_up_time,
+                "store_id": store_id,
+                "biz_brand_key": biz_brand_key
+            }
+        )
+
 
 class TbShenJingYingYong(DingTalkBaseAPI):
     """
@@ -96210,6 +102853,84 @@ class TbALiYingYeDengTa(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_pictures_dengta_order_effect_import(
+            self,
+            ims_order_id,
+            is_success,
+            url='',
+            reads_count='',
+            reposts_count='',
+            comments_count='',
+            attitudes_count='',
+            weibo_nick='',
+            followers_count='',
+            nodes_top='',
+            key_path='',
+            weibo_source='',
+            verified_type='',
+            gender='',
+            fans_count='',
+            location='',
+            graph='',
+            words='',
+            repost_num_per_hour='',
+            attitudes_num_per_hour='',
+            fail_reason=''
+    ):
+        """
+        天下秀订单数据导入
+        提供接口给天下秀，天下秀订单数据效果生成时回流到灯塔系统
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43975
+
+        :param ims_order_id: 微博订单id
+        :param is_success: 是否成功
+        :param url: 微博链接
+        :param reads_count: 阅读数
+        :param reposts_count: 转发数
+        :param comments_count: 评论数
+        :param attitudes_count: 点赞数
+        :param weibo_nick: 微博昵称
+        :param followers_count: 粉丝数
+        :param nodes_top: 传播关键节点
+        :param key_path: 关键路径
+        :param weibo_source: 微博来源
+        :param verified_type: 类型分布
+        :param gender: 性别分布
+        :param fans_count: 粉丝分布
+        :param location: 地域分布
+        :param graph: 关系图
+        :param words: 关键词云
+        :param repost_num_per_hour: 每小时转发量
+        :param attitudes_num_per_hour: 点赞量每小时趋势图
+        :param fail_reason: 失败原因
+        """
+        return self._top_request(
+            "alibaba.pictures.dengta.order.effect.import",
+            {
+                "ims_order_id": ims_order_id,
+                "is_success": is_success,
+                "url": url,
+                "reads_count": reads_count,
+                "reposts_count": reposts_count,
+                "comments_count": comments_count,
+                "attitudes_count": attitudes_count,
+                "weibo_nick": weibo_nick,
+                "followers_count": followers_count,
+                "nodes_top": nodes_top,
+                "key_path": key_path,
+                "weibo_source": weibo_source,
+                "verified_type": verified_type,
+                "gender": gender,
+                "fans_count": fans_count,
+                "location": location,
+                "graph": graph,
+                "words": words,
+                "repost_num_per_hour": repost_num_per_hour,
+                "attitudes_num_per_hour": attitudes_num_per_hour,
+                "fail_reason": fail_reason
+            }
+        )
+
 
 class TbJiLi(DingTalkBaseAPI):
     """
@@ -96418,6 +103139,71 @@ class TbYouKuMeiZi(DingTalkBaseAPI):
             }
         )
 
+    def youku_tvoperator_media_page_query(
+            self,
+            system_info='',
+            page_no='',
+            page_size=''
+    ):
+        """
+        运营商全量媒资分页查询
+        分页获取渠道全量媒资
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43935
+
+        :param system_info: 系统信息（和服务提供方确认)
+        :param page_no: 从第一页开始
+        :param page_size: 页面大小
+        """
+        return self._top_request(
+            "youku.tvoperator.media.page.query",
+            {
+                "system_info": system_info,
+                "page_no": page_no,
+                "page_size": page_size
+            }
+        )
+
+    def youku_ott_dvb_card_change(
+            self,
+            old_card_id,
+            new_card_id,
+            cable_company_code=''
+    ):
+        """
+        dvb ca卡替换
+        dvb 更换ca卡
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44411
+
+        :param old_card_id: 老卡id
+        :param new_card_id: 新卡id
+        :param cable_company_code: 广电公司code(目前没用）
+        """
+        return self._top_request(
+            "youku.ott.dvb.card.change",
+            {
+                "old_card_id": old_card_id,
+                "new_card_id": new_card_id,
+                "cable_company_code": cable_company_code
+            }
+        )
+
+    def youku_ott_dvb_renew_feedback(
+            self,
+            order_id=''
+    ):
+        """
+        dvb续费之后的反馈接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44412
+
+        :param order_id: 订单id
+        """
+        return self._top_request(
+            "youku.ott.dvb.renew.feedback",
+            {
+                "order_id": order_id
+            }
+        )
+
 
 class TbYouKuWangMeng(DingTalkBaseAPI):
     """
@@ -96434,6 +103220,8 @@ class TbYouKuWangMeng(DingTalkBaseAPI):
     ):
         """
         优酷实时获取可投放设备资源信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         优酷实时获取可投放设备资源信息,为第三方渠道提供素材获取人群识别的api
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=38714
 
@@ -96524,6 +103312,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         物流订单妥投
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         记录阿里健康O2O药品商家自配送妥投时间
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26466
 
@@ -96575,6 +103365,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         配送员取件
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         商家自配送取件操作
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=26468
 
@@ -96680,6 +103472,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         确认订单
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         接受订单，返回医生信息以及排队信息；拒绝订单，返回原因
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27421
 
@@ -96698,6 +103492,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         医生对话
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         发送医生对话信息
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27422
 
@@ -96716,6 +103512,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         关闭会话
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=27423
 
         :param param_session_info_v_o: 系统自动生成
@@ -96891,6 +103689,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         添加体检项目API
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28680
 
         :param item: 体检项目
@@ -96908,6 +103708,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         艾玛妇产添加用户
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         添加一个体检用户
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28708
 
@@ -96926,6 +103728,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         添加体检结果
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28709
 
         :param param: 参数
@@ -96943,6 +103747,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         艾玛添加聚合检查结果
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=28851
 
         :param gather_result: 检查结果
@@ -97589,6 +104395,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         消费医疗渠道分销取消订单接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41110
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97619,6 +104427,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         消费医疗渠道分销下单接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41111
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97650,6 +104460,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         获取商品列表接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取体检套餐详情
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41112
 
@@ -97684,6 +104496,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         获取支持的门店列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         获取商品或者城市支持的门店列表
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41118
 
@@ -97719,6 +104533,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         消费医疗去打分销预约校验卡密接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41119
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97744,6 +104560,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销预约取消接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41143
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97767,6 +104585,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销预约获取预约的体检报告
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41161
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97790,6 +104610,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         阿里健康渠道分销同步预约状态
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41162
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97814,6 +104636,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销预约修改预约日期接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41165
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97840,6 +104664,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销预约获取支持的门店列表
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41166
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97868,6 +104694,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销获取排期接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41170
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97909,6 +104737,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销预约提交接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         提交体检预约信息接口
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41178
 
@@ -97957,6 +104787,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销获取可预约的套餐
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41179
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -97980,6 +104812,8 @@ class TbALiJianKang(DingTalkBaseAPI):
     ):
         """
         渠道分销已到体检日期申请退款接口
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41180
 
         :param token: 分配给合作方的token，作为请求的标志
@@ -98060,6 +104894,263 @@ class TbALiJianKang(DingTalkBaseAPI):
             "alibaba.alihealth.medical.doctor.sync",
             {
                 "save_request": save_request
+            }
+        )
+
+    def alibaba_alihealth_medical_register_weiyi_sync(
+            self,
+            service_request
+    ):
+        """
+        微医数据号源回传
+        微医号源数据回传
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42993
+
+        :param service_request: 号源数据实体
+        """
+        return self._top_request(
+            "alibaba.alihealth.medical.register.weiyi.sync",
+            {
+                "service_request": service_request
+            }
+        )
+
+    def alibaba_alihealth_medical_registration_syncnew(
+            self,
+            save_request=None
+    ):
+        """
+        阿里健康新挂号数据回传
+        阿里健康新挂号记录回传接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43284
+
+        :param save_request: 接口入参
+        """
+        return self._top_request(
+            "alibaba.alihealth.medical.registration.syncnew",
+            {
+                "save_request": save_request
+            }
+        )
+
+    def alibaba_alihealth_booking_reserve_confirm(
+            self,
+            confirm=None
+    ):
+        """
+        确认预约
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43372
+
+        :param confirm: 参数
+        """
+        return self._top_request(
+            "alibaba.alihealth.booking.reserve.confirm",
+            {
+                "confirm": confirm
+            }
+        )
+
+    def alibaba_alihealth_booking_reserve_treat(
+            self,
+            treat=None
+    ):
+        """
+        确认就诊
+        统一预约平台，ISV确认就诊
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43380
+
+        :param treat: treat
+        """
+        return self._top_request(
+            "alibaba.alihealth.booking.reserve.treat",
+            {
+                "treat": treat
+            }
+        )
+
+    def alibaba_alihealth_booking_reserve_cancel(
+            self,
+            cancel=None
+    ):
+        """
+        取消预约
+        消费医疗统一预约平台，ISV取消预约
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43381
+
+        :param cancel: cancel
+        """
+        return self._top_request(
+            "alibaba.alihealth.booking.reserve.cancel",
+            {
+                "cancel": cancel
+            }
+        )
+
+    def alibaba_alihealth_booking_reserve_checkin(
+            self,
+            check_in=None
+    ):
+        """
+        确认到店
+        消费医疗统一预约平台，ISV 确认到店
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43382
+
+        :param check_in: check_in
+        """
+        return self._top_request(
+            "alibaba.alihealth.booking.reserve.checkin",
+            {
+                "check_in": check_in
+            }
+        )
+
+    def alibaba_alihealth_booking_reserve_modify(
+            self,
+            modify=None
+    ):
+        """
+        修改预约
+        消费医疗统一预约平台，取消预约
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43383
+
+        :param modify: modify
+        """
+        return self._top_request(
+            "alibaba.alihealth.booking.reserve.modify",
+            {
+                "modify": modify
+            }
+        )
+
+    def alibaba_alihealth_dental_item_list(
+            self,
+            need_test_item='false'
+    ):
+        """
+        ISV获取口腔标品列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43391
+
+        :param need_test_item: 是否需要测试商品
+        """
+        return self._top_request(
+            "alibaba.alihealth.dental.item.list",
+            {
+                "need_test_item": need_test_item
+            }
+        )
+
+    def alibaba_alihealth_dental_item_bind(
+            self,
+            bind_list=None,
+            type=''
+    ):
+        """
+        ISV绑定外部门店id和外部商品id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43392
+
+        :param bind_list: bind_list
+        :param type: 类型 1 天猫门店 2 支付宝门店
+        """
+        return self._top_request(
+            "alibaba.alihealth.dental.item.bind",
+            {
+                "bind_list": bind_list,
+                "type": type
+            }
+        )
+
+    def alibaba_alihealth_dental_item_unbind(
+            self,
+            sp_store_id='',
+            sp_item_id=''
+    ):
+        """
+        ISV解绑商品
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43393
+
+        :param sp_store_id: ISV门店ID
+        :param sp_item_id: ISV商品ID
+        """
+        return self._top_request(
+            "alibaba.alihealth.dental.item.unbind",
+            {
+                "sp_store_id": sp_store_id,
+                "sp_item_id": sp_item_id
+            }
+        )
+
+    def alibaba_alihealth_dental_store_insertorupdate(
+            self,
+            store=None
+    ):
+        """
+        ISV新增/修改口腔门店
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44182
+
+        :param store: 门店
+        """
+        return self._top_request(
+            "alibaba.alihealth.dental.store.insertorupdate",
+            {
+                "store": store
+            }
+        )
+
+    def alibaba_alihealth_dental_store_audit_query(
+            self,
+            store_audit_ids=''
+    ):
+        """
+        ISV查询门店审核状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44183
+
+        :param store_audit_ids: 审核ID列表
+        """
+        return self._top_request(
+            "alibaba.alihealth.dental.store.audit.query",
+            {
+                "store_audit_ids": store_audit_ids
+            }
+        )
+
+    def alibaba_alihealth_dental_bind_audit_query(
+            self,
+            bind_ids=''
+    ):
+        """
+        ISV查询绑定审核状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44184
+
+        :param bind_ids: 绑定ID列表
+        """
+        return self._top_request(
+            "alibaba.alihealth.dental.bind.audit.query",
+            {
+                "bind_ids": bind_ids
+            }
+        )
+
+    def alibaba_alihealth_tracecodeseller_code_single_codereplace(
+            self,
+            ent_info_id,
+            new_code,
+            old_code
+    ):
+        """
+        非药单码替换
+        提供非药追溯码单码替换功能
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44351
+
+        :param ent_info_id: 企业id
+        :param new_code: 新码
+        :param old_code: 老码
+        """
+        return self._top_request(
+            "alibaba.alihealth.tracecodeseller.code.single.codereplace",
+            {
+                "ent_info_id": ent_info_id,
+                "new_code": new_code,
+                "old_code": old_code
             }
         )
 
@@ -98240,6 +105331,8 @@ class TbXinZhiZao(DingTalkBaseAPI):
     ):
         """
         新制造-保存工艺设计图信息
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         CAD软件保存工艺设计图信息到新制造系统
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=40796
 
@@ -98817,7 +105910,8 @@ class TbWuDaoKouShangPin(DingTalkBaseAPI):
             sku_code,
             sku_price='',
             sku_member_price='',
-            clean_sku_member_price=''
+            clean_sku_member_price='',
+            time_stamp=''
     ):
         """
         商品售价会员价修改
@@ -98828,6 +105922,7 @@ class TbWuDaoKouShangPin(DingTalkBaseAPI):
         :param sku_price: 售价，单位分，售价会员价至少填一个
         :param sku_member_price: 会员价，单位分
         :param clean_sku_member_price: 是否清空会员价
+        :param time_stamp: 时间戳
         """
         return self._top_request(
             "alibaba.wdk.item.memberprice.update",
@@ -98836,7 +105931,8 @@ class TbWuDaoKouShangPin(DingTalkBaseAPI):
                 "sku_code": sku_code,
                 "sku_price": sku_price,
                 "sku_member_price": sku_member_price,
-                "clean_sku_member_price": clean_sku_member_price
+                "clean_sku_member_price": clean_sku_member_price,
+                "time_stamp": time_stamp
             }
         )
 
@@ -99034,6 +106130,57 @@ class TbTianMaoXianXiaDaPing(DingTalkBaseAPI):
             }
         )
 
+    def tmall_brandmarketing_tmax_offlinedevice_getactivity(
+            self,
+            device_id,
+            isv_code,
+            isv_user_id=''
+    ):
+        """
+        获取TMAX营销任务列表
+        Tmax为了引导线下用户完成商家营销任务，用户因此获得免费权益，需要对接商圈场景中的线下设备；此接口用于向ISV输出营销任务列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43693
+
+        :param device_id: isv设备id
+        :param isv_code: 平台分配的isv的code
+        :param isv_user_id: isv用户id
+        """
+        return self._top_request(
+            "tmall.brandmarketing.tmax.offlinedevice.getactivity",
+            {
+                "device_id": device_id,
+                "isv_code": isv_code,
+                "isv_user_id": isv_user_id
+            }
+        )
+
+    def tmall_brandmarketing_tmax_offlinedevice_iscompletedacti(
+            self,
+            activity_id='',
+            encrypted_user_id='',
+            device_id='',
+            extra_info=''
+    ):
+        """
+        判断用户是否完成任务
+        Tmax为了引导线下用户完成商家营销任务，用户因此获得免费权益，需要对接商圈场景中的线下设备；此接口用于向ISV输出用户是否完成指定的营销任务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43695
+
+        :param activity_id: 活动id
+        :param encrypted_user_id: 加密后的用户id
+        :param device_id: isv设备id
+        :param extra_info: 额外信息
+        """
+        return self._top_request(
+            "tmall.brandmarketing.tmax.offlinedevice.iscompletedacti",
+            {
+                "activity_id": activity_id,
+                "encrypted_user_id": encrypted_user_id,
+                "device_id": device_id,
+                "extra_info": extra_info
+            }
+        )
+
 
 class TbALiJianKangHIOT(DingTalkBaseAPI):
     """
@@ -99047,6 +106194,8 @@ class TbALiJianKangHIOT(DingTalkBaseAPI):
     ):
         """
         体温服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39875
 
         :param temp: 体温
@@ -99067,6 +106216,8 @@ class TbALiJianKangHIOT(DingTalkBaseAPI):
     ):
         """
         心电服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39876
 
         :param data_id: 数据id
@@ -99089,6 +106240,8 @@ class TbALiJianKangHIOT(DingTalkBaseAPI):
     ):
         """
         血压服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39882
 
         :param high: 高压
@@ -99116,6 +106269,8 @@ class TbALiJianKangHIOT(DingTalkBaseAPI):
     ):
         """
         血糖服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39883
 
         :param blood_glucose: 血糖值
@@ -99145,6 +106300,8 @@ class TbALiJianKangHIOT(DingTalkBaseAPI):
     ):
         """
         体重服务
+        ！！！该接口已在官方文档下线，请谨慎使用！！！
+
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=39959
 
         :param weight: 体重kg
@@ -99523,12 +106680,106 @@ class TbAEOverseaSolution(DingTalkBaseAPI):
         Get product list
         文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42384
 
-        :param aeop_a_e_product_list_query: 商品列表查询
+        :param aeop_a_e_product_list_query: request parameters to query
         """
         return self._top_request(
             "aliexpress.solution.product.list.get",
             {
                 "aeop_a_e_product_list_query": aeop_a_e_product_list_query
+            }
+        )
+
+    def aliexpress_solution_order_info_get(
+            self,
+            param1=None
+    ):
+        """
+        get order detail info
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42707
+
+        :param param1: 详细参考如下
+        """
+        return self._top_request(
+            "aliexpress.solution.order.info.get",
+            {
+                "param1": param1
+            }
+        )
+
+    def aliexpress_solution_product_schema_get(
+            self,
+            aliexpress_category_id
+    ):
+        """
+        get product schema
+        provide a new schema way to post product. With a pair of API, one for getting schema, one for posting instance
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43456
+
+        :param aliexpress_category_id: aliexpress category id. You can get it from category API
+        """
+        return self._top_request(
+            "aliexpress.solution.product.schema.get",
+            {
+                "aliexpress_category_id": aliexpress_category_id
+            }
+        )
+
+    def aliexpress_solution_schema_product_instance_post(
+            self,
+            product_instance_request
+    ):
+        """
+        aliexpress.solution.schema.product.instance.post
+        Upload product based on json schema instance
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43561
+
+        :param product_instance_request: Product instance data. Please note: the shipping_template_id should be replaced with your own shipping template id, which could be obtained through  https://developers.aliexpress.com/en/doc.htm?docId=43456&docType=2
+        """
+        return self._top_request(
+            "aliexpress.solution.schema.product.instance.post",
+            {
+                "product_instance_request": product_instance_request
+            },
+            result_processor=lambda x: x["product_id"]
+        )
+
+    def aliexpress_solution_feed_submit(
+            self,
+            operation_type,
+            item_list
+    ):
+        """
+        aliexpress.solution.feed.submit
+        API for merchants to submit feed data.
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44004
+
+        :param operation_type: Currently support 4 types of feeds:PRODUCT_CREATE,PRODUCT_FULL_UPDATE,STOCK_UPDATE,PRICE_UPDATE
+        :param item_list: item list, maximum size: 2000.
+        """
+        return self._top_request(
+            "aliexpress.solution.feed.submit",
+            {
+                "operation_type": operation_type,
+                "item_list": item_list
+            },
+            result_processor=lambda x: x["job_id"]
+        )
+
+    def aliexpress_solution_feed_query(
+            self,
+            job_id=''
+    ):
+        """
+        aliexpress.solution.feed.query
+        API for query the execution result of feed.
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44009
+
+        :param job_id: job id
+        """
+        return self._top_request(
+            "aliexpress.solution.feed.query",
+            {
+                "job_id": job_id
             }
         )
 
@@ -99704,6 +106955,209 @@ class TbRenGongZhiNengShiYanShiKaiFangPingTai(DingTalkBaseAPI):
             }
         )
 
+    def taobao_ailab_aicloud_top_tvs_token_get(
+            self,
+            device_id
+    ):
+        """
+        获取Token
+        精灵的通用的的accessToken换取的服务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41839
+
+        :param device_id: 可以是sn,mac等表示设备的表示
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.tvs.token.get",
+            {
+                "device_id": device_id
+            }
+        )
+
+    def alibaba_ailabs_tvs_genietoken_get(
+            self,
+            dsn
+    ):
+        """
+        获取TVS授权所需token接口
+        获取调用TVS服务时所需授权token的接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42576
+
+        :param dsn: 厂商给予设备的唯一标识 (device serial number)
+        """
+        return self._top_request(
+            "alibaba.ailabs.tvs.genietoken.get",
+            {
+                "dsn": dsn
+            }
+        )
+
+    def alibaba_ailabs_tvs_device_get(
+            self,
+            dsn
+    ):
+        """
+        查询TVS设备详情
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42669
+
+        :param dsn: 厂商给予设备的唯一标识 (device serial number)
+        """
+        return self._top_request(
+            "alibaba.ailabs.tvs.device.get",
+            {
+                "dsn": dsn
+            }
+        )
+
+    def alibaba_ailabs_tvs_device_list(
+            self
+    ):
+        """
+        获取TVS设备列表
+        获取用户所绑定的TVS设备列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42670
+
+        """
+        return self._top_request(
+            "alibaba.ailabs.tvs.device.list"
+        )
+
+    def alibaba_ailabs_tvs_device_unregister(
+            self,
+            dsn=''
+    ):
+        """
+        TVS设备解绑接口
+        解绑TVS设备，使设备处于可重新绑定状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42677
+
+        :param dsn: 设备唯一标识
+        """
+        return self._top_request(
+            "alibaba.ailabs.tvs.device.unregister",
+            {
+                "dsn": dsn
+            }
+        )
+
+    def alibaba_ailabs_iot_device_list_update_notify(
+            self,
+            token='',
+            skill_id=''
+    ):
+        """
+        设备列表更新通知
+        用于人工智能实验室IoT合作厂商上报三方接入IoT设备列表更新时的通知
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42961
+
+        :param token: 用户OAuth授权后的token
+        :param skill_id: 厂商在天猫精灵开放平台申请的技能id
+        """
+        return self._top_request(
+            "alibaba.ailabs.iot.device.list.update.notify",
+            {
+                "token": token,
+                "skill_id": skill_id
+            }
+        )
+
+    def alibaba_ailab_user_authorized_query(
+            self,
+            schema_key='',
+            merchant_user_id=''
+    ):
+        """
+        查询授权状态接口
+        查询三方用户授权状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42962
+
+        :param schema_key: 开放平台申请的schema
+        :param merchant_user_id: 三方用户的唯一ID
+        """
+        return self._top_request(
+            "alibaba.ailab.user.authorized.query",
+            {
+                "schema_key": schema_key,
+                "merchant_user_id": merchant_user_id
+            }
+        )
+
+    def alibaba_ailab_user_authorized_cancel(
+            self,
+            merchant_user_id='',
+            schema_key=''
+    ):
+        """
+        取消账号授权
+        三方用户取消授权给天猫精灵用户
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42965
+
+        :param merchant_user_id: 三方用户的唯一ID
+        :param schema_key: 开放平台申请的schema
+        """
+        return self._top_request(
+            "alibaba.ailab.user.authorized.cancel",
+            {
+                "merchant_user_id": merchant_user_id,
+                "schema_key": schema_key
+            }
+        )
+
+    def taobao_ailab_aicloud_top_hotwords_get(
+            self,
+            user_id,
+            biz_class,
+            schema
+    ):
+        """
+        获取热词
+        获取ASR热词
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44648
+
+        :param user_id: 三方用户id
+        :param biz_class: 业务类型
+        :param schema: schemeKey
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.hotwords.get",
+            {
+                "user_id": user_id,
+                "biz_class": biz_class,
+                "schema": schema
+            },
+            result_processor=lambda x: x["baseresult"]
+        )
+
+    def taobao_ailab_aicloud_top_hotwords_update(
+            self,
+            schema='',
+            user_id='',
+            biz_class='',
+            op_type='',
+            content=None
+    ):
+        """
+        更新热词
+        更新ASR热词
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44649
+
+        :param schema: schemaKey
+        :param user_id: 三方用户id
+        :param biz_class: 业务类型
+        :param op_type: 操作类型
+        :param content: 热词内容
+        """
+        return self._top_request(
+            "taobao.ailab.aicloud.top.hotwords.update",
+            {
+                "schema": schema,
+                "user_id": user_id,
+                "biz_class": biz_class,
+                "op_type": op_type,
+                "content": content
+            },
+            result_processor=lambda x: x["baseresult"]
+        )
+
 
 class TbChengShiHeHuoRen(DingTalkBaseAPI):
     """
@@ -99819,6 +107273,75 @@ class TbTianMaoXinPinChuangXinZhongXin(DingTalkBaseAPI):
             {
                 "hash_code": hash_code,
                 "biz": biz,
+                "open_user_id": open_user_id
+            }
+        )
+
+    def tmall_tmic_questionnaire_option_get(
+            self,
+            hash_code,
+            version,
+            record_id,
+            question_code,
+            biz='',
+            extra_parameters='',
+            open_user_id=''
+    ):
+        """
+        获取单题选项
+        根据具体题号，获取当前题目的选项列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43120
+
+        :param hash_code: 问卷唯一编码，从问卷信息接口应答中获取
+        :param version: 问卷版本号，从问卷信息接口的应答中获取
+        :param record_id: 问卷填答id，从问卷信息接口的应答中获取
+        :param question_code: 问题编码，问卷中的问题的唯一编码，从问卷信息接口的应答中获取
+        :param biz: 业务参数，区分问卷分组投放，1024表示分组投放id，fav表示用户动作类型为收藏
+        :param extra_parameters: 业务扩展参数
+        :param open_user_id: openId
+        """
+        return self._top_request(
+            "tmall.tmic.questionnaire.option.get",
+            {
+                "hash_code": hash_code,
+                "version": version,
+                "record_id": record_id,
+                "question_code": question_code,
+                "biz": biz,
+                "extra_parameters": extra_parameters,
+                "open_user_id": open_user_id
+            }
+        )
+
+    def tmall_tmic_questionnaire_answer_push(
+            self,
+            record_id,
+            hash_code,
+            biz='',
+            version='',
+            user_answer_list=None,
+            open_user_id=''
+    ):
+        """
+        提交单题答案
+        问卷单题回答的提交
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43329
+
+        :param record_id: 问卷填答id，从问卷信息接口的应答中获取
+        :param hash_code: 问卷唯一编码，从问卷信息接口应答中获取
+        :param biz: 业务参数，区分问卷分组投放，1024表示分组投放id，fav表示用户动作类型为收藏
+        :param version: 问卷版本号，从问卷信息接口的应答中获取
+        :param user_answer_list: 用户填写的回答，类型为数组
+        :param open_user_id: 开发平台userId
+        """
+        return self._top_request(
+            "tmall.tmic.questionnaire.answer.push",
+            {
+                "record_id": record_id,
+                "hash_code": hash_code,
+                "biz": biz,
+                "version": version,
+                "user_answer_list": user_answer_list,
                 "open_user_id": open_user_id
             }
         )
@@ -100575,6 +108098,141 @@ class TbLingShouTongGongGong(DingTalkBaseAPI):
             }
         )
 
+    def alibaba_lst_trade_order_querychange(
+            self,
+            query
+    ):
+        """
+        订单id批量查询
+        根据品牌和时间段查询有变更记录的订单id
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43297
+
+        :param query: 入参包装类
+        """
+        return self._top_request(
+            "alibaba.lst.trade.order.querychange",
+            {
+                "query": query
+            }
+        )
+
+    def alibaba_lst_trade_refund_order_get(
+            self,
+            refund_id='',
+            main_order_id=''
+    ):
+        """
+        零售通退款订单查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43549
+
+        :param refund_id: 退款单id
+        :param main_order_id: 主订单id
+        """
+        return self._top_request(
+            "alibaba.lst.trade.refund.order.get",
+            {
+                "refund_id": refund_id,
+                "main_order_id": main_order_id
+            }
+        )
+
+    def alibaba_lst_bm_store_add(
+            self,
+            open_store_dto
+    ):
+        """
+        导入品牌商自有门店
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43687
+
+        :param open_store_dto: 门店数据模型
+        """
+        return self._top_request(
+            "alibaba.lst.bm.store.add",
+            {
+                "open_store_dto": open_store_dto
+            }
+        )
+
+    def alibaba_lst_bm_store_update(
+            self,
+            open_store_dto
+    ):
+        """
+        修改品牌商自有门店数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43688
+
+        :param open_store_dto: 门店数据模型
+        """
+        return self._top_request(
+            "alibaba.lst.bm.store.update",
+            {
+                "open_store_dto": open_store_dto
+            }
+        )
+
+    def alibaba_lst_bm_store_emp_save(
+            self,
+            store_id='',
+            bm_emp_id=''
+    ):
+        """
+        保存品牌商自有门店和内部业代之间的关系
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43689
+
+        :param store_id: 门店id标识
+        :param bm_emp_id: 员工id标识
+        """
+        return self._top_request(
+            "alibaba.lst.bm.store.emp.save",
+            {
+                "store_id": store_id,
+                "bm_emp_id": bm_emp_id
+            }
+        )
+
+    def alibaba_lst_trade_fastrefund_goodsstatus_sync(
+            self,
+            main_order_id='',
+            refund_id='',
+            status=''
+    ):
+        """
+        卖家退款单商品状态同步
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43690
+
+        :param main_order_id: 主订单id
+        :param refund_id: 退款单id
+        :param status: 已发货/未发货，枚举类型：SEND or UNSEND
+        """
+        return self._top_request(
+            "alibaba.lst.trade.fastrefund.goodsstatus.sync",
+            {
+                "main_order_id": main_order_id,
+                "refund_id": refund_id,
+                "status": status
+            }
+        )
+
+    def alibaba_lst_marketing_querybyorderid(
+            self,
+            main_order_id='',
+            sub_order_id=''
+    ):
+        """
+        根据订单查询营销信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44185
+
+        :param main_order_id: 主订单
+        :param sub_order_id: 子订单
+        """
+        return self._top_request(
+            "alibaba.lst.marketing.querybyorderid",
+            {
+                "main_order_id": main_order_id,
+                "sub_order_id": sub_order_id
+            }
+        )
+
 
 class TbHuDongXiaoYouXi(DingTalkBaseAPI):
     """
@@ -100779,6 +108437,1617 @@ class TbHuDongXiaoYouXi(DingTalkBaseAPI):
                 "scene_code": scene_code
             },
             result_processor=lambda x: x["value"]
+        )
+
+    def taobao_wegame_scene_getendinfo(
+            self,
+            open_id,
+            scene_code,
+            battle_id,
+            battle_result
+    ):
+        """
+        查询当场游戏所能获得奖励类型
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42921
+
+        :param open_id: 角色ID
+        :param scene_code: 场景ID
+        :param battle_id: 战场ID
+        :param battle_result: 游戏战果
+        """
+        return self._top_request(
+            "taobao.wegame.scene.getendinfo",
+            {
+                "open_id": open_id,
+                "scene_code": scene_code,
+                "battle_id": battle_id,
+                "battle_result": battle_result
+            },
+            result_processor=lambda x: x["award_type"]
+        )
+
+    def taobao_wegame_user_skin_list(
+            self,
+            skin_group_id
+    ):
+        """
+        获取游戏皮肤列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42925
+
+        :param skin_group_id: 皮肤组ID
+        """
+        return self._top_request(
+            "taobao.wegame.user.skin.list",
+            {
+                "skin_group_id": skin_group_id
+            },
+            result_processor=lambda x: x["list"]
+        )
+
+
+class TbALiJianKangYi(DingTalkBaseAPI):
+    """
+    阿里健康医
+    """
+
+    def alibaba_alihealth_prescription_auth_get(
+            self,
+            prescription_request
+    ):
+        """
+        阿里健康处方平台获取授权码
+        获取处方用户授权
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42645
+
+        :param prescription_request: 请求入参
+        """
+        return self._top_request(
+            "alibaba.alihealth.prescription.auth.get",
+            {
+                "prescription_request": prescription_request
+            },
+            result_processor=lambda x: x["service_result"]
+        )
+
+
+class TbSiFaKaiFangPingTai(DingTalkBaseAPI):
+    """
+    司法开放平台
+    """
+
+    def alibaba_legal_suit_case_investigation_get(
+            self,
+            case_id=''
+    ):
+        """
+        委托案件事实查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43035
+
+        :param case_id: 案件ID
+        """
+        return self._top_request(
+            "alibaba.legal.suit.case.investigation.get",
+            {
+                "case_id": case_id
+            }
+        )
+
+    def alibaba_legal_suit_case_get(
+            self,
+            id=''
+    ):
+        """
+        获取案件信息接口v2版本
+        获取案件信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43036
+
+        :param id: 案件id
+        """
+        return self._top_request(
+            "alibaba.legal.suit.case.get",
+            {
+                "id": id
+            }
+        )
+
+    def alibaba_legal_suit_court_lawyer_push(
+            self,
+            entrust_id='',
+            suit_id='',
+            lawyers_model=None
+    ):
+        """
+        推荐律师接口
+        为诉讼系统推荐律师
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43037
+
+        :param entrust_id: 委托ID
+        :param suit_id: 案件ID
+        :param lawyers_model: 推荐律师模型
+        """
+        return self._top_request(
+            "alibaba.legal.suit.court.lawyer.push",
+            {
+                "entrust_id": entrust_id,
+                "suit_id": suit_id,
+                "lawyers_model": lawyers_model
+            }
+        )
+
+    def alibaba_legal_suit_court_before_push(
+            self,
+            before_court_model=None
+    ):
+        """
+        更新或保存庭前信息
+        更新或者保存庭前信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43040
+
+        :param before_court_model: 庭前信息
+        """
+        return self._top_request(
+            "alibaba.legal.suit.court.before.push",
+            {
+                "before_court_model": before_court_model
+            }
+        )
+
+    def alibaba_legal_suit_court_entrust_get(
+            self,
+            entrust_id='',
+            suit_id=''
+    ):
+        """
+        委托开庭服务查询
+        查询委托开庭信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43041
+
+        :param entrust_id: 委托ID
+        :param suit_id: 案件ID
+        """
+        return self._top_request(
+            "alibaba.legal.suit.court.entrust.get",
+            {
+                "entrust_id": entrust_id,
+                "suit_id": suit_id
+            }
+        )
+
+    def alibaba_legal_suit_court_after_push(
+            self,
+            after_court_info_model=None
+    ):
+        """
+        更新或者新增庭后信息
+        供外部ISV供应商 推送庭后信息给集团诉讼
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43434
+
+        :param after_court_info_model: 庭后信息
+        """
+        return self._top_request(
+            "alibaba.legal.suit.court.after.push",
+            {
+                "after_court_info_model": after_court_info_model
+            }
+        )
+
+    def alibaba_legal_suit_judgement_get(
+            self,
+            suit_id
+    ):
+        """
+        获取裁判登记信息
+        供ISV供应商获取集团法务系统的裁判登记信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43435
+
+        :param suit_id: 案件id
+        """
+        return self._top_request(
+            "alibaba.legal.suit.judgement.get",
+            {
+                "suit_id": suit_id
+            }
+        )
+
+    def alibaba_legal_suit_judgement_push(
+            self,
+            referee_registration_model=None
+    ):
+        """
+        推送裁判登记信息给集团法务系统
+        isv推送裁判登记信息给集团法务系统
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43436
+
+        :param referee_registration_model: 裁判登记信息
+        """
+        return self._top_request(
+            "alibaba.legal.suit.judgement.push",
+            {
+                "referee_registration_model": referee_registration_model
+            }
+        )
+
+    def alibaba_legal_suit_court_open_push(
+            self,
+            court_info_model=None
+    ):
+        """
+        开庭信息推送接口
+        供ISV推送开庭信息给集团诉讼
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43437
+
+        :param court_info_model: 开庭信息
+        """
+        return self._top_request(
+            "alibaba.legal.suit.court.open.push",
+            {
+                "court_info_model": court_info_model
+            }
+        )
+
+
+class TbICBUShangPin(DingTalkBaseAPI):
+    """
+    ICBU－商品
+    """
+
+    def alibaba_icbu_product_batch_update_display(
+            self,
+            new_display,
+            product_id_list
+    ):
+        """
+        商品批量上下架接口
+        给国际站的三方服务商提供批量上下架接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44413
+
+        :param new_display: on表示上架，off表示下架
+        :param product_id_list: 混淆id数组
+        """
+        return self._top_request(
+            "alibaba.icbu.product.batch.update.display",
+            {
+                "new_display": new_display,
+                "product_id_list": product_id_list
+            }
+        )
+
+
+class TbShouTaoYongHuZengZhang(DingTalkBaseAPI):
+    """
+    手淘用户增长
+    """
+
+    def taobao_usergrowth_delivery_batchask(
+            self,
+            channel,
+            adid,
+            idfa_md5='',
+            imei_md5=''
+    ):
+        """
+        广告投放批量询问
+        提供给媒体在曝光广告前调用， 返回是否曝光以及报价
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43959
+
+        :param channel: 渠道标识，向淘宝技术申请
+        :param adid: 广告id，淘宝和媒体协商
+        :param idfa_md5: idfa的md5值， 32位小写
+        :param imei_md5: imei的md5值， 32位小写
+        """
+        return self._top_request(
+            "taobao.usergrowth.delivery.batchask",
+            {
+                "channel": channel,
+                "adid": adid,
+                "idfa_md5": idfa_md5,
+                "imei_md5": imei_md5
+            },
+            result_processor=lambda x: x["results"]
+        )
+
+
+class TbYunMa(DingTalkBaseAPI):
+    """
+    云码API
+    """
+
+    def tmall_mc_device_status_update(
+            self,
+            status,
+            device_code,
+            channel
+    ):
+        """
+        云码更新设备状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41656
+
+        :param status: 设备状态。NORMAL,BROKEN
+        :param device_code: 平台设备编码
+        :param channel: 设备所属渠道
+        """
+        return self._top_request(
+            "tmall.mc.device.status.update",
+            {
+                "status": status,
+                "device_code": device_code,
+                "channel": channel
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def tmall_mc_record_order_sync(
+            self,
+            device_code,
+            origin_price,
+            pay_price,
+            open_id,
+            result,
+            version
+    ):
+        """
+        订单信息同步
+        订单信息同步(零售云接口)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=41657
+
+        :param device_code: 设备编码
+        :param origin_price: 原价
+        :param pay_price: 实付价
+        :param open_id: 用户openId
+        :param result: 核销结果
+        :param version: 云码版本号
+        """
+        return self._top_request(
+            "tmall.mc.record.order.sync",
+            {
+                "device_code": device_code,
+                "origin_price": origin_price,
+                "pay_price": pay_price,
+                "open_id": open_id,
+                "result": result,
+                "version": version
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def tmall_mc_task_charge_launch(
+            self,
+            outer_code,
+            channel_id,
+            alipay_open_id,
+            url_id='',
+            extra=''
+    ):
+        """
+        云码充电宝投放链路
+        云码充电宝投放链路，用于判断用户是否有匹配的投放计划
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42081
+
+        :param outer_code: 外部设备编码
+        :param channel_id: 渠道ID
+        :param alipay_open_id: 支付宝openID
+        :param url_id: urlID
+        :param extra: 服务商附加url参数
+        """
+        return self._top_request(
+            "tmall.mc.task.charge.launch",
+            {
+                "outer_code": outer_code,
+                "channel_id": channel_id,
+                "alipay_open_id": alipay_open_id,
+                "url_id": url_id,
+                "extra": extra
+            }
+        )
+
+    def tmall_mc_device_circle_check(
+            self,
+            outer_code,
+            channel_id
+    ):
+        """
+        云码设备圈选情况查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42808
+
+        :param outer_code: 外部设备编码
+        :param channel_id: 渠道编码
+        """
+        return self._top_request(
+            "tmall.mc.device.circle.check",
+            {
+                "outer_code": outer_code,
+                "channel_id": channel_id
+            },
+            result_processor=lambda x: x["results"]
+        )
+
+    def tmall_retail_device_launch_item_get(
+            self,
+            device_code
+    ):
+        """
+        设备投放商品信息获取
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43189
+
+        :param device_code: 设备编码
+        """
+        return self._top_request(
+            "tmall.retail.device.launch.item.get",
+            {
+                "device_code": device_code
+            },
+            result_processor=lambda x: x["items"]
+        )
+
+    def tmall_stella_cc_device_circle_check(
+            self,
+            channel_id,
+            device_sn
+    ):
+        """
+        云码设备圈选情况查询
+        云码设备圈选情况查询，增加投放计划返回
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44315
+
+        :param channel_id: 渠道编码
+        :param device_sn: 外部设备编码
+        """
+        return self._top_request(
+            "tmall.stella.cc.device.circle.check",
+            {
+                "channel_id": channel_id,
+                "device_sn": device_sn
+            },
+            result_processor=lambda x: x["results"]
+        )
+
+    def tmall_stella_cc_device_status_update(
+            self,
+            status,
+            channel_id,
+            device_sn
+    ):
+        """
+        云码更新设备状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44316
+
+        :param status: 设备状态。NORMAL,BROKEN
+        :param channel_id: 渠道id
+        :param device_sn: 运营商设备编码
+        """
+        return self._top_request(
+            "tmall.stella.cc.device.status.update",
+            {
+                "status": status,
+                "channel_id": channel_id,
+                "device_sn": device_sn
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def tmall_stella_cc_task_charge_launch(
+            self,
+            alipay_open_id,
+            channel_id,
+            device_sn,
+            extra='',
+            url_id=''
+    ):
+        """
+        判断用户是否有任务投放
+        判断用户是否命中投放任务
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44318
+
+        :param alipay_open_id: 支付宝openID
+        :param channel_id: 渠道id
+        :param device_sn: 设备编码
+        :param extra: 服务商附加url参数
+        :param url_id: urlID
+        """
+        return self._top_request(
+            "tmall.stella.cc.task.charge.launch",
+            {
+                "alipay_open_id": alipay_open_id,
+                "channel_id": channel_id,
+                "device_sn": device_sn,
+                "extra": extra,
+                "url_id": url_id
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+    def tmall_stella_cc_record_order_sync(
+            self,
+            channel_id,
+            device_sn,
+            version,
+            origin_price,
+            pay_price,
+            open_id,
+            result
+    ):
+        """
+        订单信息同步
+        接收并同步isv的订单信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=44319
+
+        :param channel_id: 渠道id
+        :param device_sn: 运营商设备编码
+        :param version: 云码版本号
+        :param origin_price: 原价
+        :param pay_price: 实付价
+        :param open_id: 用户openId
+        :param result: 核销结果
+        """
+        return self._top_request(
+            "tmall.stella.cc.record.order.sync",
+            {
+                "channel_id": channel_id,
+                "device_sn": device_sn,
+                "version": version,
+                "origin_price": origin_price,
+                "pay_price": pay_price,
+                "open_id": open_id,
+                "result": result
+            },
+            result_processor=lambda x: x["data"]
+        )
+
+
+class TbXinLingShouPOS(DingTalkBaseAPI):
+    """
+    新零售POS
+    """
+
+    def alibaba_mos_commdy_posmerchandise_getmerchandise(
+            self,
+            pos_merchandise_list=None
+    ):
+        """
+        去前置机商品在线查询
+        去前置机商品在线查询接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42773
+
+        :param pos_merchandise_list: 查询参数列表
+        """
+        return self._top_request(
+            "alibaba.mos.commdy.posmerchandise.getmerchandise",
+            {
+                "pos_merchandise_list": pos_merchandise_list
+            }
+        )
+
+    def alibaba_mos_commdy_offline_getfileurl(
+            self,
+            file_keys
+    ):
+        """
+        去前置机pos商品离线文件下载地址查询接口
+        去前置机-pos查询离线文件下载地址接口
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42992
+
+        :param file_keys: 离线文件名称
+        """
+        return self._top_request(
+            "alibaba.mos.commdy.offline.getfileurl",
+            {
+                "file_keys": file_keys
+            }
+        )
+
+
+class TbTianMaoUXian(DingTalkBaseAPI):
+    """
+    天猫U先API
+    """
+
+    def tmall_try_scancode_generate(
+            self,
+            request1
+    ):
+        """
+        二维码生成
+        被授权用户调用该接口用于生成便利店派样二维码
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42635
+
+        :param request1: 请求入参
+        """
+        return self._top_request(
+            "tmall.try.scancode.generate",
+            {
+                "request1": request1
+            }
+        )
+
+    def tmall_try_eticketcode_writeoff(
+            self,
+            request1
+    ):
+        """
+        天猫U先线下便利店派样电子凭证核销
+        消费者将卡券包中的电子凭证（由天猫U先线下便利店派样业务发放）提供给U先合作的外部运营商云客POS机扫码时，该ISV会调用此接口进行核销，核销成功后便利店店员会将对应样品给到消费者
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=42636
+
+        :param request1: 请求入参
+        """
+        return self._top_request(
+            "tmall.try.eticketcode.writeoff",
+            {
+                "request1": request1
+            }
+        )
+
+
+class TbYouKuBoKongHuanYing(DingTalkBaseAPI):
+    """
+    优酷播控幻影API
+    """
+
+    def youku_mirage_query_permission(
+            self,
+            permission_request_dto=None
+    ):
+        """
+        优酷播控查询是否可播API
+        根据节目ID或者VID查询视频或者节目是否可以播放
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43082
+
+        :param permission_request_dto: 入参
+        """
+        return self._top_request(
+            "youku.mirage.query.permission",
+            {
+                "permission_request_dto": permission_request_dto
+            },
+            result_processor=lambda x: x["resp"]
+        )
+
+
+class TbiHome(DingTalkBaseAPI):
+    """
+    iHome API
+    """
+
+    def alibaba_ihome_ctom_case_save(
+            self,
+            open_id,
+            case_id,
+            area='',
+            project_id='',
+            title='',
+            image_path='',
+            case_content_url='',
+            city_name='',
+            city_code='',
+            province_name='',
+            province_code='',
+            address='',
+            building_name='',
+            name='',
+            district_code='',
+            longitude='',
+            house_image_path='',
+            district_name='',
+            latitude='',
+            sub_case_id=''
+    ):
+        """
+        保存ihome方案信息
+        用于在门店工作台里的编辑器保存方案，由三维家后端调用阿里后端，保存方案信息
+        此接口只允许ihome业务使用，用于门店的编辑功能，只允许广东三维家信息科技有限公司一家公司调用，不适用于其他业务。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43108
+
+        :param open_id: openId
+        :param case_id: caseid
+        :param area: 区域
+        :param project_id: 项目id
+        :param title: 标题
+        :param image_path: 图片地址
+        :param case_content_url: case地址
+        :param city_name: 城市名称
+        :param city_code: 城市编码
+        :param province_name: 省份
+        :param province_code: 编码省份
+        :param address: 地址
+        :param building_name: 绑定楼盘
+        :param name: 名字
+        :param district_code: 区码
+        :param longitude: 坐标
+        :param house_image_path: 房型地址
+        :param district_name: 区名
+        :param latitude: 坐标
+        :param sub_case_id: 三维家子方案id
+        """
+        return self._top_request(
+            "alibaba.ihome.ctom.case.save",
+            {
+                "open_id": open_id,
+                "case_id": case_id,
+                "area": area,
+                "project_id": project_id,
+                "title": title,
+                "image_path": image_path,
+                "case_content_url": case_content_url,
+                "city_name": city_name,
+                "city_code": city_code,
+                "province_name": province_name,
+                "province_code": province_code,
+                "address": address,
+                "building_name": building_name,
+                "name": name,
+                "district_code": district_code,
+                "longitude": longitude,
+                "house_image_path": house_image_path,
+                "district_name": district_name,
+                "latitude": latitude,
+                "sub_case_id": sub_case_id
+            },
+            result_processor=lambda x: x["api_result"]
+        )
+
+    def alibaba_ihome_ctom_case_update(
+            self,
+            case_content_url,
+            title,
+            case_id,
+            building_name='',
+            image_path='',
+            city_name='',
+            province_code='',
+            city_code='',
+            province_name='',
+            project_id='',
+            house_image_path='',
+            district_name='',
+            district_code='',
+            area='',
+            address='',
+            name='',
+            longitude='',
+            latitude='',
+            open_id=''
+    ):
+        """
+        修改ihome方案
+        用于在门店工作台里的编辑器保存方案，由三维家后端调用阿里后端，保存方案信息
+        此接口只允许ihome业务使用，用于门店的编辑功能，只允许广东三维家信息科技有限公司一家公司调用，不适用于其他业务。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43200
+
+        :param case_content_url: caseurl
+        :param title: 标题
+        :param case_id: caseid
+        :param building_name: 楼盘
+        :param image_path: 图片地址
+        :param city_name: 城市名
+        :param province_code: 省份编码
+        :param city_code: 城市编码
+        :param province_name: 省份名称
+        :param project_id: 项目id
+        :param house_image_path: 户型图
+        :param district_name: 区名
+        :param district_code: 区名
+        :param area: 区域
+        :param address: 地址
+        :param name: 名称
+        :param longitude: 坐标
+        :param latitude: 坐标
+        :param open_id: 开放id
+        """
+        return self._top_request(
+            "alibaba.ihome.ctom.case.update",
+            {
+                "case_content_url": case_content_url,
+                "title": title,
+                "case_id": case_id,
+                "building_name": building_name,
+                "image_path": image_path,
+                "city_name": city_name,
+                "province_code": province_code,
+                "city_code": city_code,
+                "province_name": province_name,
+                "project_id": project_id,
+                "house_image_path": house_image_path,
+                "district_name": district_name,
+                "district_code": district_code,
+                "area": area,
+                "address": address,
+                "name": name,
+                "longitude": longitude,
+                "latitude": latitude,
+                "open_id": open_id
+            },
+            result_processor=lambda x: x["api_result"]
+        )
+
+    def alibaba_ihome_ctom_case_mainpic_update(
+            self,
+            case_id,
+            pic_url,
+            trace_id='',
+            pic_type=''
+    ):
+        """
+        方案渲染图修改
+        用于在门店工作台里的编辑器保存方案，由三维家后端调用阿里后端，保存方案信息
+        此接口只允许ihome业务使用，用于门店的编辑功能，只允许广东三维家信息科技有限公司一家公司调用，不适用于其他业务。
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43219
+
+        :param case_id: 方案id
+        :param pic_url: 图片的地址
+        :param trace_id: 32位字符串
+        :param pic_type: 图片类型
+        """
+        return self._top_request(
+            "alibaba.ihome.ctom.case.mainpic.update",
+            {
+                "case_id": case_id,
+                "pic_url": pic_url,
+                "trace_id": trace_id,
+                "pic_type": pic_type
+            },
+            result_processor=lambda x: x["api_result"]
+        )
+
+
+class TbXinXiLiu(DingTalkBaseAPI):
+    """
+    信息流API
+    """
+
+    def taobao_feedflow_item_option_page(
+            self,
+            label_query
+    ):
+        """
+        分页查询定向标签列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43245
+
+        :param label_query: 标签查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.option.page",
+            {
+                "label_query": label_query
+            }
+        )
+
+    def taobao_feedflow_item_target_validlist(
+            self,
+            campaign_id
+    ):
+        """
+        获取有权限的定向列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43246
+
+        :param campaign_id: 计划id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.target.validlist",
+            {
+                "campaign_id": campaign_id
+            }
+        )
+
+    def taobao_feedflow_item_crowd_page(
+            self,
+            crowd_query
+    ):
+        """
+        分页查询单品单元下人群列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43247
+
+        :param crowd_query: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.page",
+            {
+                "crowd_query": crowd_query
+            }
+        )
+
+    def taobao_feedflow_account_get(
+            self
+    ):
+        """
+        获取信息流账户详情
+        获取账户信息接口。
+        (1) BP显示余额 (字段 ：banlance ) = 现金余额(字段：cash_balance) + 赠款余额；
+        (2) 可用余额(字段：availableBalance) = BP显示余额
+        (3) 红包(字段：redPacket)
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43248
+
+        """
+        return self._top_request(
+            "taobao.feedflow.account.get"
+        )
+
+    def taobao_feedflow_item_crowd_add(
+            self,
+            crowds,
+            adgroup_id
+    ):
+        """
+        单品单元下，新增定向人群
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43249
+
+        :param crowds: 人群列表
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.add",
+            {
+                "crowds": crowds,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_item_crowd_modify(
+            self,
+            crowds,
+            adgroup_id
+    ):
+        """
+        覆盖单元下同类型定向人群
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43250
+
+        :param crowds: 人群信息
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.modify",
+            {
+                "crowds": crowds,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_item_crowd_delete(
+            self,
+            crowds,
+            adgroup_id
+    ):
+        """
+        删除单品人群
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43251
+
+        :param crowds: 人群结构
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.delete",
+            {
+                "crowds": crowds,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_item_crowd_modifybind(
+            self,
+            crowds,
+            adgroup_id
+    ):
+        """
+        修改人群出价或状态
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43252
+
+        :param crowds: 人群信息
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.modifybind",
+            {
+                "crowds": crowds,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_item_campaign_add(
+            self,
+            campaign=None
+    ):
+        """
+        信息流增加推广计划
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43264
+
+        :param campaign: 计划信息
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.add",
+            {
+                "campaign": campaign
+            }
+        )
+
+    def taobao_feedflow_item_campaign_daybudget(
+            self
+    ):
+        """
+        获取当日投放日预算总额
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43273
+
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.daybudget"
+        )
+
+    def taobao_feedflow_item_campaign_modify(
+            self,
+            campaign=None
+    ):
+        """
+        信息流修改计划
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43274
+
+        :param campaign: 修改参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.modify",
+            {
+                "campaign": campaign
+            }
+        )
+
+    def taobao_feedflow_item_campaign_delete(
+            self,
+            campaign_id
+    ):
+        """
+        删除计划
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43275
+
+        :param campaign_id: 计划id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.delete",
+            {
+                "campaign_id": campaign_id
+            }
+        )
+
+    def taobao_feedflow_item_campaign_get(
+            self,
+            campagin_id
+    ):
+        """
+        通过计划id查询计划
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43276
+
+        :param campagin_id: 计划id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.get",
+            {
+                "campagin_id": campagin_id
+            }
+        )
+
+    def taobao_feedflow_item_campaign_page(
+            self,
+            campaign_query=None
+    ):
+        """
+        批量查询计划列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43277
+
+        :param campaign_query: 入参
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.page",
+            {
+                "campaign_query": campaign_query
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_delete(
+            self,
+            campaign_id,
+            adgroup_id_list
+    ):
+        """
+        根据单元id删除单元
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43278
+
+        :param campaign_id: 计划id
+        :param adgroup_id_list: 单元id列表
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.delete",
+            {
+                "campaign_id": campaign_id,
+                "adgroup_id_list": adgroup_id_list
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_modify(
+            self,
+            adgroup
+    ):
+        """
+        信息流单元修改
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43279
+
+        :param adgroup: 单元信息
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.modify",
+            {
+                "adgroup": adgroup
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_add(
+            self,
+            adgroup
+    ):
+        """
+        信息流增加单元
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43281
+
+        :param adgroup: 单元信息
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.add",
+            {
+                "adgroup": adgroup
+            }
+        )
+
+    def taobao_feedflow_item_adzone_list(
+            self,
+            adzone_query
+    ):
+        """
+        批量查询可用广告位列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43295
+
+        :param adzone_query: 广告位查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adzone.list",
+            {
+                "adzone_query": adzone_query
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_adzone_bind(
+            self,
+            bind_adzone_list,
+            adgroup_id
+    ):
+        """
+        信息流单元内绑定资源位
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43296
+
+        :param bind_adzone_list: 新增的绑定资源位
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.adzone.bind",
+            {
+                "bind_adzone_list": bind_adzone_list,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_page(
+            self,
+            adgroup_query=None
+    ):
+        """
+        查询单元列表
+        通过计划id查询单元信息
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43323
+
+        :param adgroup_query: 系统自动生成
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.page",
+            {
+                "adgroup_query": adgroup_query
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_creative_add_bind(
+            self,
+            creative_bind_list,
+            adgroup_id
+    ):
+        """
+        信息流新增并且绑定创意
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43332
+
+        :param creative_bind_list: 新增绑定的创意，一次最多2个
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.creative.add.bind",
+            {
+                "creative_bind_list": creative_bind_list,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_item_item_page(
+            self,
+            item_query=None
+    ):
+        """
+        信息流查看商品列表
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43333
+
+        :param item_query: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.item.page",
+            {
+                "item_query": item_query
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_adzone_page(
+            self,
+            adzone_bind_query
+    ):
+        """
+        信息流单元下查看绑定资源位
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43334
+
+        :param adzone_bind_query: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.adzone.page",
+            {
+                "adzone_bind_query": adzone_bind_query
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_adzone_unbind(
+            self,
+            adzone_id_list,
+            adgroup_id
+    ):
+        """
+        信息流单元内解绑资源位
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43335
+
+        :param adzone_id_list: 广告位id
+        :param adgroup_id: 单元id
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.adzone.unbind",
+            {
+                "adzone_id_list": adzone_id_list,
+                "adgroup_id": adgroup_id
+            }
+        )
+
+    def taobao_feedflow_account_rpthourlist(
+            self,
+            rpt_query
+    ):
+        """
+        超级推荐广告主分时报表查询
+        广告主分时报表查询，支持广告主查询最近90天内某一天的账户维度分时报表数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43345
+
+        :param rpt_query: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.account.rpthourlist",
+            {
+                "rpt_query": rpt_query
+            }
+        )
+
+    def taobao_feedflow_account_rptdailylist(
+            self,
+            rpt_query_d_t_o
+    ):
+        """
+        获取广告主分日数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43347
+
+        :param rpt_query_d_t_o: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.account.rptdailylist",
+            {
+                "rpt_query_d_t_o": rpt_query_d_t_o
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_creative_page(
+            self,
+            creative_bind_query
+    ):
+        """
+        信息流单元下查看创意
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43348
+
+        :param creative_bind_query: 绑定查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.creative.page",
+            {
+                "creative_bind_query": creative_bind_query
+            }
+        )
+
+    def taobao_feedflow_item_creative_delete(
+            self,
+            creative_id_list
+    ):
+        """
+        信息流删除创意
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43349
+
+        :param creative_id_list: 创意id列表
+        """
+        return self._top_request(
+            "taobao.feedflow.item.creative.delete",
+            {
+                "creative_id_list": creative_id_list
+            }
+        )
+
+    def taobao_feedflow_item_campaign_rptdailylist(
+            self,
+            rpt_query_d_t_o
+    ):
+        """
+        推广计划分日数据查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43352
+
+        :param rpt_query_d_t_o: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.rptdailylist",
+            {
+                "rpt_query_d_t_o": rpt_query_d_t_o
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_rptdailylist(
+            self,
+            rpt_query_d_t_o
+    ):
+        """
+        推广单元分日数据查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43362
+
+        :param rpt_query_d_t_o: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.rptdailylist",
+            {
+                "rpt_query_d_t_o": rpt_query_d_t_o
+            }
+        )
+
+    def taobao_feedflow_item_adzone_rptdailylist(
+            self,
+            rpt_query_d_t_o
+    ):
+        """
+        资源包分日数据查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43365
+
+        :param rpt_query_d_t_o: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adzone.rptdailylist",
+            {
+                "rpt_query_d_t_o": rpt_query_d_t_o
+            }
+        )
+
+    def taobao_feedflow_item_crowd_rptdailylist(
+            self,
+            rpt_query_d_t_o
+    ):
+        """
+        定向分日数据查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43367
+
+        :param rpt_query_d_t_o: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.rptdailylist",
+            {
+                "rpt_query_d_t_o": rpt_query_d_t_o
+            }
+        )
+
+    def taobao_feedflow_item_creative_rptdailylist(
+            self,
+            rpt_query_d_t_o
+    ):
+        """
+        创意分日数据查询
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43377
+
+        :param rpt_query_d_t_o: 查询条件
+        """
+        return self._top_request(
+            "taobao.feedflow.item.creative.rptdailylist",
+            {
+                "rpt_query_d_t_o": rpt_query_d_t_o
+            }
+        )
+
+    def taobao_feedflow_item_campaign_rpthourlist(
+            self,
+            rpt_query
+    ):
+        """
+        超级推荐【商品推广】计划分时报表查询
+        广告主推广计划分时数据查询，支持广告主查询最近90天内某一天的计划维度分时报表数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43476
+
+        :param rpt_query: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.campaign.rpthourlist",
+            {
+                "rpt_query": rpt_query
+            }
+        )
+
+    def taobao_feedflow_item_adgroup_rpthourlist(
+            self,
+            rpt_query
+    ):
+        """
+        超级推荐【商品推广】单元分时报表查询
+        广告主推广组分时数据查询，支持广告主查询最近90天内某一天的单元维度分时报表数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43477
+
+        :param rpt_query: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adgroup.rpthourlist",
+            {
+                "rpt_query": rpt_query
+            }
+        )
+
+    def taobao_feedflow_item_crowd_rpthourlist(
+            self,
+            rpt_query
+    ):
+        """
+        超级推荐【商品推广】定向分时报表查询
+        广告主定向分时数据查询，支持广告主查询最近90天内某一天的定向维度分时报表数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43478
+
+        :param rpt_query: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.crowd.rpthourlist",
+            {
+                "rpt_query": rpt_query
+            }
+        )
+
+    def taobao_feedflow_item_adzone_rpthourlist(
+            self,
+            rpt_query
+    ):
+        """
+        超级推荐【商品推广】资源位分时报表查询
+        广告主资源包分时数据查询，支持广告主查询最近90天内某一天的资源包维度分时报表数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43479
+
+        :param rpt_query: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.adzone.rpthourlist",
+            {
+                "rpt_query": rpt_query
+            }
+        )
+
+    def taobao_feedflow_item_creative_rpthourlist(
+            self,
+            rpt_query
+    ):
+        """
+        超级推荐【商品推广】创意分时报表查询
+        创意分时数据查询，支持广告主查询最近90天内某一天的创意维度分时报表数据
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43480
+
+        :param rpt_query: 查询参数
+        """
+        return self._top_request(
+            "taobao.feedflow.item.creative.rpthourlist",
+            {
+                "rpt_query": rpt_query
+            }
+        )
+
+
+class TbXinLingShouGongYingLian(DingTalkBaseAPI):
+    """
+    新零售供应链API
+    """
+
+    def alibaba_ascp_salecategory_query(
+            self,
+            item_id
+    ):
+        """
+        货品品类查询
+        根据货品ID查询对应销售品类ID
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43726
+
+        :param item_id: 货品ID
+        """
+        return self._top_request(
+            "alibaba.ascp.salecategory.query",
+            {
+                "item_id": item_id
+            },
+            result_processor=lambda x: x["data_list"]
+        )
+
+
+class TbAliOSZhiFu(DingTalkBaseAPI):
+    """
+    AliOS支付API
+    """
+
+    def aliyun_alios_pay_token_get(
+            self,
+            get_token_request=None
+    ):
+        """
+        获取支付token
+        商户用来获取支付的授权token
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43983
+
+        :param get_token_request: 请求参数
+        """
+        return self._top_request(
+            "aliyun.alios.pay.token.get",
+            {
+                "get_token_request": get_token_request
+            },
+            result_processor=lambda x: x["aliospay_response"]
+        )
+
+
+class TbCaiNiaoKongZhiTa(DingTalkBaseAPI):
+    """
+    菜鸟控制塔API
+    """
+
+    def cainiao_ecc_exceptions_delay_get(
+            self,
+            mail_no
+    ):
+        """
+        菜鸟控制塔包裹滞留异常信息获取
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43853
+
+        :param mail_no: 运单号
+        """
+        return self._top_request(
+            "cainiao.ecc.exceptions.delay.get",
+            {
+                "mail_no": mail_no
+            }
+        )
+
+    def cainiao_ecc_exceptions_delay_count(
+            self
+    ):
+        """
+        菜鸟控制塔包裹滞留异常统计信息获取
+        文档地址：https://open-doc.dingtalk.com/docs/api.htm?apiId=43854
+
+        """
+        return self._top_request(
+            "cainiao.ecc.exceptions.delay.count"
         )
 
 
@@ -101020,3 +110289,16 @@ class TaobaoMixin(object):
     tbyewupingtaishiyebushuiwupingtai = TbYeWuPingTaiShiYeBuShuiWuPingTai()
     tblingshoutonggonggong = TbLingShouTongGongGong()
     tbhudongxiaoyouxi = TbHuDongXiaoYouXi()
+    tbalijiankangyi = TbALiJianKangYi()
+    tbsifakaifangpingtai = TbSiFaKaiFangPingTai()
+    tbicbushangpin = TbICBUShangPin()
+    tbshoutaoyonghuzengzhang = TbShouTaoYongHuZengZhang()
+    tbyunma = TbYunMa()
+    tbxinlingshoupos = TbXinLingShouPOS()
+    tbtianmaouxian = TbTianMaoUXian()
+    tbyoukubokonghuanying = TbYouKuBoKongHuanYing()
+    tbihome = TbiHome()
+    tbxinxiliu = TbXinXiLiu()
+    tbxinlingshougongyinglian = TbXinLingShouGongYingLian()
+    tbalioszhifu = TbAliOSZhiFu()
+    tbcainiaokongzhita = TbCaiNiaoKongZhiTa()
