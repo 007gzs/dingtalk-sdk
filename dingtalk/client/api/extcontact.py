@@ -59,7 +59,12 @@ class ExtContact(DingTalkBaseAPI):
         :param share_userids: 共享给的员工userId列表
         :return:
         """
-
+        if not isinstance(label_ids, (list, tuple, set)):
+            label_ids = (label_ids, )
+        if not isinstance(share_deptids, (list, tuple, set)):
+            share_deptids = (share_deptids, )
+        if not isinstance(share_userids, (list, tuple, set)):
+            share_userids = (share_userids, )
         return self._top_request(
             "dingtalk.oapi.extcontact.create",
             {
@@ -99,6 +104,12 @@ class ExtContact(DingTalkBaseAPI):
         :param share_userids: 共享给的员工userId列表
         :return:
         """
+        if not isinstance(label_ids, (list, tuple, set)):
+            label_ids = (label_ids, )
+        if not isinstance(share_deptids, (list, tuple, set)):
+            share_deptids = (share_deptids, )
+        if not isinstance(share_userids, (list, tuple, set)):
+            share_userids = (share_userids, )
         return self._top_request(
             "dingtalk.oapi.extcontact.update",
             {
