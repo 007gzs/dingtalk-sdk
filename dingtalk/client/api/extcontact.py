@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import six
-
 from dingtalk.client.api.base import DingTalkBaseAPI
-from dingtalk.core.utils import json_loads
 
 
 class ExtContact(DingTalkBaseAPI):
