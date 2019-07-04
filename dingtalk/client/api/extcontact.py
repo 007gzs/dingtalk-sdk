@@ -42,7 +42,7 @@ class ExtContact(DingTalkBaseAPI):
         )
 
     def create(self, name, follower_user_id, label_ids, mobile, state_code='86',
-               title=None, share_deptids=(), remark=None, address=None, company_name=None, share_userids=()):
+               title=None, share_dept_ids=(), remark=None, address=None, company_name=None, share_user_ids=()):
         """
         添加外部联系人
 
@@ -52,19 +52,19 @@ class ExtContact(DingTalkBaseAPI):
         :param mobile: 手机号
         :param label_ids: 标签列表
         :param title: 职位
-        :param share_deptids: 共享给的部门ID
+        :param share_dept_ids: 共享给的部门ID
         :param remark: 备注
         :param address: 地址
         :param company_name: 企业名
-        :param share_userids: 共享给的员工userId列表
+        :param share_user_ids: 共享给的员工userId列表
         :return:
         """
         if not isinstance(label_ids, (list, tuple, set)):
             label_ids = (label_ids, )
-        if not isinstance(share_deptids, (list, tuple, set)):
-            share_deptids = (share_deptids, )
-        if not isinstance(share_userids, (list, tuple, set)):
-            share_userids = (share_userids, )
+        if not isinstance(share_dept_ids, (list, tuple, set)):
+            share_dept_ids = (share_dept_ids, )
+        if not isinstance(share_user_ids, (list, tuple, set)):
+            share_user_ids = (share_user_ids, )
         return self._top_request(
             "dingtalk.oapi.extcontact.create",
             {
@@ -75,18 +75,18 @@ class ExtContact(DingTalkBaseAPI):
                     'mobile': mobile,
                     'label_ids': label_ids,
                     'title': title,
-                    'share_deptids': share_deptids,
+                    'share_dept_ids': share_dept_ids,
                     'remark': remark,
                     'address': address,
                     'company_name': company_name,
-                    'share_userid': share_userids
+                    'share_user_ids': share_user_ids
                 }
             },
             result_processor=lambda x: x['userid']
         )
 
     def update(self, user_id, name, follower_user_id, label_ids, mobile, state_code='86',
-               title=None, share_deptids=(), remark=None, address=None, company_name=None, share_userids=()):
+               title=None, share_dept_ids=(), remark=None, address=None, company_name=None, share_user_ids=()):
         """
         更新外部联系人
 
@@ -97,19 +97,19 @@ class ExtContact(DingTalkBaseAPI):
         :param mobile: 手机号
         :param label_ids: 标签列表
         :param title: 职位
-        :param share_deptids: 共享给的部门ID
+        :param share_dept_ids: 共享给的部门ID
         :param remark: 备注
         :param address: 地址
         :param company_name: 企业名
-        :param share_userids: 共享给的员工userId列表
+        :param share_user_ids: 共享给的员工userId列表
         :return:
         """
         if not isinstance(label_ids, (list, tuple, set)):
             label_ids = (label_ids, )
-        if not isinstance(share_deptids, (list, tuple, set)):
-            share_deptids = (share_deptids, )
-        if not isinstance(share_userids, (list, tuple, set)):
-            share_userids = (share_userids, )
+        if not isinstance(share_dept_ids, (list, tuple, set)):
+            share_dept_ids = (share_dept_ids, )
+        if not isinstance(share_user_ids, (list, tuple, set)):
+            share_user_ids = (share_user_ids, )
         return self._top_request(
             "dingtalk.oapi.extcontact.update",
             {
@@ -121,11 +121,11 @@ class ExtContact(DingTalkBaseAPI):
                     'mobile': mobile,
                     'label_ids': label_ids,
                     'title': title,
-                    'share_deptids': share_deptids,
+                    'share_dept_ids': share_dept_ids,
                     'remark': remark,
                     'address': address,
                     'company_name': company_name,
-                    'share_userid': share_userids
+                    'share_user_ids': share_user_ids
                 }
             }
         )
