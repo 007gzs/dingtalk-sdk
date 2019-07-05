@@ -18,7 +18,9 @@ logger = logging.getLogger(__name__)
 class DingTalkClient(BaseClient, TaobaoMixin):
 
     attendance = api.Attendance()
+    blackboard = api.BlackBoard()
     bpms = api.Bpms()
+    calendar = api.Calendar()
     callback = api.Callback()
     chat = api.Chat()
     checkin = api.Checkin()
@@ -27,11 +29,13 @@ class DingTalkClient(BaseClient, TaobaoMixin):
     ext = api.Ext()
     extcontact = api.ExtContact()
     employeerm = api.Employeerm()
+    health = api.Health()
     message = api.Message()
     microapp = api.MicroApp()
     report = api.Report()
     role = api.Role()
     user = api.User()
+    workrecord = api.WorkRecord()
 
     def __init__(self, corp_id, prefix='client', storage=None, timeout=None, auto_retry=True):
         super(DingTalkClient, self).__init__(storage, timeout, auto_retry)
