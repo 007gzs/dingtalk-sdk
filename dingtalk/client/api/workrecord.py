@@ -24,7 +24,7 @@ class WorkRecord(DingTalkBaseAPI):
 
         if isinstance(create_time, (datetime.date, datetime.datetime)):
             create_time = int(time.mktime(create_time.timetuple()) * 1000)
-        form_item_list = [{'title': title, 'content': content}for title, content in form_item_dict.items()]
+        form_item_list = [{'title': k, 'content': v}for k, v in form_item_dict.items()]
         return self._top_request(
             "dingtalk.oapi.workrecord.add",
             {

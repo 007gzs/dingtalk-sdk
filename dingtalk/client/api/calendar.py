@@ -7,7 +7,7 @@ from dingtalk.client.api.base import DingTalkBaseAPI
 
 class Calendar(DingTalkBaseAPI):
 
-    def create(self, create_vo=None):
+    def create(self, create_vo):
         """
         创建日程
 
