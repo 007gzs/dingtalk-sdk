@@ -3,6 +3,8 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 
+from optionaldict import optionaldict
+
 from dingtalk.core.utils import to_text
 from six.moves.urllib.parse import urlencode
 
@@ -153,18 +155,21 @@ class Message(DingTalkBaseAPI):
         """
         userid_list = ",".join(map(to_text, userid_list))
         dept_id_list = ",".join(map(to_text, dept_id_list))
-
+        if not userid_list:
+            userid_list = None
+        if not dept_id_list:
+            dept_id_list = None
         if isinstance(msg_body, BodyBase):
             msg_body = msg_body.get_dict()
         return self._top_request(
             'dingtalk.oapi.message.corpconversation.asyncsend_v2',
-            {
+            optionaldict({
                 "msg": msg_body,
                 'agent_id': agent_id,
                 'userid_list': userid_list,
                 'dept_id_list': dept_id_list,
                 'to_all_user': to_all_user
-            },
+            }),
             result_processor=lambda x: x['task_id']
         )
 
