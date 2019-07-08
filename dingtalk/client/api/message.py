@@ -173,6 +173,18 @@ class Message(DingTalkBaseAPI):
             result_processor=lambda x: x['task_id']
         )
 
+    def recall(self, agent_id, msg_task_id):
+        """
+        撤回工作通知消息
+
+        :param agent_id: 发送工作通知的微应用agentId
+        :param msg_task_id: 发送工作通知返回的taskId
+        """
+        return self._top_request(
+            "dingtalk.oapi.message.corpconversation.recall",
+            {"agent_id": agent_id,"msg_task_id": msg_task_id}
+        )
+
     def getsendprogress(self, agent_id, task_id):
         """
         获取异步发送企业会话消息的发送进度
