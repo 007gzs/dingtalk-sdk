@@ -182,7 +182,7 @@ class Message(DingTalkBaseAPI):
         """
         return self._top_request(
             "dingtalk.oapi.message.corpconversation.recall",
-            {"agent_id": agent_id,"msg_task_id": msg_task_id}
+            {"agent_id": agent_id, "msg_task_id": msg_task_id}
         )
 
     def getsendprogress(self, agent_id, task_id):
