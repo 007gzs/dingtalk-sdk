@@ -4,6 +4,8 @@ from __future__ import absolute_import, unicode_literals
 import datetime
 import json
 
+from optionaldict import optionaldict
+
 from dingtalk.core.utils import to_text
 from dingtalk.client.api.base import DingTalkBaseAPI
 
@@ -117,7 +119,12 @@ class Employeerm(DingTalkBaseAPI):
         """
         智能人事添加企业待入职员工
 
-        :param param: 添加待入职入参
+        :param name: 员工姓名
+        :param mobile: 手机号
+        :param pre_entry_time: 预期入职时间
+        :param op_userid: 操作人userid
+        :param extend_info: 扩展信息
+        :return:
         """
         if isinstance(pre_entry_time, (datetime.date, datetime.datetime)):
             pre_entry_time = pre_entry_time.strftime(self.DATE_TIME_FORMAT)
@@ -126,7 +133,7 @@ class Employeerm(DingTalkBaseAPI):
 
         return self._top_request(
             "dingtalk.oapi.smartwork.hrm.employee.addpreentry",
-            {
+            optionaldict({
                 "param": {
                     "name": name,
                     "mobile": mobile,
@@ -134,7 +141,7 @@ class Employeerm(DingTalkBaseAPI):
                     "op_userid": op_userid,
                     "extend_info": extend_info
                 }
-            }
+            })
         )
 
     def getdismissionlist(self, op_userid, current=1, page_size=100):
