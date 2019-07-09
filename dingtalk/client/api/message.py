@@ -113,8 +113,8 @@ class Message(DingTalkBaseAPI):
 
     def asyncsend(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
         """
-        企业会话消息异步发送
-
+        企业会话消息异步发送(此API已不能使用, 请使用asyncsend_v2替换.)
+		
         :param msg_body: BodyBase 消息体
         :param agent_id: 微应用的id
         :param userid_list: 接收者的用户userid列表
@@ -122,6 +122,7 @@ class Message(DingTalkBaseAPI):
         :param to_all_user: 是否发送给企业全部用户
         :return: 任务id
         """
+        raise(RuntimeError('asyncsend已被废弃。后续版本将移除。 请使用asyncsend_v2替换。'))
         userid_list = ",".join(map(to_text, userid_list))
         dept_id_list = ",".join(map(to_text, dept_id_list))
 
@@ -142,7 +143,7 @@ class Message(DingTalkBaseAPI):
             result_processor=lambda x: x['task_id']
         )
 
-    def asyncsend_v2(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
+    def asyncsend_v2(self, msg_body, agent_id, userid_list=[], dept_id_list=[], to_all_user=False):
         """
         企业会话消息异步发送
 
@@ -159,6 +160,9 @@ class Message(DingTalkBaseAPI):
             userid_list = None
         if not dept_id_list:
             dept_id_list = None
+        if not to_all_user:
+            to_all_user=None
+
         if isinstance(msg_body, BodyBase):
             msg_body = msg_body.get_dict()
         return self._top_request(
