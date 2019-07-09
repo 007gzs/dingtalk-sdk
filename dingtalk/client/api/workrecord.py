@@ -48,8 +48,7 @@ class WorkRecord(DingTalkBaseAPI):
         """
         return self._top_request(
             "dingtalk.oapi.workrecord.update",
-            {"userid": userid, "record_id": record_id},
-            result_processor=lambda x: x['result']
+            {"userid": userid, "record_id": record_id}
         )
 
     def getbyuserid(self, userid, status, offset=0, limit=50):
