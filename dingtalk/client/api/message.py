@@ -143,7 +143,7 @@ class Message(DingTalkBaseAPI):
             result_processor=lambda x: x['task_id']
         )
 
-    def asyncsend_v2(self, msg_body, agent_id, userid_list=[], dept_id_list=[], to_all_user=False):
+    def asyncsend_v2(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
         """
         企业会话消息异步发送
 
@@ -160,8 +160,9 @@ class Message(DingTalkBaseAPI):
             userid_list = None
         if not dept_id_list:
             dept_id_list = None
-        if not to_all_user:
-            to_all_user=None
+
+        if not (userid_list or dept_id_list):
+            raise(ArgumentError('userid_list和dept_id_list不能同时为空。'))
 
         if isinstance(msg_body, BodyBase):
             msg_body = msg_body.get_dict()
