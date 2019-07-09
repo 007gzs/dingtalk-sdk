@@ -153,8 +153,10 @@ class Message(DingTalkBaseAPI):
         :param to_all_user: 是否发送给企业全部用户
         :return: 任务id
         """
-        userid_list = ",".join(map(to_text, userid_list))
-        dept_id_list = ",".join(map(to_text, dept_id_list))
+        if isinstance(userid_list, (list, tuple, set)):
+            userid_list = ",".join(map(to_text, userid_list))
+        if isinstance(dept_id_list, (list, tuple, set)):
+            dept_id_list = ",".join(map(to_text, dept_id_list))
         if not userid_list:
             userid_list = None
         if not dept_id_list:
