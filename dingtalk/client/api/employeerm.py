@@ -129,19 +129,19 @@ class Employeerm(DingTalkBaseAPI):
         if isinstance(pre_entry_time, (datetime.date, datetime.datetime)):
             pre_entry_time = pre_entry_time.strftime(self.DATE_TIME_FORMAT)
         if isinstance(extend_info, dict):
-            extend_info = json.loads(extend_info)
+            extend_info = json.dumps(extend_info)
 
         return self._top_request(
             "dingtalk.oapi.smartwork.hrm.employee.addpreentry",
-            optionaldict({
-                "param": {
+            {
+                "param": optionaldict({
                     "name": name,
                     "mobile": mobile,
                     "pre_entry_time": pre_entry_time,
                     "op_userid": op_userid,
                     "extend_info": extend_info
-                }
-            })
+                })
+            }
         )
 
     def getdismissionlist(self, op_userid, current=1, page_size=100):
