@@ -140,7 +140,8 @@ class BaseClient(object):
                         response=res
                     )
             result = top_result
-
+        if not isinstance(result, dict):
+            return result
         if 'errcode' in result:
             result['errcode'] = int(result['errcode'])
 
