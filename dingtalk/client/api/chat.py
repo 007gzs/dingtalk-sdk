@@ -115,7 +115,7 @@ class Chat(DingTalkBaseAPI):
         :param size: 分页查询的大小，最大可以传100
         :return:
         """
-        return self._post(
+        return self._get(
             '/chat/getReadList',
             {"messageId": message_id, "cursor": cursor, "size": size}
         )
