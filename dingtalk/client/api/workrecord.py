@@ -4,7 +4,10 @@ from __future__ import absolute_import, unicode_literals
 import datetime
 import time
 
+from optionaldict import optionaldict
+
 from dingtalk.client.api.base import DingTalkBaseAPI
+from dingtalk.model.field import FieldBase
 
 
 class WorkRecord(DingTalkBaseAPI):
@@ -69,4 +72,188 @@ class WorkRecord(DingTalkBaseAPI):
                 "status": status
             },
             result_processor=lambda x: x['records']
+        )
+
+    def process_save(self, name, description, form_component_list=(), process_code=None, agentid=None):
+        """
+        保存审批模板
+
+        :param name: 模板名称
+        :param description: 模板描述
+        :param form_component_list: 表单列表
+        :param process_code: 模板的唯一码
+        :param agentid: 企业微应用标识
+        """
+        form_component_list = [form.get_dict() if isinstance(form, FieldBase) else form for form in form_component_list]
+
+        return self._top_request(
+            "dingtalk.oapi.process.save",
+            {
+                "saveProcessRequest": optionaldict({
+                    "agentid": agentid,
+                    "process_code": process_code,
+                    "name": name,
+                    "description": description,
+                    "fake_mode": True,
+                    "form_component_list": form_component_list
+                })
+            },
+            result_processor=lambda x: x['process_code']
+        )
+
+    def process_delete(self, process_code, agentid=''):
+        """
+        删除创建的审批模板
+
+        :param process_code: 模板的唯一码
+        :param agentid: 微应用agentId，ISV必填
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.delete",
+            {
+                "request": {
+                    "process_code": process_code,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def process_workrecord_create(
+            self,
+            process_code,
+            originator_user_id,
+            form_component_values,
+            url,
+            agentid='',
+            title=''
+    ):
+        """
+        发起不带流程的审批实例
+
+        :param process_code: 审批模板唯一码
+        :param originator_user_id: 审批发起人
+        :param form_component_values: 表单参数列表
+        :param url: 实例跳转链接
+        :param agentid: 应用id
+        :param title: 实例标题
+        """
+        if isinstance(form_component_values, dict):
+            form_component_values = [{"name": name, "value": value} for name, value in form_component_values.items()]
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.create",
+            {
+                "request": {
+                    "process_code": process_code,
+                    "originator_user_id": originator_user_id,
+                    "form_component_values": form_component_values,
+                    "url": url,
+                    "agentid": agentid,
+                    "title": title
+                }
+            },
+            result_processor=lambda x: x['process_instance_id']
+        )
+
+    def process_workrecord_update(
+            self,
+            process_instance_id,
+            status,
+            result,
+            agentid=''
+    ):
+        """
+        同步待办实例状态
+
+        :param process_instance_id: 实例id
+        :param status: 实例状态，分为COMPLETED, TERMINATED
+        :param result: 实例结果, 如果实例状态是COMPLETED，需要设置result，分为agree和refuse
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.update",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "status": status,
+                    "result": result,
+                    "agentid": agentid
+                }
+            }
+        )
+
+    def process_workrecord_task_create(
+            self,
+            process_instance_id,
+            tasks,
+            agentid='',
+            activity_id=''
+    ):
+        """
+        创建待办任务
+
+        :param process_instance_id: 实例id
+        :param tasks: 任务列表
+        :param agentid: 应用id
+        :param activity_id: 节点id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.task.create",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "tasks": tasks,
+                    "agentid": agentid,
+                    "activity_id": activity_id
+                }
+            },
+            result_processor=lambda x: x['tasks']
+        )
+
+    def dingtalk_oapi_process_workrecord_task_update(
+            self,
+            process_instance_id,
+            tasks,
+            agentid=''
+    ):
+        """
+        更新待办任务状态
+
+        :param process_instance_id: 实例id
+        :param tasks: 任务列表
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.task.update",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "tasks": tasks,
+                    "agentid": agentid
+                }
+            },
+            result_processor=lambda x: x['tasks']
+        )
+
+    def process_workrecord_taskgroup_cancel(
+            self,
+            process_instance_id,
+            activity_id,
+            agentid=''
+    ):
+        """
+        批量取消任务
+
+        :param process_instance_id: 实例id
+        :param activity_id: 任务组id
+        :param agentid: 应用id
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.workrecord.taskgroup.cancel",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "activity_id": activity_id,
+                    "agentid": agentid
+                }
+            }
         )
