@@ -26,6 +26,7 @@ dingtalk-sdk 是一个钉钉开放平台的第三方 Python SDK, 实现了 企�
    :maxdepth: 2
 
    model/message
+   model/field
    client/index
 
 应用服务商（ISV）
