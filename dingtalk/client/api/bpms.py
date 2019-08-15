@@ -103,7 +103,7 @@ class Bpms(DingTalkBaseAPI):
                 "process_code": process_code,
                 "originator_user_id": originator_user_id,
                 "dept_id": dept_id,
-                "form_component_values": form_component_values,
+                "form_component_values": form_component_value_list,
                 "agent_id": agent_id,
                 "approvers": approvers,
                 "cc_list": cc_list,
