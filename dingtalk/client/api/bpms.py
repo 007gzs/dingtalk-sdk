@@ -61,7 +61,7 @@ class Bpms(DingTalkBaseAPI):
         )
 
     def processinstance_create(
-            self, process_code, originator_user_id, dept_id, approvers=None, form_component_values=(),
+            self, process_code, originator_user_id, dept_id, approvers=None, form_component_values=None,
             agent_id=None, cc_list=(), cc_start=False, cc_finish=False, approvers_v2=None
     ):
         """
@@ -88,14 +88,15 @@ class Bpms(DingTalkBaseAPI):
         if isinstance(approvers, (list, tuple, set)):
             approvers = ','.join(map(to_text, approvers))
         form_component_value_list = []
-        for name, value in form_component_values.items():
-            data = {'name': name}
-            if isinstance(value, (list, tuple)):
-                if len(value) > 1:
-                    data['ext_value'] = value[1]
-                value = value[0]
-            data['value'] = value
-            form_component_value_list.append(data)
+        if form_component_values:
+            for name, value in form_component_values.items():
+                data = {'name': name}
+                if isinstance(value, (list, tuple)):
+                    if len(value) > 1:
+                        data['ext_value'] = value[1]
+                    value = value[0]
+                data['value'] = value
+                form_component_value_list.append(data)
 
         return self._top_request(
             "dingtalk.oapi.processinstance.create",
