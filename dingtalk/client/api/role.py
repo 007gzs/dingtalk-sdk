@@ -89,7 +89,7 @@ class Role(DingTalkBaseAPI):
         :return:
         """
         self._top_request(
-            'dingtalk.corp.role.deleterole',
+            'dingtalk.corp.role.getrolegroup',
             {'group_id': group_id},
             result_processor=lambda x: x['role_group']
         )
