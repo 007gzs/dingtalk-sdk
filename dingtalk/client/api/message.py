@@ -111,7 +111,7 @@ class Message(DingTalkBaseAPI):
         msg_body['code'] = code
         return self._post('/message/sendByCode', msg_body)
 
-    def asyncsend(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
+    def asyncsend(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=None):
         """
         企业会话消息异步发送(此API已不能使用, 请使用asyncsend_v2替换.)
 		
@@ -143,7 +143,7 @@ class Message(DingTalkBaseAPI):
             result_processor=lambda x: x['task_id']
         )
 
-    def asyncsend_v2(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
+    def asyncsend_v2(self, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=None):
         """
         企业会话消息异步发送
 
@@ -218,7 +218,7 @@ class Message(DingTalkBaseAPI):
             result_processor=lambda x: x['send_result']
         )
 
-    def asyncsendbycode(self, code, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=False):
+    def asyncsendbycode(self, code, msg_body, agent_id, userid_list=(), dept_id_list=(), to_all_user=None):
         """
         通过用户授权码异步向企业会话发送消息
 
