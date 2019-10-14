@@ -162,7 +162,7 @@ class Message(DingTalkBaseAPI):
             dept_id_list = None
 
         if not (userid_list or dept_id_list):
-            raise(ArgumentError('userid_list和dept_id_list不能同时为空。'))
+            raise(ArgumentError('userid_list和dept_id_list不能同时传递。'))
 
         if isinstance(msg_body, BodyBase):
             msg_body = msg_body.get_dict()
