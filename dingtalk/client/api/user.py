@@ -197,8 +197,8 @@ class User(DingTalkBaseAPI):
         """
         获取部门用户userid列表
 
-        :param unionid: 用户在当前钉钉开放平台账号范围内的唯一标识
-        :return:
+        :param dept_id: 用户在当前钉钉开放平台账号范围内的唯一标识
+        :return 部门userid列表:
         """
         return self._get(
             '/user/getDeptMember',
