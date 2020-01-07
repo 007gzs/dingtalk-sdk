@@ -170,7 +170,7 @@ class Message(DingTalkBaseAPI):
                 'agent_id': agent_id,
                 'userid_list': userid_list,
                 'dept_id_list': dept_id_list,
-                'to_all_user': to_all_user
+                'to_all_user': 'true' if to_all_user else 'false'
             }),
             result_processor=lambda x: x['task_id']
         )
