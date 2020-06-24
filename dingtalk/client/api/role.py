@@ -17,7 +17,7 @@ class Role(DingTalkBaseAPI):
         :param size: 分页偏移
         :return:
         """
-        self._top_request(
+        return self._top_request(
             'dingtalk.corp.role.simplelist',
             {'role_id': role_id, 'offset': offset, 'size': size}
         )
@@ -30,7 +30,7 @@ class Role(DingTalkBaseAPI):
         :param size: 分页偏移
         :return:
         """
-        self._top_request(
+        return self._top_request(
             'dingtalk.corp.role.list',
             {'offset': offset, 'size': size}
         )
@@ -47,7 +47,7 @@ class Role(DingTalkBaseAPI):
             rolelid_list = ','.join(map(to_text, rolelid_list))
         if isinstance(userid_list, (list, tuple, set)):
             userid_list = ','.join(map(to_text, userid_list))
-        self._top_request(
+        return self._top_request(
             'dingtalk.corp.role.addrolesforemps',
             {'rolelid_list': rolelid_list, 'userid_list': userid_list}
         )
@@ -64,7 +64,7 @@ class Role(DingTalkBaseAPI):
             rolelid_list = ','.join(map(to_text, rolelid_list))
         if isinstance(userid_list, (list, tuple, set)):
             userid_list = ','.join(map(to_text, userid_list))
-        self._top_request(
+        return self._top_request(
             'dingtalk.corp.role.removerolesforemps',
             {'rolelid_list': rolelid_list, 'userid_list': userid_list}
         )
@@ -76,7 +76,7 @@ class Role(DingTalkBaseAPI):
         :param role_id: 角色id
         :return:
         """
-        self._top_request(
+        return self._top_request(
             'dingtalk.corp.role.deleterole',
             {'role_id': role_id}
         )
@@ -88,7 +88,7 @@ class Role(DingTalkBaseAPI):
         :param group_id: 角色组的Id
         :return:
         """
-        self._top_request(
+        return self._top_request(
             'dingtalk.corp.role.getrolegroup',
             {'group_id': group_id},
             result_processor=lambda x: x['role_group']
