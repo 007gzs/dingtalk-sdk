@@ -40,7 +40,10 @@ class DingTalkClient(BaseClient, TaobaoMixin):
     def __init__(self, corp_id, prefix='client', storage=None, timeout=None, auto_retry=True):
         super(DingTalkClient, self).__init__(storage, timeout, auto_retry)
         self.corp_id = corp_id
-        self.cache = DingTalkCache(self.storage, prefix)
+        self.cache = DingTalkCache(self.storage, "%s:%s" % (prefix, self.get_access_token_key()))
+
+    def get_access_token_key(self):
+        return "corp_id:%s" % self.corp_id
 
     @property
     def access_token(self):
@@ -130,10 +133,13 @@ class AppKeyClient(DingTalkClient):
 
     def __init__(self, corp_id, app_key, app_secret, token=None, aes_key=None, storage=None, timeout=None,
                  auto_retry=True):
-        super(AppKeyClient, self).__init__(corp_id, 'secret:' + corp_id, storage, timeout, auto_retry)
         self.app_key = app_key
         self.app_secret = app_secret
+        super(AppKeyClient, self).__init__(corp_id, 'secret:' + corp_id, storage, timeout, auto_retry)
         self.crypto = DingTalkCrypto(token, aes_key, corp_id)
+
+    def get_access_token_key(self):
+        return "app_key:%s" % self.app_key
 
     def get_access_token(self):
         return self._request(
