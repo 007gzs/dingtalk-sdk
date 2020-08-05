@@ -5,11 +5,19 @@ from dingtalk.client.api.base import DingTalkBaseAPI
 
 
 class Callback(DingTalkBaseAPI):
-    ALL_CALL_BACK_TAGS = ('user_add_org', 'user_modify_org', 'user_leave_org', 'org_admin_add', 'org_admin_remove',
-                          'org_dept_create', 'org_dept_modify', 'org_dept_remove', 'org_remove', 'label_user_change',
-                          'label_conf_add', 'label_conf_modify', 'label_conf_del', 'org_change', 'chat_add_member',
-                          'chat_remove_member', 'chat_quit', 'chat_update_owner', 'chat_update_title', 'chat_disband',
-                          'chat_disband_microapp', 'check_in', 'bpms_task_change', 'bpms_instance_change')
+    ALL_CALL_BACK_TAGS = (
+        'user_add_org', 'user_modify_org', 'user_leave_org', 'user_active_org',
+        'org_admin_add', 'org_admin_remove', 'org_dept_create', 'org_dept_modify',
+        'org_dept_remove', 'org_change', 'org_remove',
+        'label_user_change', 'label_conf_add', 'label_conf_modify', 'label_conf_del',
+        'edu_user_insert', 'edu_user_update', 'edu_user_delete',
+        'edu_user_relation_insert', 'edu_user_relation_update', 'edu_user_relation_delete',
+        'edu_dept_insert', 'edu_dept_update', 'edu_dept_delete',
+        'chat_add_member', 'chat_remove_member', 'chat_quit', 'chat_update_owner', 'chat_update_title', 'chat_disband',
+        'check_in', 'bpms_task_change', 'bpms_instance_change',
+        'attendance_check_record', 'attendance_schedule_change', 'attendance_overtime_duration',
+        'meetingroom_book', 'meetingroom_room_info'
+    )
 
     def register_call_back(self, call_back_tags, token, aes_key, url):
         """
