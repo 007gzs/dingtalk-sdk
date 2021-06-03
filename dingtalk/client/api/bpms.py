@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import time
 import datetime
+import time
 
 import six
-from optionaldict import optionaldict
-
-from dingtalk.core.utils import to_text
-
 from dingtalk.client.api.base import DingTalkBaseAPI
+from dingtalk.core.utils import to_text
+from optionaldict import optionaldict
 
 
 class Bpms(DingTalkBaseAPI):
@@ -220,4 +218,27 @@ class Bpms(DingTalkBaseAPI):
                 'offset': offset,
                 'size': size
             }
+        )
+
+    def process_instance_terminate(self, process_instance_id,  remark="", is_system=True, operating_userid=""):
+        """
+        调用本接口通过实例id终止当前企业下发起的审批实例。
+        终止审批实例后，审批状态为“已撤销”。
+        :param process_instance_id: 审批实例ID
+        :param remark: 终止说明
+        :param is_system: 是否通过系统操作：true：由系统直接终止false：由指定的操作者终止
+        :param operating_userid: 操作人的userid, 当is_system为false时，该参数必传
+        :return: 
+        """
+        return self._top_request(
+            "dingtalk.oapi.process.instance.terminate",
+            {
+                "request": {
+                    "process_instance_id": process_instance_id,
+                    "remark": remark,
+                    "is_system": is_system,
+                    "operating_userid": operating_userid
+                }
+            }
+
         )
