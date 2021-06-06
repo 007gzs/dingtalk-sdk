@@ -47,4 +47,5 @@ dingtalk-sdk 消息加解密同时兼容 cryptography 和 PyCrypto, 优先使用
 使用示例
 ****************
 
-django 示例 https://github.com/007gzs/dingtalk-django-example
+django 示例（第三方企业应用） https://github.com/007gzs/dingtalk-django-example
+django 示例（企业内部开发） https://github.com/children1987/dingtalk_sdk_demo_for_corp
